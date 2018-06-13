@@ -1,0 +1,50 @@
+Signal Region 1 Datacard -- signal category
+
+imax * number of bins
+jmax * number of processes minus 1
+kmax * number of nuisance parameters
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+shapes data_obs    sigF1    multiF_syst_ws.root wspace:data_obs_F1
+shapes bkg_tt      sigF1    multiF_syst_ws.root wspace:background_tt_F1
+shapes bkg_other   sigF1    multiF_syst_ws.root wspace:background_other_F1
+shapes signal      sigF1    multiF_syst_ws.root wspace:signal_F1
+
+shapes data_obs    sigF2    multiF_syst_ws.root wspace:data_obs_F2
+shapes bkg_tt      sigF2    multiF_syst_ws.root wspace:background_tt_F2
+shapes bkg_other   sigF2    multiF_syst_ws.root wspace:background_other_F2
+shapes signal      sigF2    multiF_syst_ws.root wspace:signal_F2
+
+shapes data_obs    sigF3    multiF_syst_ws.root wspace:data_obs_F3
+shapes bkg_tt      sigF3    multiF_syst_ws.root wspace:background_tt_F3
+shapes bkg_other   sigF3    multiF_syst_ws.root wspace:background_other_F3
+shapes signal      sigF3    multiF_syst_ws.root wspace:signal_F3
+
+shapes data_obs    sigF4    multiF_syst_ws.root wspace:data_obs_F4
+shapes bkg_tt      sigF4    multiF_syst_ws.root wspace:background_tt_F4
+shapes bkg_other   sigF4    multiF_syst_ws.root wspace:background_other_F4
+shapes signal      sigF4    multiF_syst_ws.root wspace:signal_F4
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+bin         sigF1    sigF2    sigF3    sigF4
+observation  -1       -1       -1       -1
+-------------------------------------------------------------------------------------------------------------------------------------------
+# background rate must be taken from _norm param x 1      
+bin                 sigF1       sigF1       sigF1        sigF2       sigF2       sigF2        sigF3       sigF3       sigF3        sigF4       sigF4       sigF4
+process             signal      bkg_tt      bkg_other    signal      bkg_tt      bkg_other    signal      bkg_tt      bkg_other    signal      bkg_tt      bkg_other
+process             0           1           2            0           1           2            0           1           2            0           1           2
+rate                353.343     1           23201.8      378.322     1           12038.7      441.289     1           8588.26      306.682     1           4613.87
+-------------------------------------------------------------------------------------------------------------------------------------------
+# Normal uncertainties in the signal region 
+lumi_13TeV         lnN    1.05     -    -    1.05     -    -    1.05     -    -    1.05     -    -
+-------------------------------------------------------------------------------------------------------------------------------------------
+ttBkgRateF1 rateParam sigF1 bkg_tt multiF_syst_ws.root:wspace
+ttBkgRateF2 rateParam sigF2 bkg_tt multiF_syst_ws.root:wspace
+ttBkgRateF3 rateParam sigF3 bkg_tt multiF_syst_ws.root:wspace
+ttBkgRateF4 rateParam sigF4 bkg_tt multiF_syst_ws.root:wspace
+np_tt_F1 param 1.0 1.0
+np_tt_F2 param 1.0 1.0
+np_tt_F3 param 1.0 1.0
+np_tt_F4 param 1.0 1.0
