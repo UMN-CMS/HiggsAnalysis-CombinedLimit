@@ -21,7 +21,7 @@ export SCRAM_ARCH=slc6_amd64_gcc530
 cmsrel CMSSW_8_1_0
 cd CMSSW_8_1_0/src
 cmsenv
-git clone git@github.com:StealthStop/HiggsAnalysis-CombinedLimit.git -b stealth HiggsAnalysis/CombinedLimit
+git clone git@github.com:StealthStop/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
 scram b clean
 scram b -j8
