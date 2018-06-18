@@ -4,6 +4,13 @@
 // Aron Soha
 // May 7, 2018
 
+template<typename T> T* getObjectPtr(std::string name, TFile* file)
+{
+    T* ptr;
+    file->GetObject(name.c_str(), ptr);
+    return ptr;
+}
+
 void make_F1234_8bin_ttsyst_ws() {
   using namespace RooFit;
   // Load the combine library to get access to the RooParametricHist
@@ -36,54 +43,35 @@ void make_F1234_8bin_ttsyst_ws() {
   // file for obtaining histograms
   TFile* file = TFile::Open("njets_rebinned.root");
 
-  TH1* data_th1_F1 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher1_pseudodataS_RPV 550",data_th1_F1);
-  //file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher1_pseudodata",data_th1_F1);
-  TH1* ttMC_th1_F1 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher1_TT",ttMC_th1_F1);
-  TH1D* ttMC_syst_th1_F1 = 0;
-  file->GetObject("tt_F1_syst",ttMC_syst_th1_F1);
-  TH1* otherMC_th1_F1 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher1_other",otherMC_th1_F1);
-  TH1* sigMC_th1_F1 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher1_RPV 550",sigMC_th1_F1);
+  TH1D* data_th1_F1 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher1_pseudodataS_RPV 550", file);
+  //TH1D* data_th1_F1 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher1_pseudodata", file);
+  TH1D* ttMC_th1_F1 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher1_TT", file);
+  TH1D* ttMC_syst_th1_F1 = getObjectPtr<TH1D>("tt_F1_syst", file);
 
-  TH1* data_th1_F2 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher2_pseudodataS_RPV 550",data_th1_F2);
-  //file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher2_pseudodata",data_th1_F2);
-  TH1* ttMC_th1_F2 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher2_TT",ttMC_th1_F2);
-  TH1D* ttMC_syst_th1_F2 = 0;
-  file->GetObject("tt_F2_syst",ttMC_syst_th1_F2);
-  TH1* otherMC_th1_F2 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher2_other",otherMC_th1_F2);
-  TH1* sigMC_th1_F2 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher2_RPV 550",sigMC_th1_F2);
+  TH1D* otherMC_th1_F1 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher1_other", file);
+  TH1D* sigMC_th1_F1 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher1_RPV 550", file);
 
-  TH1* data_th1_F3 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher3_pseudodataS_RPV 550",data_th1_F3);
-  //file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher3_pseudodata",data_th1_F3);
-  TH1* ttMC_th1_F3 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher3_TT",ttMC_th1_F3);
-  TH1D* ttMC_syst_th1_F3 = 0;
-  file->GetObject("tt_F3_syst",ttMC_syst_th1_F3);
-  TH1* otherMC_th1_F3 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher3_other",otherMC_th1_F3);
-  TH1* sigMC_th1_F3 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher1_RPV 550",sigMC_th1_F3);
+  TH1D* data_th1_F2 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher2_pseudodataS_RPV 550", file);
+  //TH1D* data_th1_F2 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher2_pseudodata", file);
 
-  TH1* data_th1_F4 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher4_pseudodataS_RPV 550",data_th1_F4);
-  //file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher4_pseudodata",data_th1_F4);
-  TH1* ttMC_th1_F4 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher4_TT",ttMC_th1_F4);
-  TH1D* ttMC_syst_th1_F4 = 0;
-  file->GetObject("tt_F4_syst",ttMC_syst_th1_F4);
-  TH1* otherMC_th1_F4 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher4_other",otherMC_th1_F4);
-  TH1* sigMC_th1_F4 = 0;
-  file->GetObject("h_njets_pt30_1l_g1b_mbl_fisher4_RPV 550",sigMC_th1_F4);
+  TH1D* ttMC_th1_F2 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher2_TT", file);
+  TH1D* ttMC_syst_th1_F2 = getObjectPtr<TH1D>("tt_F2_syst", file);
+  TH1D* otherMC_th1_F2 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher2_other", file);
+  TH1D* sigMC_th1_F2 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher2_RPV 550", file);
 
+  TH1D* data_th1_F3 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher3_pseudodataS_RPV 550", file);
+  //TH1D* data_th1_F3 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher3_pseudodata", file);
+  TH1D* ttMC_th1_F3 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher3_TT", file);
+  TH1D* ttMC_syst_th1_F3 = getObjectPtr<TH1D>("tt_F3_syst", file);
+  TH1D* otherMC_th1_F3 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher3_other", file);
+  TH1D* sigMC_th1_F3 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher1_RPV 550", file);
+
+  TH1D* data_th1_F4 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher4_pseudodataS_RPV 550", file);
+  //TH1D* data_th1_F4 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher4_pseudodata", file);
+  TH1D* ttMC_th1_F4 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher4_TT", file);
+  TH1D* ttMC_syst_th1_F4 = getObjectPtr<TH1D>("tt_F4_syst", file);
+  TH1D* otherMC_th1_F4 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher4_other", file);
+  TH1D* sigMC_th1_F4 = getObjectPtr<TH1D>("h_njets_pt30_1l_g1b_mbl_fisher4_RPV 550", file);
 
   // tt bkg param setup
   //wspace->factory("p0_tt[0.35,0.14,.54]");
