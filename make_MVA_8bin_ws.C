@@ -66,7 +66,7 @@ void addNPs(stringstream& f, RooArgList& list, const double r, const RooAbsArg& 
 {
     std::string paramNum  = std::to_string(list.getSize());
     std::string paramNumG = std::to_string(list.getSize()+1);
-    f << "*TMath::Power(" << r << ",@"+paramNum+")*TMath::Power(" << rprime << ",@"+paramNumG+"*@"+paramNum+")";
+    f << "*TMath::Power(" << r << ",@"+paramNum+")*TMath::Power(" << rprime << ",@"+paramNumG+")";
     list.add(NP);
     list.add(NPg);
 }
