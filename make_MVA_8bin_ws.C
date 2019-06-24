@@ -223,7 +223,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   else if(dataType == "pseudodataC" ) data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
   else                               data_th1_D1 = (TH1D*)file->Get(("D1_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
   TH1D* otherMC_th1_D1 = (TH1D*)file->Get(("D1_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D1 = (TH1D*)file->Get(("D1_QCD_h_njets_pt30_1l"+syst).c_str());
   TH1D* ttxMC_th1_D1 = (TH1D*)file->Get(("D1_TTX_h_njets_pt30_1l"+syst).c_str());
   TH1D* sigMC_th1_D1 = (TH1D*)file->Get(("D1_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
 
@@ -236,7 +235,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   else if(dataType == "pseudodataC" ) data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
   else                               data_th1_D2 = (TH1D*)file->Get(("D2_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
   TH1D* otherMC_th1_D2 = (TH1D*)file->Get(("D2_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D2 = (TH1D*)file->Get(("D2_QCD_h_njets_pt30_1l"+syst).c_str());
   TH1D* ttxMC_th1_D2 = (TH1D*)file->Get(("D2_TTX_h_njets_pt30_1l"+syst).c_str());
   TH1D* sigMC_th1_D2 = (TH1D*)file->Get(("D2_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
 
@@ -249,7 +247,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   else if(dataType == "pseudodataC" ) data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
   else                               data_th1_D3 = (TH1D*)file->Get(("D3_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
   TH1D* otherMC_th1_D3 = (TH1D*)file->Get(("D3_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D3 = (TH1D*)file->Get(("D3_QCD_h_njets_pt30_1l"+syst).c_str());
   TH1D* ttxMC_th1_D3 = (TH1D*)file->Get(("D3_TTX_h_njets_pt30_1l"+syst).c_str());
   TH1D* sigMC_th1_D3 = (TH1D*)file->Get(("D3_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
 
@@ -262,7 +259,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   else if(dataType == "pseudodataC" ) data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
   else                               data_th1_D4 = (TH1D*)file->Get(("D4_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
   TH1D* otherMC_th1_D4 = (TH1D*)file->Get(("D4_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D4 = (TH1D*)file->Get(("D4_QCD_h_njets_pt30_1l"+syst).c_str());
   TH1D* ttxMC_th1_D4 = (TH1D*)file->Get(("D4_TTX_h_njets_pt30_1l"+syst).c_str());
   TH1D* sigMC_th1_D4 = (TH1D*)file->Get(("D4_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
 
@@ -306,22 +302,22 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   //RooRealVar a2_tt_D4(("a2_tt_D4_"+year).c_str(),("a2 of tt bkg shape D4 for "+year).c_str(),0.10,-0.5,0.5);
   RooRealVar  d_tt_D4(("d_tt_D4_" +year).c_str(),("d  of tt bkg shape D4 for "+year).c_str(),20,-2500,2500);
 
-  double_t n7_tt_portion_D1 = TTonly ? data_th1_D1->GetBinContent(1) : data_th1_D1->GetBinContent(1) - otherMC_th1_D1->GetBinContent(1) - qcdMC_th1_D1->GetBinContent(1) - ttxMC_th1_D1->GetBinContent(1);
+  double_t n7_tt_portion_D1 = TTonly ? data_th1_D1->GetBinContent(1) : data_th1_D1->GetBinContent(1) - otherMC_th1_D1->GetBinContent(1) - ttxMC_th1_D1->GetBinContent(1);
   double_t n7_tt_portion_D1_low = n7_tt_portion_D1-6000;
   if (n7_tt_portion_D1_low<0) n7_tt_portion_D1_low = 0;
   RooRealVar N7_tt_D1(("N7_tt_D1_"+year).c_str(),"njets 7 for tt bkg in MVA D1",n7_tt_portion_D1,n7_tt_portion_D1_low,n7_tt_portion_D1+6000);
 
-  double_t n7_tt_portion_D2 = TTonly ? data_th1_D2->GetBinContent(1) : data_th1_D2->GetBinContent(1) - otherMC_th1_D2->GetBinContent(1) - qcdMC_th1_D2->GetBinContent(1) - ttxMC_th1_D2->GetBinContent(1);
+  double_t n7_tt_portion_D2 = TTonly ? data_th1_D2->GetBinContent(1) : data_th1_D2->GetBinContent(1) - otherMC_th1_D2->GetBinContent(1) - ttxMC_th1_D2->GetBinContent(1);
   double_t n7_tt_portion_D2_low = n7_tt_portion_D2-5000;
   if (n7_tt_portion_D2_low<0) n7_tt_portion_D2_low = 0;
   RooRealVar N7_tt_D2(("N7_tt_D2_"+year).c_str(),"njets 7 for tt bkg in MVA D2",n7_tt_portion_D2,n7_tt_portion_D2_low,n7_tt_portion_D2+5000);
 
-  double_t n7_tt_portion_D3 = TTonly ? data_th1_D3->GetBinContent(1) : data_th1_D3->GetBinContent(1) - otherMC_th1_D3->GetBinContent(1) - qcdMC_th1_D3->GetBinContent(1) - ttxMC_th1_D3->GetBinContent(1);
+  double_t n7_tt_portion_D3 = TTonly ? data_th1_D3->GetBinContent(1) : data_th1_D3->GetBinContent(1) - otherMC_th1_D3->GetBinContent(1) - ttxMC_th1_D3->GetBinContent(1);
   double_t n7_tt_portion_D3_low = n7_tt_portion_D3-4000;
   if (n7_tt_portion_D3_low<0) n7_tt_portion_D3_low = 0;
   RooRealVar N7_tt_D3(("N7_tt_D3_"+year).c_str(),"njets 7 for tt bkg in MVA D3",n7_tt_portion_D3,n7_tt_portion_D3_low,n7_tt_portion_D3+4000);
 
-  double_t n7_tt_portion_D4 = TTonly ? data_th1_D4->GetBinContent(1) : data_th1_D4->GetBinContent(1) - otherMC_th1_D4->GetBinContent(1) - qcdMC_th1_D4->GetBinContent(1) - ttxMC_th1_D4->GetBinContent(1);
+  double_t n7_tt_portion_D4 = TTonly ? data_th1_D4->GetBinContent(1) : data_th1_D4->GetBinContent(1) - otherMC_th1_D4->GetBinContent(1) - ttxMC_th1_D4->GetBinContent(1);
   double_t n7_tt_portion_D4_low = n7_tt_portion_D4-3000;
   if (n7_tt_portion_D4_low<0) n7_tt_portion_D4_low = 0;
   RooRealVar N7_tt_D4(("N7_tt_D4_"+year).c_str(),"njets 7 for tt bkg in MVA D4",n7_tt_portion_D4,n7_tt_portion_D4_low,n7_tt_portion_D4+3000);
@@ -708,16 +704,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   otherMC_th1_D3->Write();
   otherMC_th1_D4->Write();
 
-  // Shape histograms for QCD backgrounds
-  qcdMC_th1_D1->SetName("qcdMC_th1_D1");
-  qcdMC_th1_D2->SetName("qcdMC_th1_D2");
-  qcdMC_th1_D3->SetName("qcdMC_th1_D3");
-  qcdMC_th1_D4->SetName("qcdMC_th1_D4");
-  qcdMC_th1_D1->Write();
-  qcdMC_th1_D2->Write();
-  qcdMC_th1_D3->Write();
-  qcdMC_th1_D4->Write();
-
   // Shape histograms for TTX backgrounds
   ttxMC_th1_D1->SetName("ttxMC_th1_D1");
   ttxMC_th1_D2->SetName("ttxMC_th1_D2");
@@ -797,10 +783,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       // OTHER backgrounds
       WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "OTHER");      
       WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "OTHER");      
-
-      // QCD backgrounds
-      WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "QCD");      
-      WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "QCD");      
 
       // TTX backgrounds
       WriteHisto2WS<TH1D>(file, "TTX_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "TTX");      
