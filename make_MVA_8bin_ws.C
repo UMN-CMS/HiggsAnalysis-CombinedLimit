@@ -343,7 +343,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   wspace->factory(("np_tt_pu_"+year+"[0.0]").c_str());// uncorrelated
   wspace->factory(("np_tt_JECDown_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_JERDown_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD1Bin1_"+year+"[0.0]").c_str()); // uncorrelated
+/*  wspace->factory(("np_tt_qcdCRErrD1Bin1_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRErrD1Bin2_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRErrD1Bin3_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRErrD1Bin4_"+year+"[0.0]").c_str()); // uncorrelated
@@ -367,7 +367,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   wspace->factory(("np_tt_qcdCRErrD4Bin4_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRErrD4Bin5_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRErrD4Bin6_"+year+"[0.0]").c_str()); // uncorrelated
-
+*/
   // Load in the histograms with the bin-by-bin ratios to be used in the ttbar shape systematics
   TFile* tt_syst_file = TFile::Open((infile_path+"/ttbar_systematics.root").c_str());
 
@@ -469,7 +469,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D1},
       {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D1},
       {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D1},
-      {
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D1}, 
+/*      {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D1, tt_qcdCRErr_D1, 
           { 
               *wspace->var(("np_tt_qcdCRErrD1Bin1_"+year).c_str()),
@@ -479,7 +480,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRErrD1Bin5_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRErrD1Bin6_"+year).c_str()),
           }
-      },
+      },*/
       {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D1},
       {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D1},
       {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D1},
@@ -529,7 +530,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D2},
       {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D2},
       {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D2},
-      {
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D2}, 
+/*      {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D2, tt_qcdCRErr_D2, 
           { 
               *wspace->var(("np_tt_qcdCRErrD2Bin1_"+year).c_str()),
@@ -539,7 +541,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRErrD2Bin5_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRErrD2Bin6_"+year).c_str()),
           }
-      },
+      },*/
       {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D2},
       {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D2},
       {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D2},
@@ -585,7 +587,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D3},
       {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D3},
       {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D3},
-      {
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D3}, 
+/*      {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D3, tt_qcdCRErr_D3, 
           { 
               *wspace->var(("np_tt_qcdCRErrD3Bin1_"+year).c_str()),
@@ -595,7 +598,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRErrD3Bin5_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRErrD3Bin6_"+year).c_str()),
           }
-      },
+      },*/
       {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D3},
       {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D3},
       {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D3},
@@ -641,7 +644,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D4},
       {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D4},
       {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D4},
-      {
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D4},
+/*      {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D4, tt_qcdCRErr_D4, 
           { 
               *wspace->var(("np_tt_qcdCRErrD4Bin1_"+year).c_str()),
@@ -651,7 +655,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRErrD4Bin5_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRErrD4Bin6_"+year).c_str()),
           }
-      },
+      },*/
       {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D4},
       {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D4},
       {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D4},
