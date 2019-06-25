@@ -327,46 +327,46 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   RooRealVar N7_tt_D4(("N7_tt_D4_"+year).c_str(),"njets 7 for tt bkg in MVA D4",n7_tt_portion_D4,n7_tt_portion_D4_low,n7_tt_portion_D4+3000);
 
   // tt shape systematic nuisance parameters
-  wspace->factory(("np_tt_JECUp_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_JERUp_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_btg_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_lep_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_nom_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCR_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory("np_tt_pdf[0.0]"); // fully correlated
-  wspace->factory("np_tt_FSR[0.0]"); // fully correlated
-  wspace->factory("np_tt_ISR[0.0]"); // fully correlated
-  wspace->factory("np_tt_scl[0.0]"); // fully correlated
-  wspace->factory(("np_tt_ht_"+year+"[0.0]").c_str());// uncorrelated
-  wspace->factory(("np_tt_httail_"+year+"[0.0]").c_str());// uncorrelated
-  wspace->factory(("np_tt_htnjet_"+year+"[0.0]").c_str());// uncorrelated
-  wspace->factory(("np_tt_pu_"+year+"[0.0]").c_str());// uncorrelated
-  wspace->factory(("np_tt_JECDown_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_JERDown_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD1Bin1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD1Bin2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD1Bin3_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD1Bin4_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD1Bin5_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD1Bin6_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD2Bin1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD2Bin2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD2Bin3_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD2Bin4_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD2Bin5_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD2Bin6_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD3Bin1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD3Bin2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD3Bin3_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD3Bin4_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD3Bin5_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD3Bin6_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD4Bin1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD4Bin2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD4Bin3_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD4Bin4_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD4Bin5_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRErrD4Bin6_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_JECUp_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_JERUp_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_btg_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_lep_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_nom_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCR_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory("np_tt_pdf[0.0]"); // fully correlated
+  //wspace->factory("np_tt_FSR[0.0]"); // fully correlated
+  //wspace->factory("np_tt_ISR[0.0]"); // fully correlated
+  //wspace->factory("np_tt_scl[0.0]"); // fully correlated
+  //wspace->factory(("np_tt_ht_"+year+"[0.0]").c_str());// uncorrelated
+  //wspace->factory(("np_tt_httail_"+year+"[0.0]").c_str());// uncorrelated
+  //wspace->factory(("np_tt_htnjet_"+year+"[0.0]").c_str());// uncorrelated
+  //wspace->factory(("np_tt_pu_"+year+"[0.0]").c_str());// uncorrelated
+  //wspace->factory(("np_tt_JECDown_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_JERDown_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD1Bin1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD1Bin2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD1Bin3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD1Bin4_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD1Bin5_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD1Bin6_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD2Bin1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD2Bin2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD2Bin3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD2Bin4_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD2Bin5_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD2Bin6_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD3Bin1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD3Bin2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD3Bin3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD3Bin4_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD3Bin5_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD3Bin6_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD4Bin1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD4Bin2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD4Bin3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD4Bin4_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD4Bin5_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRErrD4Bin6_"+year+"[0.0]").c_str()); // uncorrelated
 
   // Load in the histograms with the bin-by-bin ratios to be used in the ttbar shape systematics
   TFile* tt_syst_file = TFile::Open((infile_path+"/ttbar_systematics.root").c_str());
@@ -464,32 +464,32 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
 
   //list of nuisance parameters for tt bkg D1
   const std::vector<NuisanceParam>& nuisanceParams_D1 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D1},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D1},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D1},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D1},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D1},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D1, tt_qcdCRErr_D1, 
-          { 
-              *wspace->var(("np_tt_qcdCRErrD1Bin1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD1Bin2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD1Bin3_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD1Bin4_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD1Bin5_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD1Bin6_"+year).c_str()),
-          }
-      },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D1},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D1},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D1},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D1},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D1},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D1},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D1},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D1},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D1},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D1}
+      //{*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D1},
+      //{*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D1},
+      //{*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D1},
+      //{*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D1},
+      //{*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D1},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D1, tt_qcdCRErr_D1, 
+      //    { 
+      //        *wspace->var(("np_tt_qcdCRErrD1Bin1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD1Bin2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD1Bin3_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD1Bin4_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD1Bin5_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD1Bin6_"+year).c_str()),
+      //    }
+      //},
+      //{*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D1},
+      //{*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D1},
+      //{*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D1},
+      //{*wspace->var("np_tt_scl"),                     tt_syst_scl_D1},
+      //{*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D1},
+      //{*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D1},
+      //{*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D1},
+      //{*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D1},
+      //{*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D1},
+      //{*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D1}
   };
   
   //std::cout << "test" << std::endl;
@@ -524,32 +524,32 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D2
   const std::vector<NuisanceParam>& nuisanceParams_D2 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D2},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D2},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D2},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D2},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D2},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D2, tt_qcdCRErr_D2, 
-          { 
-              *wspace->var(("np_tt_qcdCRErrD2Bin1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD2Bin2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD2Bin3_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD2Bin4_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD2Bin5_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD2Bin6_"+year).c_str()),
-          }
-      },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D2},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D2},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D2},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D2},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D2},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D2},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D2},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D2},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D2},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D2}
+      //{*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D2},
+      //{*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D2},
+      //{*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D2},
+      //{*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D2},
+      //{*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D2},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D2, tt_qcdCRErr_D2, 
+      //    { 
+      //        *wspace->var(("np_tt_qcdCRErrD2Bin1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD2Bin2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD2Bin3_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD2Bin4_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD2Bin5_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD2Bin6_"+year).c_str()),
+      //    }
+      //},
+      //{*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D2},
+      //{*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D2},
+      //{*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D2},
+      //{*wspace->var("np_tt_scl"),                     tt_syst_scl_D2},
+      //{*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D2},
+      //{*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D2},
+      //{*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D2},
+      //{*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D2},
+      //{*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D2},
+      //{*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D2}
   };
   
   RooArgList *bkg_tt_bins_D2 = new RooArgList();
@@ -580,32 +580,32 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D3
   const std::vector<NuisanceParam>& nuisanceParams_D3 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D3},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D3},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D3},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D3},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D3},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D3, tt_qcdCRErr_D3, 
-          { 
-              *wspace->var(("np_tt_qcdCRErrD3Bin1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD3Bin2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD3Bin3_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD3Bin4_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD3Bin5_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD3Bin6_"+year).c_str()),
-          }
-      },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D3},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D3},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D3},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D3},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D3},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D3},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D3},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D3},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D3},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D3}
+      //{*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D3},
+      //{*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D3},
+      //{*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D3},
+      //{*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D3},
+      //{*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D3},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D3, tt_qcdCRErr_D3, 
+      //    { 
+      //        *wspace->var(("np_tt_qcdCRErrD3Bin1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD3Bin2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD3Bin3_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD3Bin4_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD3Bin5_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD3Bin6_"+year).c_str()),
+      //    }
+      //},
+      //{*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D3},
+      //{*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D3},
+      //{*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D3},
+      //{*wspace->var("np_tt_scl"),                     tt_syst_scl_D3},
+      //{*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D3},
+      //{*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D3},
+      //{*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D3},
+      //{*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D3},
+      //{*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D3},
+      //{*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D3}
   };
 
   RooArgList *bkg_tt_bins_D3 = new RooArgList();
@@ -636,32 +636,32 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D4
   const std::vector<NuisanceParam>& nuisanceParams_D4 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D4},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D4},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D4},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D4},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D4},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D4, tt_qcdCRErr_D4, 
-          { 
-              *wspace->var(("np_tt_qcdCRErrD4Bin1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD4Bin2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD4Bin3_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD4Bin4_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD4Bin5_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRErrD4Bin6_"+year).c_str()),
-          }
-      },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D4},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D4},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D4},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D4},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D4},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D4},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D4},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D4},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D4},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D4}
+      //{*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D4},
+      //{*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D4},
+      //{*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D4},
+      //{*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D4},
+      //{*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D4},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_qcdCR_D4, tt_qcdCRErr_D4, 
+      //    { 
+      //        *wspace->var(("np_tt_qcdCRErrD4Bin1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD4Bin2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD4Bin3_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD4Bin4_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD4Bin5_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRErrD4Bin6_"+year).c_str()),
+      //    }
+      //},
+      //{*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D4},
+      //{*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D4},
+      //{*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D4},
+      //{*wspace->var("np_tt_scl"),                     tt_syst_scl_D4},
+      //{*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D4},
+      //{*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D4},
+      //{*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D4},
+      //{*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D4},
+      //{*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D4},
+      //{*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D4}
   };
   
   RooArgList *bkg_tt_bins_D4 = new RooArgList();
