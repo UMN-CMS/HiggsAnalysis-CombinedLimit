@@ -123,13 +123,21 @@
             tge_vec.emplace_back( tge ) ;
 
             hp -> Draw() ;
+            gPad -> SetGridy(1) ;
             tge -> Draw( "3 same" ) ;
-            hp -> Draw( "same" ) ;
+            hp -> Draw( "E0 same" ) ;
+            hp -> Draw( "axis same" ) ;
+            hp -> Draw( "axig same" ) ;
 
             char fname[1000] ;
             sprintf( fname, "output-files/fit-plot-%d-D%d.pdf", year, di ) ;
             can -> SaveAs( fname ) ;
 
+            hp -> SetMaximum(1.2) ;
+            hp -> SetMinimum(0.8) ;
+            can -> Update() ; can -> Draw() ;
+            sprintf( fname, "output-files/fit-plot-%d-D%d-zoom.pdf", year, di ) ;
+            can -> SaveAs( fname ) ;
 
 
 

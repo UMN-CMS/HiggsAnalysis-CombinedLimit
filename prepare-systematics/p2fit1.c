@@ -1,7 +1,7 @@
 
 #include "histio.c"
 
-   void p2fit1( int dbin_ind = 1, bool add_full_dev = false, const char* infile = "../fit-input-root-files/2016/ttbar_systematics.root" ) {
+   void p2fit1( int dbin_ind = 1, bool add_full_dev = true, const char* infile = "../fit-input-root-files/2016/ttbar_systematics.root" ) {
 
       loadHist( infile ) ;
 
@@ -28,7 +28,7 @@
 
       can -> cd(1) ;
 
-      hp -> DrawCopy() ;
+      hp -> DrawCopy("E0") ;
       gPad -> SetGridy(1) ;
 
       TF1* tf1 = new TF1( "tf1", "[0]+[1]*x+[2]*x*x", 0., 6. ) ;
@@ -86,12 +86,11 @@
       } // bi
 
       TGraphErrors* tge = new TGraphErrors( n_hist_bins, x_val, f_val, x_err, f_err ) ;
-      tge -> SetFillColor(11) ;
+      tge -> SetFillColor(29) ;
 
 
       tge -> Draw("3 same" ) ;
-      tge -> Draw("same" ) ;
-      hp -> Draw("same") ;
+      hp -> Draw("E0 same") ;
 
      //-----
       TVectorD eigenVals ;
@@ -198,7 +197,7 @@
          int h2bin = h_toycheck -> GetXaxis() -> FindBin( x_val[bi] ) ;
          sprintf( hname, "h_toy_xbin%d", bi ) ;
          TH1* hp = h_toycheck -> ProjectionY( hname, h2bin, h2bin ) ;
-         hp -> SetFillColor(11) ;
+         hp -> SetFillColor(29) ;
          can2 -> cd( bi+1 ) ;
          hp -> Draw() ;
          gPad -> SetGridx(1) ;
@@ -220,6 +219,137 @@
       printf( " Actual values:                        p0 = %7.5f , p1 = %7.5f , p2 = %7.5f\n", p0, p1, p2 ) ;
       printf( "\n\n" ) ;
 
+
+     //-----  Look at what a +/- 1 sigma deviation looks like for each of the three eigenvectors.
+
+      {
+
+         int gr_npoints(200) ;
+         double gr_x[gr_npoints] ;
+         double gr_f0[gr_npoints] ;
+         double gr_f1p[gr_npoints] ;
+         double gr_f1m[gr_npoints] ;
+         double gr_f2p[gr_npoints] ;
+         double gr_f2m[gr_npoints] ;
+         double gr_f3p[gr_npoints] ;
+         double gr_f3m[gr_npoints] ;
+
+
+         TMatrixD par_prime_vec_col_1p = eigenVecsT * par_vec_col ;
+         par_prime_vec_col_1p[0][0] += sqrt( eigenVals(0) ) ;
+         TMatrixD par_vec_col_1p = eigenVecs * par_prime_vec_col_1p ;
+
+         TMatrixD par_prime_vec_col_1m = eigenVecsT * par_vec_col ;
+         par_prime_vec_col_1m[0][0] -= sqrt( eigenVals(0) ) ;
+         TMatrixD par_vec_col_1m = eigenVecs * par_prime_vec_col_1m ;
+
+
+
+         TMatrixD par_prime_vec_col_2p = eigenVecsT * par_vec_col ;
+         par_prime_vec_col_2p[1][0] += sqrt( eigenVals(1) ) ;
+         TMatrixD par_vec_col_2p = eigenVecs * par_prime_vec_col_2p ;
+
+         TMatrixD par_prime_vec_col_2m = eigenVecsT * par_vec_col ;
+         par_prime_vec_col_2m[1][0] -= sqrt( eigenVals(1) ) ;
+         TMatrixD par_vec_col_2m = eigenVecs * par_prime_vec_col_2m ;
+
+
+
+         TMatrixD par_prime_vec_col_3p = eigenVecsT * par_vec_col ;
+         par_prime_vec_col_3p[2][0] += sqrt( eigenVals(2) ) ;
+         TMatrixD par_vec_col_3p = eigenVecs * par_prime_vec_col_3p ;
+
+         TMatrixD par_prime_vec_col_3m = eigenVecsT * par_vec_col ;
+         par_prime_vec_col_3m[2][0] -= sqrt( eigenVals(2) ) ;
+         TMatrixD par_vec_col_3m = eigenVecs * par_prime_vec_col_3m ;
+
+
+
+
+
+         for ( int xi=0; xi<gr_npoints; xi++ ) {
+
+            double x = (xi+0.5) * 6./(1.*gr_npoints) ;
+            double f0 = p0 + p1 * x + p2 * x * x ;
+
+            double f1p = par_vec_col_1p[0][0] + par_vec_col_1p[1][0] * x + par_vec_col_1p[2][0] * x * x ;
+            double f1m = par_vec_col_1m[0][0] + par_vec_col_1m[1][0] * x + par_vec_col_1m[2][0] * x * x ;
+
+            double f2p = par_vec_col_2p[0][0] + par_vec_col_2p[1][0] * x + par_vec_col_2p[2][0] * x * x ;
+            double f2m = par_vec_col_2m[0][0] + par_vec_col_2m[1][0] * x + par_vec_col_2m[2][0] * x * x ;
+
+            double f3p = par_vec_col_3p[0][0] + par_vec_col_3p[1][0] * x + par_vec_col_3p[2][0] * x * x ;
+            double f3m = par_vec_col_3m[0][0] + par_vec_col_3m[1][0] * x + par_vec_col_3m[2][0] * x * x ;
+
+            gr_x[xi] = x ;
+            gr_f0[xi] = f0 ;
+            gr_f1p[xi] = f1p ;
+            gr_f1m[xi] = f1m ;
+            gr_f2p[xi] = f2p ;
+            gr_f2m[xi] = f2m ;
+            gr_f3p[xi] = f3p ;
+            gr_f3m[xi] = f3m ;
+
+         } // xi
+
+         TGraph* tg_f0  = new TGraph( gr_npoints, gr_x, gr_f0  ) ;
+         TGraph* tg_f1p = new TGraph( gr_npoints, gr_x, gr_f1p ) ;
+         TGraph* tg_f1m = new TGraph( gr_npoints, gr_x, gr_f1m ) ;
+         TGraph* tg_f2p = new TGraph( gr_npoints, gr_x, gr_f2p ) ;
+         TGraph* tg_f2m = new TGraph( gr_npoints, gr_x, gr_f2m ) ;
+         TGraph* tg_f3p = new TGraph( gr_npoints, gr_x, gr_f3p ) ;
+         TGraph* tg_f3m = new TGraph( gr_npoints, gr_x, gr_f3m ) ;
+
+         tg_f0  -> SetLineWidth(3) ;
+
+         tg_f1p -> SetLineWidth(3) ;
+         tg_f1p -> SetLineColor(2) ;
+         tg_f1m -> SetLineWidth(3) ;
+         tg_f1m -> SetLineColor(2) ;
+
+         tg_f2p -> SetLineWidth(3) ;
+         tg_f2p -> SetLineColor(4) ;
+         tg_f2m -> SetLineWidth(3) ;
+         tg_f2m -> SetLineColor(4) ;
+
+         tg_f3p -> SetLineWidth(3) ;
+         tg_f3p -> SetLineColor(6) ;
+         tg_f3m -> SetLineWidth(3) ;
+         tg_f3m -> SetLineColor(6) ;
+
+
+         TH2F* h_dummy = new TH2F( "h_dummy", "", 200, 0., 6., 200., 0.5, 1.5 ) ;
+         gStyle -> SetOptStat(0) ;
+
+         TCanvas* can3 = new TCanvas( "can3", "", 500, 900 ) ;
+         can3 -> Divide(1,3) ;
+
+         can3 -> cd(1) ;
+         h_dummy -> Draw() ;
+         tge -> Draw( "3 same" ) ;
+         gPad -> SetGridy(1) ;
+         tg_f0 -> Draw("l same" ) ;
+         tg_f1p -> Draw("l same" ) ;
+         tg_f1m -> Draw("l same" ) ;
+
+         can3 -> cd(2) ;
+         h_dummy -> Draw() ;
+         tge -> Draw( "3 same" ) ;
+         gPad -> SetGridy(1) ;
+         tg_f0 -> Draw("l same" ) ;
+         tg_f2p -> Draw("l same" ) ;
+         tg_f2m -> Draw("l same" ) ;
+
+         can3 -> cd(3) ;
+         h_dummy -> Draw() ;
+         tge -> Draw( "3 same" ) ;
+         gPad -> SetGridy(1) ;
+         tg_f0 -> Draw("l same" ) ;
+         tg_f3p -> Draw("l same" ) ;
+         tg_f3m -> Draw("l same" ) ;
+
+
+      }
 
 
    } // p2fit1
