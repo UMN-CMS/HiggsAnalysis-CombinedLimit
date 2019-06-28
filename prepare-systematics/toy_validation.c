@@ -58,16 +58,31 @@
             int nby(200) ;
             sprintf( hname, "h_toy_%d_D%d", yi+2016, di+1 ) ;
             TH2F* hp = new TH2F( hname, hname, nbx, 0., 6., nby, 0., 2. ) ;
+            nbx = nby ;
+            sprintf( hname, "h_toy_%d_D%d_fine", yi+2016, di+1 ) ;
+            TH2F* hp2 = new TH2F( hname, hname, nbx, 0., 6., nby, 0., 2. ) ;
             int ntoy = 10000 ;
             for ( int ti=0; ti<ntoy; ti++ ) {
                double theta1 = tran.Gaus(0.,1.) ;
                double theta2 = tran.Gaus(0.,1.) ;
                double theta3 = tran.Gaus(0.,1.) ;
+               double x_val[6] ;
+               double f_val[6] ;
                for ( int xi=0; xi<6; xi++ ) {
                   double x = xi+0.5 ;
                   double fval = c0[yi][di][xi] + theta1 * c1[yi][di][xi] + theta2 * c2[yi][di][xi] + theta3 * c3[yi][di][xi] ;
                   hp -> Fill( x, fval ) ;
+                  x_val[xi] = x ;
+                  f_val[xi] = fval ;
                } // xi
+               double calc_p2 = 0.5 * ( f_val[2] - 2 * f_val[1] + f_val[0] ) ;
+               double calc_p1 = f_val[1] - f_val[0] - (2 * x_val[0] + 1 ) * calc_p2 ;
+               double calc_p0 = f_val[0] - calc_p1 * x_val[0] - calc_p2 * x_val[0] * x_val[0] ;
+               for ( int xi=0; xi<nbx; xi++ ) {
+                  double x = 0. + (xi+0.5)*(6./(1.*nbx)) ;
+                  double f = calc_p0 + calc_p1 * x + calc_p2 * x * x ;
+                  hp2 -> Fill( x, f ) ;
+               }
             } // ti
 
             char tgename[1000] ;
@@ -99,6 +114,11 @@
                sprintf( pname, "h_%d_D%d_Njets%d", yi+2016, di+1, nji+1 ) ;
                TH1* hproj = hp -> ProjectionY( pname, nji+1, nji+1 ) ;
                hproj -> Draw() ;
+               int finexbin = hp2 -> GetXaxis() -> FindBin( nji+0.5 ) ;
+               sprintf( pname, "h_%d_D%d_Njets%d_fine", yi+2016, di+1, nji+1 ) ;
+               TH1* hproj_fine = hp2 -> ProjectionY( pname, finexbin, finexbin ) ;
+               hproj_fine -> SetLineColor(2) ;
+               hproj_fine -> Draw("same") ;
                char label[100] ;
                sprintf( label, "Fit = %7.4f +/- %7.4f", fvals[nji], ferrs[nji] ) ;
                ttlabel -> DrawTextNDC( 0.15, 0.80, label ) ;

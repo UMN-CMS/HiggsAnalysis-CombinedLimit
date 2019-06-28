@@ -1,6 +1,4 @@
 
-// hi
-//
 #include "histio.c"
 
    void p2fit1( int dbin_ind = 1, bool add_full_dev = false, const char* infile = "../fit-input-root-files/2016/ttbar_systematics.root" ) {
@@ -211,6 +209,16 @@
          sprintf( label, "Func. = %7.4f +/- %7.4f", f_val[bi], f_err[bi] ) ;
          tt_label -> DrawTextNDC( 0.15, 0.80, label ) ;
       } // bi
+
+     //--- check of equations for computing p0, p1, p2 from three points on the function.
+
+      double calc_p2 = 0.5 * ( f_val[2] - 2 * f_val[1] + f_val[0] ) ;
+      double calc_p1 = f_val[1] - f_val[0] - (2 * x_val[0] + 1 ) * calc_p2 ;
+      double calc_p0 = f_val[0] - calc_p1 * x_val[0] - calc_p2 * x_val[0] * x_val[0] ;
+      printf( "\n\n" ) ;
+      printf( " Calculated values from three points:  p0 = %7.5f , p1 = %7.5f , p2 = %7.5f\n", calc_p0, calc_p1, calc_p2 ) ;
+      printf( " Actual values:                        p0 = %7.5f , p1 = %7.5f , p2 = %7.5f\n", p0, p1, p2 ) ;
+      printf( "\n\n" ) ;
 
 
 
