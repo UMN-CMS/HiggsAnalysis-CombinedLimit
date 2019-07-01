@@ -241,71 +241,58 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   TFile* file = TFile::Open((infile_path+"/njets_for_Aron.root").c_str());
 
   TH1D* data_th1_D1;
-  if     (dataType == "data")        data_th1_D1 = (TH1D*)file->Get(("D1_data_h_njets_pt30_1l"+syst).c_str());  // Actual data -- be careful
-  else if(dataType == "pseudodata" ) data_th1_D1 = (TH1D*)file->Get(("D1_pseudodata_h_njets_pt30_1l"+syst).c_str()); // without signal
-  else if(dataType == "pseudodataS") data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());  // with signal
-  else if(dataType == "pseudodataA" ) data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataFunc28_24_236_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataB" ) data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataFunc28_24_18_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataC" ) data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
+  if     (dataType == "data")        data_th1_D1 = (TH1D*)file->Get("D1_data_h_njets_pt30_1l");  // Actual data -- be careful
+  else if(dataType == "pseudodata" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodata_h_njets_pt30_1l"); // without signal
+  else if(dataType == "pseudodataS") data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataA" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataB" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataC" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
   else                               data_th1_D1 = (TH1D*)file->Get(("D1_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
-  TH1D* otherMC_th1_D1 = (TH1D*)file->Get(("D1_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D1 = (TH1D*)file->Get(("D1_QCD_h_njets_pt30_1l"+syst).c_str());
-  TH1D* ttxMC_th1_D1 = (TH1D*)file->Get(("D1_TTX_h_njets_pt30_1l"+syst).c_str());
-  TH1D* sigMC_th1_D1 = (TH1D*)file->Get(("D1_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
+  TH1D* otherMC_th1_D1 = (TH1D*)file->Get("D1_OTHER_h_njets_pt30_1l");
+  TH1D* qcdMC_th1_D1 = (TH1D*)file->Get("D1_QCD_h_njets_pt30_1l");
+  TH1D* ttxMC_th1_D1 = (TH1D*)file->Get("D1_TTX_h_njets_pt30_1l");
+  TH1D* sigMC_th1_D1 = (TH1D*)file->Get(("D1_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());
 
   TH1D* data_th1_D2;
-  if     (dataType == "data")        data_th1_D2 = (TH1D*)file->Get(("D2_data_h_njets_pt30_1l"+syst).c_str());  // Actual data -- be careful
-  else if(dataType == "pseudodata" ) data_th1_D2 = (TH1D*)file->Get(("D2_pseudodata_h_njets_pt30_1l"+syst).c_str()); // without signal
-  else if(dataType == "pseudodataS") data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());  // with signal
-  else if(dataType == "pseudodataA" ) data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataFunc28_24_236_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataB" ) data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataFunc28_24_18_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataC" ) data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
+  if     (dataType == "data")        data_th1_D2 = (TH1D*)file->Get("D2_data_h_njets_pt30_1l");  // Actual data -- be careful
+  else if(dataType == "pseudodata" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodata_h_njets_pt30_1l"); // without signal
+  else if(dataType == "pseudodataS") data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataA" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataB" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataC" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
   else                               data_th1_D2 = (TH1D*)file->Get(("D2_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
-  TH1D* otherMC_th1_D2 = (TH1D*)file->Get(("D2_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D2 = (TH1D*)file->Get(("D2_QCD_h_njets_pt30_1l"+syst).c_str());
-  TH1D* ttxMC_th1_D2 = (TH1D*)file->Get(("D2_TTX_h_njets_pt30_1l"+syst).c_str());
-  TH1D* sigMC_th1_D2 = (TH1D*)file->Get(("D2_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
+  TH1D* otherMC_th1_D2 = (TH1D*)file->Get("D2_OTHER_h_njets_pt30_1l");
+  TH1D* qcdMC_th1_D2 = (TH1D*)file->Get("D2_QCD_h_njets_pt30_1l");
+  TH1D* ttxMC_th1_D2 = (TH1D*)file->Get("D2_TTX_h_njets_pt30_1l");
+  TH1D* sigMC_th1_D2 = (TH1D*)file->Get(("D2_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());
 
   TH1D* data_th1_D3;
-  if     (dataType == "data")        data_th1_D3 = (TH1D*)file->Get(("D3_data_h_njets_pt30_1l"+syst).c_str());  // Actual data -- be careful
-  else if(dataType == "pseudodata" ) data_th1_D3 = (TH1D*)file->Get(("D3_pseudodata_h_njets_pt30_1l"+syst).c_str()); // without signal
-  else if(dataType == "pseudodataS") data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());  // with signal
-  else if(dataType == "pseudodataA" ) data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataFunc28_24_236_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataB" ) data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataFunc28_24_18_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataC" ) data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
+  if     (dataType == "data")        data_th1_D3 = (TH1D*)file->Get("D3_data_h_njets_pt30_1l");  // Actual data -- be careful
+  else if(dataType == "pseudodata" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodata_h_njets_pt30_1l"); // without signal
+  else if(dataType == "pseudodataS") data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataA" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataB" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataC" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
   else                               data_th1_D3 = (TH1D*)file->Get(("D3_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
-  TH1D* otherMC_th1_D3 = (TH1D*)file->Get(("D3_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D3 = (TH1D*)file->Get(("D3_QCD_h_njets_pt30_1l"+syst).c_str());
-  TH1D* ttxMC_th1_D3 = (TH1D*)file->Get(("D3_TTX_h_njets_pt30_1l"+syst).c_str());
-  TH1D* sigMC_th1_D3 = (TH1D*)file->Get(("D3_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
+  TH1D* otherMC_th1_D3 = (TH1D*)file->Get("D3_OTHER_h_njets_pt30_1l");
+  TH1D* qcdMC_th1_D3 = (TH1D*)file->Get("D3_QCD_h_njets_pt30_1l");
+  TH1D* ttxMC_th1_D3 = (TH1D*)file->Get("D3_TTX_h_njets_pt30_1l");
+  TH1D* sigMC_th1_D3 = (TH1D*)file->Get(("D3_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());
 
   TH1D* data_th1_D4;
-  if     (dataType == "data")        data_th1_D4 = (TH1D*)file->Get(("D4_data_h_njets_pt30_1l"+syst).c_str());  // Actual data -- be careful
-  else if(dataType == "pseudodata" ) data_th1_D4 = (TH1D*)file->Get(("D4_pseudodata_h_njets_pt30_1l"+syst).c_str()); // without signal
-  else if(dataType == "pseudodataS") data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());  // with signal
-  else if(dataType == "pseudodataA" ) data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataFunc28_24_236_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataB" ) data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataFunc28_24_18_h_njets_pt30_1l"+syst).c_str()); //
-  else if(dataType == "pseudodataC" ) data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataFunc28_24_-20_h_njets_pt30_1l"+syst).c_str()); //
+  if     (dataType == "data")        data_th1_D4 = (TH1D*)file->Get("D4_data_h_njets_pt30_1l");  // Actual data -- be careful
+  else if(dataType == "pseudodata" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodata_h_njets_pt30_1l"); // without signal
+  else if(dataType == "pseudodataS") data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataA" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataB" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
+  else if(dataType == "pseudodataC" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
   else                               data_th1_D4 = (TH1D*)file->Get(("D4_"+dataType+"_h_njets_pt30_1l"+syst).c_str());
-  TH1D* otherMC_th1_D4 = (TH1D*)file->Get(("D4_OTHER_h_njets_pt30_1l"+syst).c_str());
-  TH1D* qcdMC_th1_D4 = (TH1D*)file->Get(("D4_QCD_h_njets_pt30_1l"+syst).c_str());
-  TH1D* ttxMC_th1_D4 = (TH1D*)file->Get(("D4_TTX_h_njets_pt30_1l"+syst).c_str());
-  TH1D* sigMC_th1_D4 = (TH1D*)file->Get(("D4_"+model+"_"+mass+"_h_njets_pt30_1l"+syst).c_str());
+  TH1D* otherMC_th1_D4 = (TH1D*)file->Get("D4_OTHER_h_njets_pt30_1l");
+  TH1D* qcdMC_th1_D4 = (TH1D*)file->Get("D4_QCD_h_njets_pt30_1l");
+  TH1D* ttxMC_th1_D4 = (TH1D*)file->Get("D4_TTX_h_njets_pt30_1l");
+  TH1D* sigMC_th1_D4 = (TH1D*)file->Get(("D4_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());
 
   // tt bkg param setup
-  //RooRealVar a0_tt("a0_tt","a0 of tt bkg shape",0.28,0.0,1.0);
-  //RooRealVar a1_tt("a1_tt","a1 of tt bkg shape",0.24,0.0,1.0);
-  ////RooRealVar a2_tt("a2_tt","a2 of tt bkg shape",0.10,-0.5,0.5);
-  //RooRealVar a2_tt("a2_tt","a2 of tt bkg shape",0.10,-0.5,0.23);
-
-  //RooRealVar a0_tt("a0_tt","a0 of tt bkg shape",0.28,0.26,0.30);
-  //RooRealVar a1_tt("a1_tt","a1 of tt bkg shape",0.24,0.23,0.27);
-  //RooRealVar a2_tt("a2_tt","a2 of tt bkg shape",0.10,-0.05,0.23);
-
-  //RooRealVar a0_tt("a0_tt","a0 of tt bkg shape",0.28,0.26,0.50);
-  //RooRealVar a1_tt("a1_tt","a1 of tt bkg shape",0.25,0.24,0.50);
-  //RooRealVar a2_tt("a2_tt","a2 of tt bkg shape",0.10,-0.05,0.24);
-
   RooRealVar a0_tt(("a0_tt_"+year).c_str(),("a0 of tt bkg shape for "+year).c_str(),0.28,0.1,0.4);
   RooRealVar a1_tt(("a1_tt_"+year).c_str(),("a1 of tt bkg shape for "+year).c_str(),0.24,0.1,0.4);
   //RooRealVar a2_tt(("a2_tt_"+year).c_str(),("a2 of tt bkg shape for "+year).c_str(),0.20,0.0,0.4);
