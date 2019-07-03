@@ -471,7 +471,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   std::map<std::string,std::map<std::string, std::map<int, std::vector<double>>>> qcdcrMap;
   while(reader.Next()) qcdcrMap[std::to_string(*yearTree)]["MVABin"+std::to_string(*MVAbin)][*Njets] = {*coef0, *coef1, *coef2, *coef3};
 
-  // ----------------------  MVA bin 1  ------------------
+  // ----------------------------------------------------
+  // ----------------------  MVA bin 1  -----------------
+  // ----------------------------------------------------
   
   // Dataset with 8 bins -- now 6
   RooDataHist data_hist_D1("data_obs_D1","Data observed in MVA bin 1",vars_D1,data_th1_D1);
@@ -525,8 +527,10 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   RooAddition tt_norm_D1(procNameD1Norm.str().c_str(),"",*bkg_tt_bins_D1);
   wspace->import(tt_norm_D1,RooFit::RecycleConflictNodes());
   
+  // ----------------------------------------------------
   // ---------------------- MVA bin 2  ------------------
-  
+  // ----------------------------------------------------  
+
   // Dataset with 8 bins
   RooDataHist data_hist_D2("data_obs_D2","Data observed in MVA bin 2",vars_D2,data_th1_D2);
   wspace->import(data_hist_D2);
@@ -578,7 +582,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   RooAddition tt_norm_D2(procNameD2Norm.str().c_str(),"",*bkg_tt_bins_D2);
   wspace->import(tt_norm_D2,RooFit::RecycleConflictNodes());
   
+  // ----------------------------------------------------
   // ---------------------- MVA bin 3  ------------------
+  // ----------------------------------------------------
   
   // Dataset with 8 bins
   RooDataHist data_hist_D3("data_obs_D3","Data observed in MVA bin 3",vars_D3,data_th1_D3);
@@ -630,8 +636,10 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   procNameD3Norm << procName_D3 << "_norm";
   RooAddition tt_norm_D3(procNameD3Norm.str().c_str(),"",*bkg_tt_bins_D3);
   wspace->import(tt_norm_D3,RooFit::RecycleConflictNodes());
-  
+
+  // ----------------------------------------------------
   // ---------------------- MVA bin 4  ------------------
+  // ----------------------------------------------------
   
   // Dataset with 8 bins
   RooDataHist data_hist_D4("data_obs_D4","Data observed in MVA bin 4",vars_D4,data_th1_D4);
@@ -689,44 +697,28 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   fOut->cd();
   
   // Shape histograms for signal
-  sigMC_th1_D1->SetName("sigMC_th1_D1");
-  sigMC_th1_D2->SetName("sigMC_th1_D2");
-  sigMC_th1_D3->SetName("sigMC_th1_D3");
-  sigMC_th1_D4->SetName("sigMC_th1_D4");
-  sigMC_th1_D1->Write();
-  sigMC_th1_D2->Write();
-  sigMC_th1_D3->Write();
-  sigMC_th1_D4->Write();
+  sigMC_th1_D1->SetName("sigMC_th1_D1");  sigMC_th1_D1->Write();
+  sigMC_th1_D2->SetName("sigMC_th1_D2");  sigMC_th1_D2->Write();
+  sigMC_th1_D3->SetName("sigMC_th1_D3");  sigMC_th1_D3->Write();
+  sigMC_th1_D4->SetName("sigMC_th1_D4");  sigMC_th1_D4->Write();
   
   // Shape histograms for other backgrounds
-  otherMC_th1_D1->SetName("otherMC_th1_D1");
-  otherMC_th1_D2->SetName("otherMC_th1_D2");
-  otherMC_th1_D3->SetName("otherMC_th1_D3");
-  otherMC_th1_D4->SetName("otherMC_th1_D4");
-  otherMC_th1_D1->Write();
-  otherMC_th1_D2->Write();
-  otherMC_th1_D3->Write();
-  otherMC_th1_D4->Write();
+  otherMC_th1_D1->SetName("otherMC_th1_D1");  otherMC_th1_D1->Write();
+  otherMC_th1_D2->SetName("otherMC_th1_D2");  otherMC_th1_D2->Write();
+  otherMC_th1_D3->SetName("otherMC_th1_D3");  otherMC_th1_D3->Write();
+  otherMC_th1_D4->SetName("otherMC_th1_D4");  otherMC_th1_D4->Write();
   
   // Shape histograms for QCD backgrounds
-  qcdMC_th1_D1->SetName("qcdMC_th1_D1");
-  qcdMC_th1_D2->SetName("qcdMC_th1_D2");
-  qcdMC_th1_D3->SetName("qcdMC_th1_D3");
-  qcdMC_th1_D4->SetName("qcdMC_th1_D4");
-  qcdMC_th1_D1->Write();
-  qcdMC_th1_D2->Write();
-  qcdMC_th1_D3->Write();
-  qcdMC_th1_D4->Write();
+  qcdMC_th1_D1->SetName("qcdMC_th1_D1");  qcdMC_th1_D1->Write();
+  qcdMC_th1_D2->SetName("qcdMC_th1_D2");  qcdMC_th1_D2->Write();
+  qcdMC_th1_D3->SetName("qcdMC_th1_D3");  qcdMC_th1_D3->Write();
+  qcdMC_th1_D4->SetName("qcdMC_th1_D4");  qcdMC_th1_D4->Write();
   
   // Shape histograms for TTX backgrounds
-  ttxMC_th1_D1->SetName("ttxMC_th1_D1");
-  ttxMC_th1_D2->SetName("ttxMC_th1_D2");
-  ttxMC_th1_D3->SetName("ttxMC_th1_D3");
-  ttxMC_th1_D4->SetName("ttxMC_th1_D4");
-  ttxMC_th1_D1->Write();
-  ttxMC_th1_D2->Write();
-  ttxMC_th1_D3->Write();
-  ttxMC_th1_D4->Write();
+  ttxMC_th1_D1->SetName("ttxMC_th1_D1");  ttxMC_th1_D1->Write();
+  ttxMC_th1_D2->SetName("ttxMC_th1_D2");  ttxMC_th1_D2->Write();
+  ttxMC_th1_D3->SetName("ttxMC_th1_D3");  ttxMC_th1_D3->Write();
+  ttxMC_th1_D4->SetName("ttxMC_th1_D4");  ttxMC_th1_D4->Write();
   
   // =================================================================================
   // Systematics

@@ -172,6 +172,8 @@ def makeSigTex(name, l):
             caption = "Best fit signal strengths for %s model in MC with signal injection" % dic["model"] 
         elif dic["runtype"] == "pseudoData": 
             caption = "Best fit signal strengths for %s model in MC" % dic["model"] 
+        else:
+            caption = "Best fit signal strengths for %s in $%s$ data type" % (dic["model"],dic["runtype"]) 
         f.write( "\\begin{table}[p]\n" )
         f.write( "\\centering\n" )
         f.write( "\\caption{%s}\n" % caption )
@@ -193,7 +195,7 @@ def main():
     Mass & Best fit signal strength & Observed Significance & p-value\\\\ \hline
     """    
     path = options.basedir
-    runtypes = ["Data", "pseudoData", "pseudoDataS"]
+    runtypes = ["pseudoData", "pseudoDataS", "pseudoDataS_RPV_350"]
     models = ["RPV","SYY"]
     years = ["2016","2017","Combo"]
     masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
@@ -280,7 +282,7 @@ def main():
     makeSigTex("table_signal_strength.tex", l)
     
     for dataSet in d:        
-        if dataSet["runtype"] == "Data":
+        if not (dataSet["runtype"] == "pseudoData" or dataSet["runtype"] == "pseudoDataS"):
             print "------------------------------------------"
             print dataSet["runtype"], dataSet["model"]        
             makePValuePlot(dataSet)
