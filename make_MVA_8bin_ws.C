@@ -105,6 +105,21 @@ template<typename T> void WriteHisto2WS(TFile* f, const std::string& histName, c
     }
 }
 
+std::string getR(const int j)
+{    
+    std::stringstream R;
+    //R << "@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<"-0 ) / TMath::Power( @1-@3 , "<<j<<"-2 ) , 1/(2-0) )";
+    //R << "@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )* ( ( @1-@2 > 0) ? 1.0 : 0.0 ) * ((@2-@3 > 0) ? 1.0 : 0.0)";
+    //R << "@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )* ( ((@1-@2<0)(0.0)+(@1-@2>=0)(1.0))*((@2-@3<0)(0.0)+(@2-@3>=0)(1.0)) )";
+    //R << "@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )* step(1.0)";
+    //R << "@3 + (@1-@2>0)*(@2-@3>0)*TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )";
+    //R << "@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )";
+    //R << "@3 + (@1-@2>0)*(@2-@3>0)*TMath::Power( TMath::Abs( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) ) , 1/2 )";
+    //R << "@3 + TMath::Power( TMath::Abs( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) ) , 1/2 )";
+    R << "@3>1 ? ( @2 - 1./@3 + TMath::Power(  TMath::Power( 1./@3 , "<<j<<" ) / TMath::Power( @1-@2+1./@3 , "<<j-2<<" ) , 1/2 ) ) : ( @2 - (2.-@3) + TMath::Power( TMath::Power( (2.-@3) , "<<j<<" ) / TMath::Power( @1-@2+(2.-@3) , "<<j-2<<" ) , 1/2 ) )";
+    return R.str();
+}
+
 void construct_formula(std::string procName, RooArgList& binlist, const RooArgList& paramlist, const std::vector<NuisanceParam>& NPs) 
 {
   // Functional form:
@@ -127,7 +142,7 @@ void construct_formula(std::string procName, RooArgList& binlist, const RooArgLi
 
   int max_bin = 18; // 14 means just njets=14, 20 means last bin is inclusive up through njets=20
 
-  // Will update this to go only to 12 jets, rather than 14. So 6 bins instead of 8
+  // Updated this to go only to 12 jets, rather than 14. So 6 bins instead of 8
   for (int i=0; i<6; i++) 
   {
     std::stringstream form;
@@ -136,31 +151,28 @@ void construct_formula(std::string procName, RooArgList& binlist, const RooArgLi
     form << "(@0";
     formArgList.add(paramlist[0]); // N7_tt for this MVA bin
 
-    if (i>=1) { // for bin 1 and up
-      for (int j=0; j<i; j++) {
-	//form << "*(@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<"-0 ) / TMath::Power( @1-@3 , "<<j<<"-2 ) , 1/(2-0) ))";
-	//form << "*(@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )* ( ( @1-@2 > 0) ? 1.0 : 0.0 ) * ((@2-@3 > 0) ? 1.0 : 0.0) )";
-	//form << "*(@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )* ( ((@1-@2<0)(0.0)+(@1-@2>=0)(1.0))*((@2-@3<0)(0.0)+(@2-@3>=0)(1.0)) ) )";
-	//form << "*(@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 )* step(1.0))";
-	//form << "*(@3 + (@1-@2>0)*(@2-@3>0)*TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 ) )";
-	//form << "*(@3 + TMath::Power( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) , 1/2 ))";
-	//form << "*(@3 + (@1-@2>0)*(@2-@3>0)*TMath::Power( TMath::Abs( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) ) , 1/2 ))";
-	//form << "*(@3 + TMath::Power( TMath::Abs( TMath::Power( @2-@3 , "<<j<<" ) / TMath::Power( @1-@3 , "<<j-2<<" ) ) , 1/2 ))";
-	form << "*( @3>1 ? ( @2 - 1./@3 + TMath::Power(  TMath::Power( 1./@3 , "<<j<<" ) / TMath::Power( @1-@2+1./@3 , "<<j-2<<" ) , 1/2 ) ) : ( @2 - (2.-@3) + TMath::Power( TMath::Power( (2.-@3) , "<<j<<" ) / TMath::Power( @1-@2+(2.-@3) , "<<j-2<<" ) , 1/2 ) ) )";
-      }
-      formArgList.add(paramlist[1]); // a0_tt
-      formArgList.add(paramlist[2]); // a1_tt
-      formArgList.add(paramlist[3]); // d_tt
+    if (i>=1) // for bin 1 and up
+    { 
+        for (int j=0; j<i; j++) 
+        {
+            form << "*(" << getR(j) << ")";
+        }
+        formArgList.add(paramlist[1]); // a0_tt
+        formArgList.add(paramlist[2]); // a1_tt
+        formArgList.add(paramlist[3]); // d_tt
     } // end bin 1 and up
 
     // The last bin covers from njet=14 through njet=max_bin
-    if (i==5) {
-      for (int k=6; k<=max_bin-7; k++) {
-	form << " + 1";
-	for (int j=0; j<k; j++) {
-	  form << "*( @3>1 ? ( @2 - 1./@3 + TMath::Power(  TMath::Power( 1./@3 , "<<j<<" ) / TMath::Power( @1-@2+1./@3 , "<<j-2<<" ) , 1/2 ) ) : ( @2 - (2.-@3) + TMath::Power( TMath::Power( (2.-@3) , "<<j<<" ) / TMath::Power( @1-@2+(2.-@3) , "<<j-2<<" ) , 1/2 ) ) )";
-	}
-      }
+    if (i==5) 
+    {
+        for (int k=6; k<=max_bin-7; k++) 
+        {
+            form << " + @0";
+            for (int j=0; j<k; j++) 
+            {
+                form << "*(" << getR(j) << ")";
+            }
+        }
     }
     form << ")";
 
