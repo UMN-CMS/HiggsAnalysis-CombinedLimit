@@ -20,8 +20,8 @@ def main():
     # Parse command line arguments
     parser = optparse.OptionParser("usage: %prog [options]\n")
 
-    parser.add_option ('--inPut_2016',  dest='inputRoot2016',  type='string', default = 'Keras_V1.2.6_v1_DataQCDShape', help="input root file directory: 2016")
-    parser.add_option ('--inPut_2017',  dest='inputRoot2017',  type='string', default = 'Keras_V3.0.2_v1_DataQCDShape', help="input root file directory: 2017")
+    parser.add_option ('--inPut_2016',  dest='inputRoot2016',  type='string', default = 'Keras_V1.2.8_Approval_SepOther_StatErrPlusFullDev', help="input root file directory: 2016")
+    parser.add_option ('--inPut_2017',  dest='inputRoot2017',  type='string', default = 'Keras_V3.0.4_Approval_SepOther_StatErrPlusFullDev', help="input root file directory: 2017")
     parser.add_option ('-d',            dest='signalType',     type='string', default = '',                help="List of signal model, comma separated")
     parser.add_option ('-t',            dest='dataType',       type='string', default = 'data',            help="Specify if running over data or pseudo data")
     parser.add_option ('--syst',        dest='syst',           type='string', default = 'None',            help="Specify what systimatic variation you want when picking a dataType")
@@ -151,7 +151,8 @@ def main():
 
                         fileParts.append(transfer)
                         fileParts.append("Arguments = %s %s %s %s %s %s %s %s %s %s %s %s\n" % (options.inputRoot2016, options.inputRoot2017, st, mass, options.year, 
-                                                                                             options.dataType, str(r), str(seed), str(options.numToys), str(options.iterations), str(doToyS), options.syst))
+                                                                                                options.dataType, str(r), str(seed), str(options.numToys), 
+                                                                                                str(options.iterations), str(doToyS), options.syst))
                         fileParts.append("Output = %s/log-files/MyFit_%s_%s_%s_%s.stdout\n"%(options.outPath, st, mass, str(r), str(seed)))
                         fileParts.append("Error = %s/log-files/MyFit_%s_%s_%s_%s.stderr\n"%(options.outPath, st, mass, str(r), str(seed)))
                         fileParts.append("Log = %s/log-files/MyFit_%s_%s_%s_%s.log\n"%(options.outPath, st, mass, str(r), str(seed)))
