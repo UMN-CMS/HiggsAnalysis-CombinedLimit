@@ -15,7 +15,7 @@ def makePValuePlot(dataSet):
     npoints = len(pvalue_2016)
     Xmin = 300
     Xmax = 900
-    Ymin = 0.0000005
+    Ymin = min( 0.0000005, min(pvalue_Combo)*0.1 )
     Ymax = 1
 
     c1 = ROOT.TCanvas("c1","PValues",1000,1000)
@@ -41,7 +41,6 @@ def makePValuePlot(dataSet):
     h.GetYaxis().SetLabelSize(0.05)
     h.GetYaxis().SetTitleSize(0.05)
     h.GetYaxis().SetTitleOffset(1.0)
-    #h.GetYaxis().SetRangeUser(0, 2.2)
     #h.GetYaxis().SetNdivisions(4, 2, 0)
     h.GetXaxis().SetTitle("m_{#tilde{t}} [GeV]")
     h.GetYaxis().SetTitle("Local p-value")
@@ -66,7 +65,7 @@ def makePValuePlot(dataSet):
     # For 1 sigma: s = 0.68
     #   1 - (0.5 + s/2) = 0.5 - s/2
     entries = []
-    numSigma = 4
+    numSigma = 8
     for s in range(1, numSigma+1):
         sigma = 0.5 - ROOT.TMath.Erf(s/ROOT.TMath.Sqrt(2))/2
         L = ROOT.TLine(Xmin, sigma, Xmax, sigma)
@@ -128,7 +127,8 @@ def makePValuePlot(dataSet):
     hr.GetYaxis().SetLabelSize(0.13)
     hr.GetYaxis().SetTitleSize(0.15)
     hr.GetYaxis().SetTitleOffset(0.3)
-    hr.GetYaxis().SetRangeUser(-0.2, 1.2)
+    maxR = max(1.2, max(dataSet["data"]["Combo"]["rList"]))
+    hr.GetYaxis().SetRangeUser(-0.2, maxR*1.1)
     hr.GetYaxis().SetNdivisions(4, 2, 0)
     hr.Draw()
 
@@ -195,7 +195,8 @@ def main():
     Mass & Best fit signal strength & Observed Significance & p-value\\\\ \hline
     """    
     path = options.basedir
-    runtypes = ["pseudoData", "pseudoDataS", "pseudoDataS_RPV_350"]
+    #runtypes = ["Data", "pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
+    runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
     models = ["RPV","SYY"]
     years = ["2016","2017","Combo"]
     masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
@@ -282,7 +283,7 @@ def main():
     makeSigTex("table_signal_strength.tex", l)
     
     for dataSet in d:        
-        if not (dataSet["runtype"] == "pseudoData" or dataSet["runtype"] == "pseudoDataS"):
+        #if not (dataSet["runtype"] == "pseudoData" or dataSet["runtype"] == "pseudoDataS"):
             print "------------------------------------------"
             print dataSet["runtype"], dataSet["model"]        
             makePValuePlot(dataSet)
