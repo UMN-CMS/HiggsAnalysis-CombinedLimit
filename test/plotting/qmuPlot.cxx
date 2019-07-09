@@ -112,27 +112,26 @@ void tailCount(TTree *t, std::string br, double cv, int mode, int& tpass, int& t
 }
 
 TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
-
     if (gFile == 0) { std::cerr << "You must have a file open " << std::endl; return 0; }
-    TTree *t = (TTree *) gFile->Get("q");
+    TTree *t = (TTree*) gFile->Get("q");
     if (t == 0) { std::cerr << "File " << gFile->GetName() << " does not contain a tree called 'q'" << std::endl; return 0; }
 
     TCanvas *c1 = new TCanvas("c1","c1");
     c1->SetBottomMargin(0.15);    
-    
-    TH1F *qB;
-    TH1F *qS;
 
-    t->Draw("max(2*q,0)>>qB","weight*(type==-1)");
-    qB = (TH1F*) gROOT->FindObject("qB")->Clone();
-    qB->SetName("NullHyp");
-    qB->Print();
-
-    double yMin = 4.9/qB->Integral();
-
+    //Get the observed value
     t->Draw("max(2*q,0)>>qObs","weight*(type==0)");
     double qObs = ((TH1F*) gROOT->FindObject("qObs"))->GetMean();
+    double xMax = 5*qObs;
     std::cout<<"Obs q value = "<<qObs<<std::endl;
+    
+    //Get the Null Hyp. toys dist.
+    TString bMax = std::to_string(xMax);
+    t->Draw("max(2*q,0)>>qB(1000,0.0,"+bMax+")","weight*(type==-1)");
+    TH1F *qB = (TH1F*) gROOT->FindObject("qB")->Clone();
+    qB->SetName("NullHyp");
+    qB->Print();
+    double yMin = 4.9/qB->Integral();
 
     TArrow *qO = new TArrow(qObs, 0.2, qObs, yMin*1.05, 0.01, "---|>");
     
@@ -140,7 +139,7 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
 	qB->Rebin(rebin);
     }
 
-    double  nB = qB->Integral();
+    double nB = qB->Integral();
     qB->Scale(1.0/qB->Integral());
 
     gStyle->SetOptStat(0); c1->SetLogy(1);
@@ -149,8 +148,7 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     qO->SetLineColor(kBlack);
     qO->SetLineWidth(3);
 
-    double clB;
-    clB  = tailReal(t,"qB",qObs,0);
+    double clB = tailReal(t,"qB",qObs,0);
     int tpass=0, ttotal=0;
     tailCount(t,"qB",qObs,0,tpass,ttotal);
 
@@ -188,6 +186,7 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     qO->Draw(); 
     qB->Draw("AXIS SAME");
     qB->GetYaxis()->SetRangeUser(yMin, 2.0);
+    qB->GetXaxis()->SetRangeUser(0.0, xMax);
     leg1->Draw();
     leg2->Draw();
     qB->SetTitle("");

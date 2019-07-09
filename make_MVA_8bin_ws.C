@@ -120,7 +120,7 @@ std::string getR(const int j)
     return R.str();
 }
 
-void construct_formula(std::string procName, RooArgList& binlist, const RooArgList& paramlist, const std::vector<NuisanceParam>& NPs) 
+void construct_formula(const std::string& procName, RooArgList& binlist, const RooArgList& paramlist, const std::vector<NuisanceParam>& NPs) 
 {
   // Functional form:
   // f(x) = Njets bin x / Njets bin x-1 = a2 + [ (a1-a2)^(x-a0_val) / (a0-a2)^(x-a1_val) ]^(1/(a1_val-a0_val)) where a1 > a2,
@@ -137,9 +137,7 @@ void construct_formula(std::string procName, RooArgList& binlist, const RooArgLi
   // N7 = Njets=7
 
   std::cout << "size of NPs: " << NPs.size() << std::endl;
-
   ROOT::v5::TFormula::SetMaxima(10000);
-
   int max_bin = 18; // 14 means just njets=14, 20 means last bin is inclusive up through njets=20
 
   // Updated this to go only to 12 jets, rather than 14. So 6 bins instead of 8
@@ -203,10 +201,9 @@ void construct_formula(std::string procName, RooArgList& binlist, const RooArgLi
     binlist.add(*binvar);
 
     std::cout << "bin i = " << i << " , njets = " << i+7 << std::endl;
-    std::cout << "process bin name : " << binName.str().c_str() << std::endl;
-    std::cout << "Formula : " << form.str().c_str() << std::endl;
+    std::cout << "process bin name : " << binName.str() << std::endl;
+    std::cout << "Formula : " << form.str() << std::endl;
     formArgList.Print();
-    std::cout << std::endl;
   }
 }
 
