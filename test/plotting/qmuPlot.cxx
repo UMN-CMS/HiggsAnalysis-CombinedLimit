@@ -122,23 +122,22 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     //Get the observed value
     t->Draw("max(2*q,0)>>qObs","weight*(type==0)");
     double qObs = ((TH1F*) gROOT->FindObject("qObs"))->GetMean();
-    double xMax = 5*qObs;
+    //double xMax = 3*qObs;
+    double xMax = 40;
     std::cout<<"Obs q value = "<<qObs<<std::endl;
     
     //Get the Null Hyp. toys dist.
     TString bMax = std::to_string(xMax);
-    t->Draw("max(2*q,0)>>qB(1000,0.0,"+bMax+")","weight*(type==-1)");
+    //t->Draw("max(2*q,0)>>qB(320,0.0,"+bMax+")","weight*(type==-1)");
+    t->Draw("max(2*q,0)>>qB(100000, 0.0, 10000.0)","weight*(type==-1)");
     TH1F *qB = (TH1F*) gROOT->FindObject("qB")->Clone();
     qB->SetName("NullHyp");
     qB->Print();
-    double yMin = 4.9/qB->Integral();
+    //double yMin = 4.9/qB->Integral();
+    double yMin = 0.000000001;
 
     TArrow *qO = new TArrow(qObs, 0.2, qObs, yMin*1.05, 0.01, "---|>");
     
-    if (rebin>0){
-	qB->Rebin(rebin);
-    }
-
     double nB = qB->Integral();
     qB->Scale(1.0/qB->Integral());
 
@@ -163,6 +162,24 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     TH1F *qB1 = tail(qB, qObs,0);
     qB1->SetFillColor(qB1->GetLineColor()); qB1->SetLineWidth(0); qB1->SetFillStyle(3345);
 
+    // Plotting a chi2 distriution    
+    TF1* chi2Func = new TF1("chi2Func","0.5*ROOT::Math::chisquared_pdf(x,1,0)",0.0,xMax);    
+    TH1F* chi2 = (TH1F*)qB->Clone("chi2");
+    double binWidth = qB->GetBinWidth(1);
+    for(int i = 0; i < qB->GetNbinsX()+1; i++)
+    {
+        double val = chi2Func->Integral(i*binWidth, (i+1)*binWidth);
+        if( i==1 ) val+=0.5;
+        chi2->SetBinContent(i, val);
+    }
+    chi2->SetLineColor(kGreen+2);
+    std::cout<<chi2->Integral(0,xMax)<<std::endl;
+
+    if (rebin>0){
+	qB->Rebin(rebin);
+        chi2->Rebin(rebin);
+    }
+
     TLegend *leg1 = new TLegend(.45,.68,.93,.85);
     leg1->SetFillColor(0);
     leg1->SetShadowColor(0);
@@ -170,8 +187,9 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     leg1->SetTextSize(0.04);
     leg1->SetLineColor(1);
 
-    leg1->AddEntry(qB, "expected for Null", "L");
+    leg1->AddEntry(qB, "expected for b-only", "L");
     leg1->AddEntry(qO, "observed value", "L");
+    leg1->AddEntry(chi2, "#chi^{2} with n.d.f = 1", "L");
 
     TLegend *leg2 = new TLegend(.45,.67,.93,.54);
     leg2->SetFillColor(0);
@@ -183,14 +201,17 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     qB->SetStats(0);
     qB->Draw();
     qB1->Draw("HIST SAME"); 
+    chi2->Draw("SAME");
     qO->Draw(); 
     qB->Draw("AXIS SAME");
-    qB->GetYaxis()->SetRangeUser(yMin, 2.0);
+    qB->GetYaxis()->SetRangeUser(yMin, 10.0);
+    //qB->GetYaxis()->SetRangeUser(yMin, 0.1);
     qB->GetXaxis()->SetRangeUser(0.0, xMax);
+    //qB->GetXaxis()->SetRangeUser(0.0, 5);
     leg1->Draw();
     leg2->Draw();
     qB->SetTitle("");
-    qB->GetYaxis()->SetTitle("");
+    qB->GetYaxis()->SetTitle("Probability");
     qB->GetXaxis()->SetTitle(Form("q_{0}(m_{#tilde{t}} = %g GeV)",mass));
     qB->GetXaxis()->SetTitleOffset(1.05);
     
