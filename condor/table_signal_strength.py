@@ -15,7 +15,10 @@ def makePValuePlot(dataSet):
     npoints = len(pvalue_2016)
     Xmin = 300
     Xmax = 900
-    Ymin = min( 0.0000005, min(pvalue_Combo)*0.1 )
+    Ymin = 0.00005
+    #if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1 or dataSet["runtype"] == "Data":
+    if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1:
+        Ymin = 0.000000000000000000005
     Ymax = 1
 
     c1 = ROOT.TCanvas("c1","PValues",1000,1000)
@@ -41,7 +44,6 @@ def makePValuePlot(dataSet):
     h.GetYaxis().SetLabelSize(0.05)
     h.GetYaxis().SetTitleSize(0.05)
     h.GetYaxis().SetTitleOffset(1.0)
-    #h.GetYaxis().SetNdivisions(4, 2, 0)
     h.GetXaxis().SetTitle("m_{#tilde{t}} [GeV]")
     h.GetYaxis().SetTitle("Local p-value")
     h.Draw()
@@ -127,7 +129,7 @@ def makePValuePlot(dataSet):
     hr.GetYaxis().SetLabelSize(0.13)
     hr.GetYaxis().SetTitleSize(0.15)
     hr.GetYaxis().SetTitleOffset(0.3)
-    maxR = max(1.2, max(dataSet["data"]["Combo"]["rList"]))
+    maxR = 2.5
     hr.GetYaxis().SetRangeUser(-0.2, maxR*1.1)
     hr.GetYaxis().SetNdivisions(4, 2, 0)
     hr.Draw()
@@ -167,11 +169,13 @@ def makeSigTex(name, l):
     f.write( "\n" )
 
     for dic in l:
-        caption = "Best fit signal strengths for %s model in data" % dic["model"]
+        caption = ""
         if dic["runtype"] == "pseudoDataS": 
             caption = "Best fit signal strengths for %s model in MC with signal injection" % dic["model"] 
         elif dic["runtype"] == "pseudoData": 
             caption = "Best fit signal strengths for %s model in MC" % dic["model"] 
+        elif dic["runtype"] == "Data":
+            caption = "Best fit signal strengths for %s model in data" % dic["model"]
         else:
             caption = "Best fit signal strengths for %s in $%s$ data type" % (dic["model"],dic["runtype"]) 
         f.write( "\\begin{table}[p]\n" )
@@ -195,8 +199,13 @@ def main():
     Mass & Best fit signal strength & Observed Significance & p-value\\\\ \hline
     """    
     path = options.basedir
+    runtypes = ["Data", "pseudoData", "pseudoDataS"]
     #runtypes = ["Data", "pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
-    runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
+    #runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
+    #runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp", 
+    #            "pseudodata_qcdCR", "pseudodata_2xqcdCR", "pseudodata_JECUp_JERDown_FSR", "pseudodataS_0.3xRPV_350",
+    #            "pseudodata_0.2xLine", "pseudodata_0.05-0.2xLine", "pseudodata_0.05-0.2xLineNorm", "pseudodata_0.2-0.05xLine", 
+    #            "pseudodataTTJets", "pseudodata_qcdCR_0.05-0.2xLine", "pseudodata_qcdCR_0.2xLine"]
     models = ["RPV","SYY"]
     years = ["2016","2017","Combo"]
     masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
@@ -206,7 +215,7 @@ def main():
     d=[]
     for runtype in runtypes:        
         for model in models:
-            outFileName = "table_signal_strength_%s_%s_%s" % (model, runtype, path)
+            outFileName = "table_signal_strength_%s_%s_%s.tex" % (model, runtype, path)
             file_table = open(outFileName,'w')
             file_table.write(pre_tabular)
             dataSet={"runtype":runtype,"model":model,"data":{}}
