@@ -75,4 +75,4 @@ for mass in args.masses:
     
     outputdir = "%s/Fit_%s_%s/output-files/%s_%s" % (basedir, data, year, model_mass, year)
     if inFile != "": outputdir = "."         
-    canvas.SaveAs(outputdir + "/profilescan_%s_%s_%s_%s.png" % (model_mass, year, data, poi))
+    canvas.SaveAs(outputdir + "/profilescan_%s_%s_%s_%s.pdf" % (model_mass, year, data, poi))

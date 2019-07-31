@@ -216,7 +216,7 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     qB->GetXaxis()->SetTitleOffset(1.05);
     
     c1->SetName(Form("q0_%.1f",mass));
-    c1->Print("qDistribution.pdf");
+    c1->Print(("qDistribution_"+std::to_string(mass)+".pdf").c_str());
 
     return c1;
 }
