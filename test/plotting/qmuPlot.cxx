@@ -180,7 +180,7 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
         chi2->Rebin(rebin);
     }
 
-    TLegend *leg1 = new TLegend(.45,.68,.93,.85);
+    TLegend *leg1 = new TLegend(0.40,0.73,0.90,0.90);
     leg1->SetFillColor(0);
     leg1->SetShadowColor(0);
     leg1->SetTextFont(42);
@@ -191,13 +191,13 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     leg1->AddEntry(qO, "observed value", "L");
     leg1->AddEntry(chi2, "#chi^{2} with n.d.f = 1", "L");
 
-    TLegend *leg2 = new TLegend(.45,.67,.93,.54);
+    TLegend *leg2 = new TLegend(0.40,0.60,0.90,0.73);
     leg2->SetFillColor(0);
     leg2->SetShadowColor(0);
     leg2->SetTextFont(42);
     leg2->SetTextSize(0.04);
     leg2->SetLineColor(1);
-    leg2->AddEntry(qB1, Form("CL_{b} = #frac{%i}{%i} = %.4f (%.1f#sigma)",tpass,ttotal,clB,sig), "F");
+    leg2->AddEntry(qB1, Form("CL_{b} = #frac{%i}{%i} = %.2e (%.1f#sigma)",tpass,ttotal,clB,sig), "F");
     qB->SetStats(0);
     qB->Draw();
     qB1->Draw("HIST SAME"); 
