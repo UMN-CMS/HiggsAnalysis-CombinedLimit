@@ -75,10 +75,11 @@ def makePValuePlot(dataSet):
         L.SetLineWidth(2)
         L.Draw("same")
 
-        S = ROOT.TPaveText(900,sigma-0.25*sigma,920,sigma+0.5*sigma,"")
+        S = ROOT.TPaveText(910,sigma-0.25*sigma,930,sigma+0.5*sigma,"")
         S.SetBorderSize(0)
         S.SetFillStyle(0)
         S.SetTextColor(2)
+        S.SetTextSize(0.035)
         S.AddText( str(s)+"#sigma" )
         S.Draw("same")
         entries.append((L,S))
@@ -200,8 +201,10 @@ def main():
     """    
     path = options.basedir
     runtypes = ["Data", "pseudoData", "pseudoDataS"]
+    #runtypes = ["Data", "pseudoData", "pseudoDataS", "pseudodataS_0.3xRPV_350"]
     #runtypes = ["Data", "pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
     #runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
+    #runtypes = ["pseudodataS_0.3xRPV_350"]
     #runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp", 
     #            "pseudodata_qcdCR", "pseudodata_2xqcdCR", "pseudodata_JECUp_JERDown_FSR", "pseudodataS_0.3xRPV_350",
     #            "pseudodata_0.2xLine", "pseudodata_0.05-0.2xLine", "pseudodata_0.05-0.2xLineNorm", "pseudodata_0.2-0.05xLine", 
