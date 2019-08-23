@@ -11,6 +11,8 @@ parser.add_argument("--data", type=int, default=0, help="Data (0), pseudo-data (
 parser.add_argument("--poi", type=str, default="r", help="Default is r: can pass in a parameter that the profile was performed for")
 parser.add_argument("--inFile", type=str, default="")
 parser.add_argument("--basedir", help="Directory that contains the output Fit_data_year directories", default="OutputForFreezing")
+parser.add_argument("--setXRange", nargs='+', default=["-0.2", "1.0"], help="Set Range of x-axis")
+parser.add_argument("--setYRange", nargs='+', default=["0.0", "20.0"], help="Set Range of y-axis")
 args=parser.parse_args()
 sys.argv.append( '-b' ) #setting batch mode for ROOT
 year = args.year
@@ -23,10 +25,10 @@ elif args.data == 2:
 poi = args.poi
 inFile = args.inFile
 basedir = args.basedir
-xMin = -0.2
-xMax = 1.0
-yMin = 0.0
-yMax = 20.0
+xMin = float(args.setXRange[0])
+xMax = float(args.setXRange[1])
+yMin = float(args.setYRange[0])
+yMax = float(args.setYRange[1]) 
 
 for mass in args.masses:
     model_mass = "%s_%s" % (model, mass)
@@ -68,9 +70,9 @@ for mass in args.masses:
     h.SetStats(0)
     h.SetTitle("Profile scan for %s in %s %s" % (model_mass, year, data))
 
-    l1 = ROOT.TLine(xMin,xMax,1,1)
+    l1 = ROOT.TLine(xMin,1,xMax,1)
     l1.Draw()
-    l2 = ROOT.TLine(0,0,yMin,yMax)
+    l2 = ROOT.TLine(0,yMin,0,yMax)
     l2.Draw()
     
     outputdir = "%s/Fit_%s_%s/output-files/%s_%s" % (basedir, data, year, model_mass, year)

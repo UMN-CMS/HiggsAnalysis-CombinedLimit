@@ -178,6 +178,7 @@ TCanvas *q0Plot(float mass, std::string poinam , int rebin=0) {
     if (rebin>0){
 	qB->Rebin(rebin);
         chi2->Rebin(rebin);
+        qB1->Rebin(rebin);
     }
 
     TLegend *leg1 = new TLegend(0.40,0.73,0.90,0.90);
