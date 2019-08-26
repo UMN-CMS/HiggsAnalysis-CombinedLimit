@@ -212,7 +212,9 @@ void construct_formula(const std::string& procName, RooArgList& binlist, const R
   }
 }
 
-void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_path = "Keras_V1.2.5_v4", const std::string model = "RPV", const std::string mass = "550", const std::string dataType = "pseudodata", const std::string syst = "", bool shared = true, bool TTonly = false) {
+void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_path = "Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix", 
+                      const std::string model = "RPV", const std::string mass = "550", const std::string dataType = "pseudodata", const std::string syst = "", bool shared = true, bool TTonly = false) 
+{
   using namespace RooFit;
   // Load the combine library to get access to the RooParametricHist
   gSystem->Load("libHiggsAnalysisCombinedLimit.so");
@@ -220,29 +222,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   // Output file and workspace 
   TFile *fOut = new TFile(("MVA_"+year+"_"+model+"_"+mass+"_ws.root").c_str(),"RECREATE");
   RooWorkspace *wspace = new RooWorkspace("wspace","wspace");
-
-  // // njet is our variable, 6 bins, from 7 up through 12,
-  // //   Note that njet=12 is inclusive as >=12
-  // // D1, D2, D3, D4 are the MVA bins
-  // wspace->factory("nj_D1[6.5,12.5]");
-  // //wspace->factory("nj_D1[0,6]");
-  // wspace->var("nj_D1")->setBins(6);
-  // RooArgSet vars_D1(*wspace->var("nj_D1"));
-
-  // wspace->factory("nj_D2[6.5,12.5]");
-  // //wspace->factory("nj_D2[0,6]");
-  // wspace->var("nj_D2")->setBins(6);
-  // RooArgSet vars_D2(*wspace->var("nj_D2"));
-
-  // wspace->factory("nj_D3[6.5,12.5]");
-  // //wspace->factory("nj_D3[0,6]");
-  // wspace->var("nj_D3")->setBins(6);
-  // RooArgSet vars_D3(*wspace->var("nj_D3"));
-
-  // wspace->factory("nj_D4[6.5,12.5]");
-  // //wspace->factory("nj_D4[0,6]");
-  // wspace->var("nj_D4")->setBins(6);
-  // RooArgSet vars_D4(*wspace->var("nj_D4"));
 
   wspace->factory("CMS_th1x[0,6]");
   wspace->var("CMS_th1x")->setBins(6);
@@ -309,28 +288,23 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   // tt bkg param setup
   RooRealVar a0_tt(("a0_tt_"+year).c_str(),("a0 of tt bkg shape for "+year).c_str(),0.28,0.1,0.4);
   RooRealVar a1_tt(("a1_tt_"+year).c_str(),("a1 of tt bkg shape for "+year).c_str(),0.24,0.1,0.4);
-  //RooRealVar a2_tt(("a2_tt_"+year).c_str(),("a2 of tt bkg shape for "+year).c_str(),0.20,0.0,0.4);
   RooRealVar d_tt(("d_tt_"+year).c_str(),("d of tt bkg shape for "+year).c_str(),20,-2500,2500);
 
   // also make the separate paramters per MVA bin for use in different fit setup 
   RooRealVar a0_tt_D1(("a0_tt_D1_"+year).c_str(),("a0 of tt bkg shape D1 for "+year).c_str(),0.28,0.0,1.0);
   RooRealVar a1_tt_D1(("a1_tt_D1_"+year).c_str(),("a1 of tt bkg shape D1 for "+year).c_str(),0.24,0.0,1.0);
-  //RooRealVar a2_tt_D1(("a2_tt_D1_"+year).c_str(),("a2 of tt bkg shape D1 for "+year).c_str(),0.10,-0.5,0.5);
   RooRealVar  d_tt_D1(("d_tt_D1_" +year).c_str(),("d  of tt bkg shape D1 for "+year).c_str(),20,-2500,2500);
 
   RooRealVar a0_tt_D2(("a0_tt_D2_"+year).c_str(),("a0 of tt bkg shape D2 for "+year).c_str(),0.28,0.0,1.0);
   RooRealVar a1_tt_D2(("a1_tt_D2_"+year).c_str(),("a1 of tt bkg shape D2 for "+year).c_str(),0.24,0.0,1.0);
-  //RooRealVar a2_tt_D2(("a2_tt_D2_"+year).c_str(),("a2 of tt bkg shape D2 for "+year).c_str(),0.10,-0.5,0.5);
   RooRealVar  d_tt_D2(("d_tt_D2_" +year).c_str(),("d  of tt bkg shape D2 for "+year).c_str(),20,-2500,2500);
 
   RooRealVar a0_tt_D3(("a0_tt_D3_"+year).c_str(),("a0 of tt bkg shape D3 for "+year).c_str(),0.28,0.0,1.0);
   RooRealVar a1_tt_D3(("a1_tt_D3_"+year).c_str(),("a1 of tt bkg shape D3 for "+year).c_str(),0.24,0.0,1.0);
-  //RooRealVar a2_tt_D3(("a2_tt_D3_"+year).c_str(),("a2 of tt bkg shape D3 for "+year).c_str(),0.10,-0.5,0.5);
   RooRealVar  d_tt_D3(("d_tt_D3_" +year).c_str(),("d  of tt bkg shape D3 for "+year).c_str(),20,-2500,2500);
 
   RooRealVar a0_tt_D4(("a0_tt_D4_"+year).c_str(),("a0 of tt bkg shape D4 for "+year).c_str(),0.28,0.0,1.0);
   RooRealVar a1_tt_D4(("a1_tt_D4_"+year).c_str(),("a1 of tt bkg shape D4 for "+year).c_str(),0.24,0.0,1.0);
-  //RooRealVar a2_tt_D4(("a2_tt_D4_"+year).c_str(),("a2 of tt bkg shape D4 for "+year).c_str(),0.10,-0.5,0.5);
   RooRealVar  d_tt_D4(("d_tt_D4_" +year).c_str(),("d  of tt bkg shape D4 for "+year).c_str(),20,-2500,2500);
 
   double_t n7_tt_portion_D1 = TTonly ? data_th1_D1->GetBinContent(1) : data_th1_D1->GetBinContent(1) - otherMC_th1_D1->GetBinContent(1) - qcdMC_th1_D1->GetBinContent(1) - ttxMC_th1_D1->GetBinContent(1);
@@ -441,27 +415,24 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if (shared) 
   {
     RooArgList parlist_D1(N7_tt_D1,a0_tt,a1_tt,d_tt);  // list of shape parameters for tt bkg
-    //RooArgList parlist_D1(N7_tt_D1,a0_tt,a1_tt,a2_tt);  // list of shape parameters for tt bkg                                
     construct_formula(procName_D1,*bkg_tt_bins_D1,parlist_D1,nuisanceParams_D1);
     std::cout << "after constructing formula" << std::endl;
-  } else 
+  } 
+  else 
   {
     RooArgList parlist_D1(N7_tt_D1,a0_tt_D1,a1_tt_D1,d_tt_D1);  // list of shape parameters for tt bkg                       
-    //RooArgList parlist_D1(N7_tt_D1,a0_tt_D1,a1_tt_D1,a2_tt_D1);  // list of shape parameters for tt bkg
     construct_formula(procName_D1,*bkg_tt_bins_D1,parlist_D1,nuisanceParams_D1);
   }
   RooParametricHist background_tt_D1(procName_D1.c_str(),"",*wspace->var("CMS_th1x"),*bkg_tt_bins_D1,*data_th1_D1);
   wspace->import(background_tt_D1,RooFit::RecycleConflictNodes());
-  std::stringstream procNameD1Norm;
-  procNameD1Norm << procName_D1 << "_norm";
-  RooAddition tt_norm_D1(procNameD1Norm.str().c_str(),"",*bkg_tt_bins_D1);
+  RooAddition tt_norm_D1((procName_D1+"_norm").c_str(),"",*bkg_tt_bins_D1);
   wspace->import(tt_norm_D1,RooFit::RecycleConflictNodes());
   
   // ----------------------------------------------------
   // ---------------------- MVA bin 2  ------------------
   // ----------------------------------------------------  
 
-  // Dataset with 8 bins
+  // Dataset with 6 bins
   RooDataHist data_hist_D2("data_obs_D2","Data observed in MVA bin 2",vars_D2,data_th1_D2);
   wspace->import(data_hist_D2);
   
@@ -498,26 +469,23 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if (shared) 
   {
     RooArgList parlist_D2(N7_tt_D2,a0_tt,a1_tt,d_tt);  // list of shape parameters for tt bkg
-    //RooArgList parlist_D2(N7_tt_D2,a0_tt,a1_tt,a2_tt);  // list of shape parameters for tt bkg                                
     construct_formula(procName_D2,*bkg_tt_bins_D2,parlist_D2,nuisanceParams_D2);
-  } else 
+  } 
+  else 
   {
     RooArgList parlist_D2(N7_tt_D2,a0_tt_D2,a1_tt_D2,d_tt_D2);  // list of shape parameters for tt bkg                       
-    //RooArgList parlist_D2(N7_tt_D2,a0_tt_D2,a1_tt_D2,a2_tt_D2);  // list of shape parameters for tt bkg
     construct_formula(procName_D2,*bkg_tt_bins_D2,parlist_D2,nuisanceParams_D2);
   }
   RooParametricHist background_tt_D2(procName_D2.c_str(),"",*wspace->var("CMS_th1x"),*bkg_tt_bins_D2,*data_th1_D2);
   wspace->import(background_tt_D2,RooFit::RecycleConflictNodes());
-  std::stringstream procNameD2Norm;
-  procNameD2Norm << procName_D2 << "_norm";
-  RooAddition tt_norm_D2(procNameD2Norm.str().c_str(),"",*bkg_tt_bins_D2);
+  RooAddition tt_norm_D2((procName_D2+"_norm").c_str(),"",*bkg_tt_bins_D2);
   wspace->import(tt_norm_D2,RooFit::RecycleConflictNodes());
   
   // ----------------------------------------------------
   // ---------------------- MVA bin 3  ------------------
   // ----------------------------------------------------
   
-  // Dataset with 8 bins
+  // Dataset with 6 bins
   RooDataHist data_hist_D3("data_obs_D3","Data observed in MVA bin 3",vars_D3,data_th1_D3);
   wspace->import(data_hist_D3);
   
@@ -554,26 +522,23 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if (shared) 
   {
     RooArgList parlist_D3(N7_tt_D3,a0_tt,a1_tt,d_tt);  // list of shape parameters for tt bkg
-    //RooArgList parlist_D3(N7_tt_D3,a0_tt,a1_tt,a2_tt);  // list of shape parameters for tt bkg                                
     construct_formula(procName_D3,*bkg_tt_bins_D3,parlist_D3,nuisanceParams_D3);
-  } else 
+  } 
+  else 
   {
     RooArgList parlist_D3(N7_tt_D3,a0_tt_D3,a1_tt_D3,d_tt_D3);  // list of shape parameters for tt bkg                       
-    //RooArgList parlist_D3(N7_tt_D3,a0_tt_D3,a1_tt_D3,a2_tt_D3);  // list of shape parameters for tt bkg
     construct_formula(procName_D3,*bkg_tt_bins_D3,parlist_D3,nuisanceParams_D3);
   }
   RooParametricHist background_tt_D3(procName_D3.c_str(),"",*wspace->var("CMS_th1x"),*bkg_tt_bins_D3,*data_th1_D3);
   wspace->import(background_tt_D3,RooFit::RecycleConflictNodes());
-  std::stringstream procNameD3Norm;
-  procNameD3Norm << procName_D3 << "_norm";
-  RooAddition tt_norm_D3(procNameD3Norm.str().c_str(),"",*bkg_tt_bins_D3);
+  RooAddition tt_norm_D3((procName_D3+"_norm").c_str(),"",*bkg_tt_bins_D3);
   wspace->import(tt_norm_D3,RooFit::RecycleConflictNodes());
 
   // ----------------------------------------------------
   // ---------------------- MVA bin 4  ------------------
   // ----------------------------------------------------
   
-  // Dataset with 8 bins
+  // Dataset with 6 bins
   RooDataHist data_hist_D4("data_obs_D4","Data observed in MVA bin 4",vars_D4,data_th1_D4);
   wspace->import(data_hist_D4);
   
@@ -610,19 +575,16 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if (shared) 
   {
     RooArgList parlist_D4(N7_tt_D4,a0_tt,a1_tt,d_tt);  // list of shape parameters for tt bkg
-    //RooArgList parlist_D4(N7_tt_D4,a0_tt,a1_tt,a2_tt);  // list of shape parameters for tt bkg                                
     construct_formula(procName_D4,*bkg_tt_bins_D4,parlist_D4,nuisanceParams_D4);
-  } else 
+  } 
+  else 
   {
     RooArgList parlist_D4(N7_tt_D4,a0_tt_D4,a1_tt_D4,d_tt_D4);  // list of shape parameters for tt bkg                       
-    //RooArgList parlist_D4(N7_tt_D4,a0_tt_D4,a1_tt_D4,a2_tt_D4);  // list of shape parameters for tt bkg
     construct_formula(procName_D4,*bkg_tt_bins_D4,parlist_D4,nuisanceParams_D4);
   }
   RooParametricHist background_tt_D4(procName_D4.c_str(),"",*wspace->var("CMS_th1x"),*bkg_tt_bins_D4,*data_th1_D4);
   wspace->import(background_tt_D4,RooFit::RecycleConflictNodes());
-  std::stringstream procNameD4Norm;
-  procNameD4Norm << procName_D4 << "_norm";
-  RooAddition tt_norm_D4(procNameD4Norm.str().c_str(),"",*bkg_tt_bins_D4);
+  RooAddition tt_norm_D4((procName_D4+"_norm").c_str(),"",*bkg_tt_bins_D4);
   wspace->import(tt_norm_D4,RooFit::RecycleConflictNodes());
   
   // =================================================================================
