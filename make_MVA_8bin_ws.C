@@ -60,6 +60,11 @@ public:
         , h_rprime(nullptr)
     {        
     }
+
+    NuisanceParam(const RooAbsArg& r_name, TFile* tt_syst_file, const std::string& h_name) 
+        : NuisanceParam(r_name, (TH1D*)tt_syst_file->Get(h_name.c_str())) 
+    {
+    }
 };
 
 Double_t step(double_t x) {
@@ -349,22 +354,22 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   RooRealVar N7_tt_D4(("N7_tt_D4_"+year).c_str(),"njets 7 for tt bkg in MVA D4",n7_tt_portion_D4,n7_tt_portion_D4_low,n7_tt_portion_D4+3000);
 
   // tt shape systematic nuisance parameters
-  wspace->factory(("np_tt_JECUp_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_JERUp_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_btg_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_lep_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_nom_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCR_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory("np_tt_pdf[0.0]"); // fully correlated
   wspace->factory("np_tt_FSR[0.0]"); // fully correlated
   wspace->factory("np_tt_ISR[0.0]"); // fully correlated
   wspace->factory("np_tt_scl[0.0]"); // fully correlated
+  wspace->factory(("np_tt_JECUp_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_JECDown_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_JERUp_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_JERDown_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_btg_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_lep_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_nom_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_qcdCR_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_ht_"+year+"[0.0]").c_str());// uncorrelated
   wspace->factory(("np_tt_httail_"+year+"[0.0]").c_str());// uncorrelated
   wspace->factory(("np_tt_htnjet_"+year+"[0.0]").c_str());// uncorrelated
   wspace->factory(("np_tt_pu_"+year+"[0.0]").c_str());// uncorrelated
-  wspace->factory(("np_tt_JECDown_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_JERDown_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRD1Coef1_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRD1Coef2_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_qcdCRD1Coef3_"+year+"[0.0]").c_str()); // uncorrelated
@@ -380,91 +385,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
 
   // Load in the histograms with the bin-by-bin ratios to be used in the ttbar shape systematics
   TFile* tt_syst_file = TFile::Open((infile_path+"/ttbar_systematics.root").c_str());
-
-  TH1D* tt_syst_JECUp_D1 = (TH1D*)tt_syst_file->Get("D1_JECUp");
-  TH1D* tt_syst_JECUp_D2 = (TH1D*)tt_syst_file->Get("D2_JECUp");
-  TH1D* tt_syst_JECUp_D3 = (TH1D*)tt_syst_file->Get("D3_JECUp");
-  TH1D* tt_syst_JECUp_D4 = (TH1D*)tt_syst_file->Get("D4_JECUp");
-
-  TH1D* tt_syst_JECDown_D1 = (TH1D*)tt_syst_file->Get("D1_JECDown");
-  TH1D* tt_syst_JECDown_D2 = (TH1D*)tt_syst_file->Get("D2_JECDown");
-  TH1D* tt_syst_JECDown_D3 = (TH1D*)tt_syst_file->Get("D3_JECDown");
-  TH1D* tt_syst_JECDown_D4 = (TH1D*)tt_syst_file->Get("D4_JECDown");
-
-  TH1D* tt_syst_JERUp_D1 = (TH1D*)tt_syst_file->Get("D1_JERUp");
-  TH1D* tt_syst_JERUp_D2 = (TH1D*)tt_syst_file->Get("D2_JERUp");
-  TH1D* tt_syst_JERUp_D3 = (TH1D*)tt_syst_file->Get("D3_JERUp");
-  TH1D* tt_syst_JERUp_D4 = (TH1D*)tt_syst_file->Get("D4_JERUp");
-
-  TH1D* tt_syst_JERDown_D1 = (TH1D*)tt_syst_file->Get("D1_JERDown");
-  TH1D* tt_syst_JERDown_D2 = (TH1D*)tt_syst_file->Get("D2_JERDown");
-  TH1D* tt_syst_JERDown_D3 = (TH1D*)tt_syst_file->Get("D3_JERDown");
-  TH1D* tt_syst_JERDown_D4 = (TH1D*)tt_syst_file->Get("D4_JERDown");
-
-  TH1D* tt_syst_btg_D1 = (TH1D*)tt_syst_file->Get("D1_btg");
-  TH1D* tt_syst_btg_D2 = (TH1D*)tt_syst_file->Get("D2_btg");
-  TH1D* tt_syst_btg_D3 = (TH1D*)tt_syst_file->Get("D3_btg");
-  TH1D* tt_syst_btg_D4 = (TH1D*)tt_syst_file->Get("D4_btg");
-
-  TH1D* tt_syst_lep_D1 = (TH1D*)tt_syst_file->Get("D1_lep");
-  TH1D* tt_syst_lep_D2 = (TH1D*)tt_syst_file->Get("D2_lep");
-  TH1D* tt_syst_lep_D3 = (TH1D*)tt_syst_file->Get("D3_lep");
-  TH1D* tt_syst_lep_D4 = (TH1D*)tt_syst_file->Get("D4_lep");
-
-  TH1D* tt_syst_nom_D1 = (TH1D*)tt_syst_file->Get("D1_nom");
-  TH1D* tt_syst_nom_D2 = (TH1D*)tt_syst_file->Get("D2_nom");
-  TH1D* tt_syst_nom_D3 = (TH1D*)tt_syst_file->Get("D3_nom");
-  TH1D* tt_syst_nom_D4 = (TH1D*)tt_syst_file->Get("D4_nom");
-
-  TH1D* tt_syst_qcdCR_D1 = (TH1D*)tt_syst_file->Get("D1_qcdCR");
-  TH1D* tt_syst_qcdCR_D2 = (TH1D*)tt_syst_file->Get("D2_qcdCR");
-  TH1D* tt_syst_qcdCR_D3 = (TH1D*)tt_syst_file->Get("D3_qcdCR");
-  TH1D* tt_syst_qcdCR_D4 = (TH1D*)tt_syst_file->Get("D4_qcdCR");
-
-  TH1D* tt_syst_pdf_D1 = (TH1D*)tt_syst_file->Get("D1_pdf");
-  TH1D* tt_syst_pdf_D2 = (TH1D*)tt_syst_file->Get("D2_pdf");
-  TH1D* tt_syst_pdf_D3 = (TH1D*)tt_syst_file->Get("D3_pdf");
-  TH1D* tt_syst_pdf_D4 = (TH1D*)tt_syst_file->Get("D4_pdf");
-
-  TH1D* tt_syst_FSR_D1 = (TH1D*)tt_syst_file->Get("D1_FSR");
-  TH1D* tt_syst_FSR_D2 = (TH1D*)tt_syst_file->Get("D2_FSR");
-  TH1D* tt_syst_FSR_D3 = (TH1D*)tt_syst_file->Get("D3_FSR");
-  TH1D* tt_syst_FSR_D4 = (TH1D*)tt_syst_file->Get("D4_FSR");
-
-  TH1D* tt_syst_ISR_D1 = (TH1D*)tt_syst_file->Get("D1_ISR");
-  TH1D* tt_syst_ISR_D2 = (TH1D*)tt_syst_file->Get("D2_ISR");
-  TH1D* tt_syst_ISR_D3 = (TH1D*)tt_syst_file->Get("D3_ISR");
-  TH1D* tt_syst_ISR_D4 = (TH1D*)tt_syst_file->Get("D4_ISR");
-
-  TH1D* tt_syst_ht_D1 = (TH1D*)tt_syst_file->Get("D1_ht");
-  TH1D* tt_syst_ht_D2 = (TH1D*)tt_syst_file->Get("D2_ht");
-  TH1D* tt_syst_ht_D3 = (TH1D*)tt_syst_file->Get("D3_ht");
-  TH1D* tt_syst_ht_D4 = (TH1D*)tt_syst_file->Get("D4_ht");
-
-  TH1D* tt_syst_scl_D1 = (TH1D*)tt_syst_file->Get("D1_scl");
-  TH1D* tt_syst_scl_D2 = (TH1D*)tt_syst_file->Get("D2_scl");
-  TH1D* tt_syst_scl_D3 = (TH1D*)tt_syst_file->Get("D3_scl");
-  TH1D* tt_syst_scl_D4 = (TH1D*)tt_syst_file->Get("D4_scl");
-  
-  TH1D* tt_syst_httail_D1 = (TH1D*)tt_syst_file->Get("D1_httail");
-  TH1D* tt_syst_httail_D2 = (TH1D*)tt_syst_file->Get("D2_httail");
-  TH1D* tt_syst_httail_D3 = (TH1D*)tt_syst_file->Get("D3_httail");
-  TH1D* tt_syst_httail_D4 = (TH1D*)tt_syst_file->Get("D4_httail");
-
-  TH1D* tt_syst_htnjet_D1 = (TH1D*)tt_syst_file->Get("D1_htnjet");
-  TH1D* tt_syst_htnjet_D2 = (TH1D*)tt_syst_file->Get("D2_htnjet");
-  TH1D* tt_syst_htnjet_D3 = (TH1D*)tt_syst_file->Get("D3_htnjet");
-  TH1D* tt_syst_htnjet_D4 = (TH1D*)tt_syst_file->Get("D4_htnjet");
-  
-  TH1D* tt_syst_pu_D1 = (TH1D*)tt_syst_file->Get("D1_pu");
-  TH1D* tt_syst_pu_D2 = (TH1D*)tt_syst_file->Get("D2_pu");
-  TH1D* tt_syst_pu_D3 = (TH1D*)tt_syst_file->Get("D3_pu");
-  TH1D* tt_syst_pu_D4 = (TH1D*)tt_syst_file->Get("D4_pu");
-
-  TH1D* tt_qcdCRErr_D1 = (TH1D*)tt_syst_file->Get("D1_qcdCRErr");
-  TH1D* tt_qcdCRErr_D2 = (TH1D*)tt_syst_file->Get("D2_qcdCRErr");
-  TH1D* tt_qcdCRErr_D3 = (TH1D*)tt_syst_file->Get("D3_qcdCRErr");
-  TH1D* tt_qcdCRErr_D4 = (TH1D*)tt_syst_file->Get("D4_qcdCRErr");
 
   //Get qcd control region R value functions and store them in a map
   TFile* qcdcrFile = TFile::Open((infile_path+"/qcdcr-syst-parameters.root").c_str());
@@ -484,17 +404,27 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   // ----------------------  MVA bin 1  -----------------
   // ----------------------------------------------------
   
-  // Dataset with 8 bins -- now 6
+  // Dataset with 6 bins
   RooDataHist data_hist_D1("data_obs_D1","Data observed in MVA bin 1",vars_D1,data_th1_D1);
   wspace->import(data_hist_D1);
   
   //list of nuisance parameters for tt bkg D1
   const std::vector<NuisanceParam>& nuisanceParams_D1 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D1},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D1},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D1},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D1},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D1},
+      {*wspace->var("np_tt_pdf"),                     tt_syst_file, "D1_pdf"},
+      {*wspace->var("np_tt_FSR"),                     tt_syst_file, "D1_FSR"},
+      {*wspace->var("np_tt_ISR"),                     tt_syst_file, "D1_ISR"},
+      {*wspace->var("np_tt_scl"),                     tt_syst_file, "D1_scl"},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),   tt_syst_file, "D1_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_file, "D1_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),   tt_syst_file, "D1_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_file, "D1_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),     tt_syst_file, "D1_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),     tt_syst_file, "D1_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),     tt_syst_file, "D1_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_file, "D1_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D1_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D1_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D1_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin1"],
           {
@@ -503,16 +433,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRD1Coef3_"+year).c_str()),
           }
       },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D1},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D1},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D1},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D1},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D1},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D1},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D1},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D1},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D1},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D1}
+      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D1_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D1 = new RooArgList();
@@ -546,11 +467,21 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D2
   const std::vector<NuisanceParam>& nuisanceParams_D2 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D2},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D2},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D2},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D2},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D2},
+      {*wspace->var("np_tt_pdf"),                     tt_syst_file, "D2_pdf"},
+      {*wspace->var("np_tt_FSR"),                     tt_syst_file, "D2_FSR"},
+      {*wspace->var("np_tt_ISR"),                     tt_syst_file, "D2_ISR"},
+      {*wspace->var("np_tt_scl"),                     tt_syst_file, "D2_scl"},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),   tt_syst_file, "D2_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_file, "D2_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),   tt_syst_file, "D2_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_file, "D2_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),     tt_syst_file, "D2_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),     tt_syst_file, "D2_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),     tt_syst_file, "D2_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_file, "D2_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D2_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D2_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D2_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin2"],
           {
@@ -559,16 +490,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRD2Coef3_"+year).c_str()),
           }
       },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D2},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D2},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D2},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D2},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D2},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D2},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D2},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D2},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D2},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D2}
+      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D2_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D2 = new RooArgList();
@@ -601,11 +523,21 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D3
   const std::vector<NuisanceParam>& nuisanceParams_D3 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D3},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D3},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D3},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D3},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D3},
+      {*wspace->var("np_tt_pdf"),                     tt_syst_file, "D3_pdf"},
+      {*wspace->var("np_tt_FSR"),                     tt_syst_file, "D3_FSR"},
+      {*wspace->var("np_tt_ISR"),                     tt_syst_file, "D3_ISR"},
+      {*wspace->var("np_tt_scl"),                     tt_syst_file, "D3_scl"},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),   tt_syst_file, "D3_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_file, "D3_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),   tt_syst_file, "D3_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_file, "D3_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),     tt_syst_file, "D3_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),     tt_syst_file, "D3_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),     tt_syst_file, "D3_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_file, "D3_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D3_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D3_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D3_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin3"],
           {
@@ -614,16 +546,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRD3Coef3_"+year).c_str()),
           }
       },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D3},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D3},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D3},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D3},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D3},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D3},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D3},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D3},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D3},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D3}
+      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D3_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D3 = new RooArgList();
@@ -656,11 +579,21 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D4
   const std::vector<NuisanceParam>& nuisanceParams_D4 = {
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()), tt_syst_JECUp_D4},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()), tt_syst_JERUp_D4},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),   tt_syst_btg_D4},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),   tt_syst_lep_D4},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),   tt_syst_nom_D4},
+      {*wspace->var("np_tt_pdf"),                     tt_syst_file, "D4_pdf"},
+      {*wspace->var("np_tt_FSR"),                     tt_syst_file, "D4_FSR"},
+      {*wspace->var("np_tt_ISR"),                     tt_syst_file, "D4_ISR"},
+      {*wspace->var("np_tt_scl"),                     tt_syst_file, "D4_scl"},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),   tt_syst_file, "D4_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_file, "D4_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),   tt_syst_file, "D4_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_file, "D4_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),     tt_syst_file, "D4_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),     tt_syst_file, "D4_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),     tt_syst_file, "D4_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_file, "D4_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D4_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D4_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D4_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin4"],
           {
@@ -669,16 +602,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
               *wspace->var(("np_tt_qcdCRD4Coef3_"+year).c_str()),
           }
       },
-      {*wspace->var("np_tt_pdf"),                     tt_syst_pdf_D4},
-      {*wspace->var("np_tt_FSR"),                     tt_syst_FSR_D4},
-      {*wspace->var("np_tt_ISR"),                     tt_syst_ISR_D4},
-      {*wspace->var("np_tt_scl"),                     tt_syst_scl_D4},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),      tt_syst_ht_D4},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_httail_D4},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_htnjet_D4},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_pu_D4},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()), tt_syst_JECDown_D4},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()), tt_syst_JERDown_D4}
+      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D4_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D4 = new RooArgList();
@@ -794,15 +718,12 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       // Particular signal model and mass point
       WriteHisto2WS<TH1D>(file, model+"_"+mass+"_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "SIG");      
       WriteHisto2WS<TH1D>(file, model+"_"+mass+"_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "SIG");      
-  
       // OTHER backgrounds
       WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "OTHER");      
       WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "OTHER");      
-  
       // QCD backgrounds
       WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "QCD");      
       WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "QCD");      
-  
       // TTX backgrounds
       WriteHisto2WS<TH1D>(file, "TTX_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "TTX");      
       WriteHisto2WS<TH1D>(file, "TTX_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "TTX");      
@@ -810,24 +731,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //Finally write out the work space
   wspace->Write();
-  
-  // TCanvas *c1 = new TCanvas("c1","c1");
-  // data_hist_D4.createHistogram("nj")->Draw("H");
-  // TCanvas *c2 = new TCanvas("c2","c2");
-  // ttMC_hist_D4.createHistogram("nj")->Draw("H");
-  // TCanvas *c3 = new TCanvas("c3","c3");
-  // otherMC_hist_D4.createHistogram("nj")->Draw("H");
-  // TCanvas *c4 = new TCanvas("c4","c4");
-  // sigMC_hist_D4.createHistogram("nj")->Draw("H");
-  
-  // TCanvas *c1 = new TCanvas("c1","c1");
-  // data_hist_D4.createHistogram("nj")->Draw("H");
-  // TCanvas *c2 = new TCanvas("c2","c2");
-  // ttMC_hist_D4.createHistogram("nj")->Draw("H");
-  // TCanvas *c3 = new TCanvas("c3","c3");
-  // otherMC_hist_D4.createHistogram("nj")->Draw("H")
-  // TCanvas *c4 = new TCanvas("c4","c4");
-  // sigMC_hist_D4.createHistogram("nj")->Draw("H");
 }
 
 int main()
