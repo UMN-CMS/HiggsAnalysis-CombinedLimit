@@ -344,18 +344,18 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   wspace->factory(("np_tt_httail_"+year+"[0.0]").c_str());// uncorrelated
   wspace->factory(("np_tt_htnjet_"+year+"[0.0]").c_str());// uncorrelated
   wspace->factory(("np_tt_pu_"+year+"[0.0]").c_str());// uncorrelated
-  wspace->factory(("np_tt_qcdCRD1Coef1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD1Coef2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD1Coef3_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD2Coef1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD2Coef2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD2Coef3_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD3Coef1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD3Coef2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD3Coef3_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD4Coef1_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD4Coef2_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_qcdCRD4Coef3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD1Coef1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD1Coef2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD1Coef3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD2Coef1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD2Coef2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD2Coef3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD3Coef1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD3Coef2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD3Coef3_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD4Coef1_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD4Coef2_"+year+"[0.0]").c_str()); // uncorrelated
+  //wspace->factory(("np_tt_qcdCRD4Coef3_"+year+"[0.0]").c_str()); // uncorrelated
 
   // Load in the histograms with the bin-by-bin ratios to be used in the ttbar shape systematics
   TFile* tt_syst_file = TFile::Open((infile_path+"/ttbar_systematics.root").c_str());
@@ -399,15 +399,15 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D1_httail"},
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D1_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D1_pu"},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin1"],
-          {
-              *wspace->var(("np_tt_qcdCRD1Coef1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD1Coef2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD1Coef3_"+year).c_str()),
-          }
-      },
-      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D1_qcdCR"},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin1"],
+      //    {
+      //        *wspace->var(("np_tt_qcdCRD1Coef1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD1Coef2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD1Coef3_"+year).c_str()),
+      //    }
+      //},
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D1_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D1 = new RooArgList();
@@ -453,15 +453,15 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D2_httail"},
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D2_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D2_pu"},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin2"],
-          {
-              *wspace->var(("np_tt_qcdCRD2Coef1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD2Coef2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD2Coef3_"+year).c_str()),
-          }
-      },
-      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D2_qcdCR"},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin2"],
+      //    {
+      //        *wspace->var(("np_tt_qcdCRD2Coef1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD2Coef2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD2Coef3_"+year).c_str()),
+      //    }
+      //},
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D2_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D2 = new RooArgList();
@@ -506,15 +506,15 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D3_httail"},
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D3_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D3_pu"},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin3"],
-          {
-              *wspace->var(("np_tt_qcdCRD3Coef1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD3Coef2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD3Coef3_"+year).c_str()),
-          }
-      },
-      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D3_qcdCR"},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin3"],
+      //    {
+      //        *wspace->var(("np_tt_qcdCRD3Coef1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD3Coef2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD3Coef3_"+year).c_str()),
+      //    }
+      //},
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D3_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D3 = new RooArgList();
@@ -559,15 +559,15 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_httail_"+year).c_str()),  tt_syst_file, "D4_httail"},
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D4_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D4_pu"},
-      {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin4"],
-          {
-              *wspace->var(("np_tt_qcdCRD4Coef1_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD4Coef2_"+year).c_str()),
-              *wspace->var(("np_tt_qcdCRD4Coef3_"+year).c_str()),
-          }
-      },
-      //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D4_qcdCR"},
+      //{
+      //    *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin4"],
+      //    {
+      //        *wspace->var(("np_tt_qcdCRD4Coef1_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD4Coef2_"+year).c_str()),
+      //        *wspace->var(("np_tt_qcdCRD4Coef3_"+year).c_str()),
+      //    }
+      //},
+      {*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D4_qcdCR"},
   };
   
   RooArgList *bkg_tt_bins_D4 = new RooArgList();
