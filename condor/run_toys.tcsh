@@ -12,43 +12,24 @@ set numToys = $9
 set iterations = $10
 set doToyS = $11
 set syst = $12
+set base_dir = `pwd`
 
 if ($syst == None) then
     set syst=""
 endif
 
-set base_dir = `pwd`
-printf "\n\n base dir is $base_dir\n\n"
-
 source /cvmfs/cms.cern.ch/cmsset_default.csh
 setenv SCRAM_ARCH slc6_amd64_gcc530
-
-printf "\n\n ls output\n"
-ls -l
-
-printf "\n\n Get the code needed .\n\n"
-cmsrel CMSSW_8_1_0
-cd CMSSW_8_1_0/src
+tar -xf CMSSW_8_1_0.tar.gz
+cd CMSSW_8_1_0/src/HiggsAnalysis/CombinedLimit
+scram b ProjectRename
 eval `scramv1 runtime -csh`
-git clone https://github.com/StealthStop/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
-scram b clean
-scram b -j8
-
-printf "\n\n ls output\n"
-ls -l
-
-printf "\n\n output of uname -s : "
-uname -s
-printf "\n\n"
-
+cp ${base_dir}/exestuff.tar.gz .
+tar xzvf exestuff.tar.gz
+mv exestuff/* .
 setenv LD_LIBRARY_PATH ${PWD}:${LD_LIBRARY_PATH}
-printf "\n\n LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}\n\n"
-
-printf "\n\n ls output\n"
 ls -l
 
-printf "\n\n Attempting to run Fit executable.\n\n"
 mkdir ${inputRoot2016}
 xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2016}/njets_for_Aron.root     ${inputRoot2016}/.
 xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2016}/ttbar_systematics.root  ${inputRoot2016}/.
@@ -77,13 +58,7 @@ endif
 #removing log files because they can be larger than 1G
 rm log_tmp.txt
 
-printf "\n\n ls output\n"
-ls -l
-
 mv *.root ${base_dir}
 mv log*.txt ${base_dir}
 
 cd ${base_dir}
-
-printf "\n\n ls output\n"
-ls -l
