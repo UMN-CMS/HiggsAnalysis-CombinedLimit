@@ -4,6 +4,16 @@ import optparse
 import subprocess
 import time
 
+def makeExeAndFriendsTarball(filestoTransfer, fname, path):
+    system("mkdir -p %s" % fname)
+    for fn in filestoTransfer:
+        system("cd %s; ln -s %s" % (fname, fn))
+        
+    tarallinputs = "tar czvf %s/%s.tar.gz %s --dereference"% (path, fname, fname)
+    print tarallinputs
+    system(tarallinputs)
+    system("rm -r %s" % fname)
+
 def getOptionList(option, failMessage):
     l = []
     if option:
@@ -31,6 +41,7 @@ def main():
     parser.add_option ('-A',            dest='doAsym',   action='store_true', default = False,             help="Specify AsymptoticLimits and Significance fit command to run")
     parser.add_option ('-F',            dest='doFitDiag',action='store_true', default = False,             help="Specify FitDiagnostics fit command to run")
     parser.add_option ('-M',            dest='doMulti',  action='store_true', default = False,             help="Specify MultiDimFit fit command to run")
+    parser.add_option ('-I',            dest='doImpact', action='store_true', default = False,             help="Specify impact fit command to run")
     parser.add_option ('--output',      dest='outPath',        type='string', default = '.',               help="Name of directory where output of each condor job goes")
     parser.add_option ('--inject',      dest='inject',         type='float',  default = 0,                 help="Inject signal at signal strength specified")
 
@@ -52,11 +63,13 @@ def main():
     doAsym = 1 if options.doAsym else 0
     doFitDiag = 1 if options.doFitDiag else 0
     doMulti = 1 if options.doMulti else 0
+    doImpact = 1 if options.doImpact else 0
     doToyS = 1 if options.toyS else 0 
-    if not doAsym and not doFitDiag and not doMulti:
+    if not doAsym and not doFitDiag and not doMulti and not doImpact:
         doAsym=1
         doFitDiag=1
         doMulti=1
+        doImpact=1
 
     executable = "run_fits.tcsh"
     if options.toy or options.toyS:
@@ -70,6 +83,7 @@ def main():
     fileParts.append("request_disk = 1000000\n")
     fileParts.append("request_memory = 4000\n")
     fileParts.append("x509userproxy = $ENV(X509_USER_PROXY)\n\n")
+    fileParts.append("Transfer_Input_Files = {0}/CMSSW_8_1_0.tar.gz, {0}/exestuff.tar.gz\n".format(options.outPath))
     
     for st in signalType:
         st = st.strip()
@@ -81,7 +95,7 @@ def main():
             outDir = st+"_"+mass+"_"+options.year
             if not os.path.isdir("%s/output-files/%s" % (options.outPath, outDir)):
                 os.makedirs("%s/output-files/%s" % (options.outPath, outDir))
-    
+
             if not options.toy and not options.toyS:
                 outputFiles = [
                     "higgsCombine%s.AsymptoticLimits.mH%s.MODEL%s.root" % (options.year, mass, st),
@@ -94,6 +108,8 @@ def main():
                     "MVA_2017_%s_%s_ws.root" % (st, mass),
                     "ws_%s_%s_%s.root"       % (options.year, st, mass),
                     "fitDiagnostics%s%s%s.root" % (options.year, st, mass), 
+                    "impacts_%s%s%s.json"       % (options.year, st, mass),
+                    "impacts_%s%s%s_%s.pdf"     % (options.year, st, mass, options.dataType),
                     "log_%s%s%s_Asymp.txt"      % (options.year, st, mass),
                     "log_%s%s%s_FitDiag.txt"    % (options.year, st, mass),
                     "log_%s%s%s_Sign_sig.txt"   % (options.year, st, mass),
@@ -110,8 +126,8 @@ def main():
                 transfer += "\"\n"
                     
                 fileParts.append(transfer)
-                fileParts.append("Arguments = %s %s %s %s %s %s %i %i %i %s %s\n" % (options.inputRoot2016, options.inputRoot2017, st, mass, options.year, 
-                                                                                     options.dataType, doAsym, doFitDiag, doMulti, options.inject, options.syst))
+                fileParts.append("Arguments = %s %s %s %s %s %s %i %i %i %i %s %s\n" % (options.inputRoot2016, options.inputRoot2017, st, mass, options.year, 
+                                                                                     options.dataType, doAsym, doFitDiag, doMulti, doImpact, options.inject, options.syst))
                 fileParts.append("Output = %s/log-files/MyFit_%s_%s.stdout\n"%(options.outPath, st, mass))
                 fileParts.append("Error = %s/log-files/MyFit_%s_%s.stderr\n"%(options.outPath, st, mass))
                 fileParts.append("Log = %s/log-files/MyFit_%s_%s.log\n"%(options.outPath, st, mass))
@@ -162,6 +178,21 @@ def main():
     fout = open("condor_submit.txt", "w")
     fout.write(''.join(fileParts))
     fout.close()
+
+    #Tar up area
+    filestoTransfer = [environ["CMSSW_BASE"] + "/src/HiggsAnalysis/CombinedLimit/make_MVA_8bin_ws.C",
+                       environ["CMSSW_BASE"] + "/src/HiggsAnalysis/CombinedLimit/Card2016.txt",
+                       environ["CMSSW_BASE"] + "/src/HiggsAnalysis/CombinedLimit/Card2017.txt",
+                       ]
+    makeExeAndFriendsTarball(filestoTransfer, "exestuff", options.outPath)
+
+    dirToTar  = ""
+    for d in [".SCRAM", "biglib", "bin", "cfipython", "config", "doc", "external", "include", "lib", "logs", "objs", "python", "test", "tmp"]:
+        dirToTar += "${CMSSW_VERSION}/%s/ " % d
+    for d in ["bin", "data", "doc", "interface", "macros", "scripts", "src", "obj", "exe", "lib", "test", "python"]:
+        dirToTar += "${CMSSW_VERSION}/src/HiggsAnalysis/CombinedLimit/%s/ " % d
+    dirToTar += "${CMSSW_VERSION}/src/CombineHarvester/ "
+    system("tar --exclude=*.root --exclude=tmp --exclude=.git --exclude=*.pdf --exclude=*.png -zcf %s/${CMSSW_VERSION}.tar.gz -C ${CMSSW_BASE}/.. %s" % (options.outPath, dirToTar))
     
     if not options.noSubmit: 
         system('mkdir -p %s/log-files' % options.outPath)
