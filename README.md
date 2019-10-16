@@ -5,14 +5,6 @@ HiggsAnalysis-CombinedLimit
 
 [Manual to run combine](https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit/wiki)
 
-### Standalone compilation in `lxplus`
-```
-git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-cd HiggsAnalysis/CombinedLimit
-source env_standalone.sh 
-make -j 8; make # second make fixes compilation error of first
-```
-
 ### Stealth Stop Group Setup `(LPC)`
 ```
 cmsrel CMSSW_8_1_0
@@ -20,7 +12,6 @@ cd CMSSW_8_1_0/src
 cmsenv
 git clone git@github.com:StealthStop/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
-scram b clean
 scram b -j8
 ```
 
@@ -28,13 +19,27 @@ Add CombineTools from CombineHarvester to your work area:
  (this is needed for impact plots, and possible crab submission)
 ```
 cd $CMSSW_BASE/src 
-curl https://raw.githubusercontent.com/cms-analysis/CombineHarvester/master/CombineTools/scripts/sparse-checkout-https.sh > sparse-checkout-https.sh
-bash sparse-checkout-https.sh
+cmsenv
+mkdir CombineHarvester 
+cd CombineHarvester
+git init
+git remote add origin git@github.com:StealthStop/CombineHarvester.git 
+git config core.sparsecheckout true; echo CombineTools/ >> .git/info/sparse-checkout
+git pull origin master
+cd $CMSSW_BASE/src
 scram b -j8
-cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
 ```
 
-### Example
+Now copy input root files from eos (only needed for local, condor jobs copy the inputs from eos)
+```
+cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
+cmsenv
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs/Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix .
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs/Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix .
+
+```
+
+### Running Local Examples
 
 To combine the datacards for 2016 and 2017:
 ```
@@ -45,22 +50,22 @@ To make a RooFit workspace that contains our PDF definitions and input histogram
 
 For 2016 RPV:
 ```
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.5_v2","RPV","350","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.5_v2","RPV","450","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.5_v2","RPV","550","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.5_v2","RPV","650","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.5_v2","RPV","750","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.5_v2","RPV","850","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","350","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","450","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","550","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","650","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","750","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","850","pseudodata")'
 ```
 
 For 2017 RPV:
 ```
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.1_v2","RPV","350","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.1_v2","RPV","450","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.1_v2","RPV","550","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.1_v2","RPV","650","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.1_v2","RPV","750","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.1_v2","RPV","850","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","350","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","450","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","550","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","650","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","750","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","850","pseudodata")'
 ```
 
 Can substitute other input directories, models, and mass points,
@@ -264,17 +269,17 @@ Running all of the fits using condor
 
 ```
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit/condor
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t data        --output Fit_Data_2016
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodata  --output Fit_pseudoData_2016
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodataS --output Fit_pseudoDataS_2016
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t data        --output Fit_Data_2016
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodata  --output Fit_pseudoData_2016
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodataS --output Fit_pseudoDataS_2016
 
-python condorSubmit.py --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t data        --output Fit_Data_2017
-python condorSubmit.py --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodata  --output Fit_pseudoData_2017
-python condorSubmit.py --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodataS --output Fit_pseudoDataS_2017
+python condorSubmit.py --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t data        --output Fit_Data_2017
+python condorSubmit.py --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodata  --output Fit_pseudoData_2017
+python condorSubmit.py --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodataS --output Fit_pseudoDataS_2017
 
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t data        --output Fit_Data_Combo
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodata  --output Fit_pseudoData_Combo
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodataS --output Fit_pseudoDataS_Combo
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t data        --output Fit_Data_Combo
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodata  --output Fit_pseudoData_Combo
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodataS --output Fit_pseudoDataS_Combo
 
 ```
 
@@ -333,17 +338,17 @@ Similar to running the normal set of fits but add extra flags
 
 ```
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit/condor
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t data        --output Fit_Data_2016        --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodata  --output Fit_pseudoData_2016  --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodataS --output Fit_pseudoDataS_2016 --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t data        --output Fit_Data_2016        --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodata  --output Fit_pseudoData_2016  --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y 2016 -t pseudodataS --output Fit_pseudoDataS_2016 --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
 
-python condorSubmit.py --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t data        --output Fit_Data_2017        --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
-python condorSubmit.py --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodata  --output Fit_pseudoData_2017  --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
-python condorSubmit.py --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodataS --output Fit_pseudoDataS_2017 --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t data        --output Fit_Data_2017        --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodata  --output Fit_pseudoData_2017  --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 300,350,400,450,500,550,600,650,700,750,800,850,900 -y 2017 -t pseudodataS --output Fit_pseudoDataS_2017 --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
 
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t data        --output Fit_Data_Combo        --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodata  --output Fit_pseudoData_Combo  --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
-python condorSubmit.py --inPut_2016 Keras_V1.2.5_v2 --inPut_2017 Keras_V3.0.1_v2 -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodataS --output Fit_pseudoDataS_Combo --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t data        --output Fit_Data_Combo        --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodata  --output Fit_pseudoData_Combo  --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
+python condorSubmit.py --inPut_2016 Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix --inPut_2017 Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix -d RPV,SYY,SHH -m 350,450,550,650,750,850 -y Combo -t pseudodataS --output Fit_pseudoDataS_Combo --toy --rMin 0.15 --rMax 0.3 --rStep 0.01 --jPerR 5 -T 500
 
 ```
 
