@@ -141,7 +141,7 @@ void construct_formula(const std::string& procName, RooArgList& binlist, const R
   //     ...
   // N7 = Njets=7
 
-  std::cout << "size of NPs: " << NPs.size() << std::endl;
+  //std::cout << "size of NPs: " << NPs.size() << std::endl;
   ROOT::v5::TFormula::SetMaxima(10000);
   int max_bin = 18; // 14 means just njets=14, 20 means last bin is inclusive up through njets=20
 
@@ -180,7 +180,7 @@ void construct_formula(const std::string& procName, RooArgList& binlist, const R
     form << ")";
 
     // Add nuisance parameters
-    std::cout<<"Adding NP"<<std::endl;
+    //std::cout<<"Adding NP"<<std::endl;
     for(unsigned int j = 0; j < NPs.size(); j++)
     {
         double r = (NPs[j].h_r) ? NPs[j].h_r->GetBinContent(i+1) : 0.0;
@@ -205,10 +205,10 @@ void construct_formula(const std::string& procName, RooArgList& binlist, const R
     RooFormulaVar* binvar = new RooFormulaVar(binName.str().c_str(), "", form.str().c_str(), RooArgList(formArgList));
     binlist.add(*binvar);
 
-    std::cout << "bin i = " << i << " , njets = " << i+7 << std::endl;
-    std::cout << "process bin name : " << binName.str() << std::endl;
-    std::cout << "Formula : " << form.str() << std::endl;
-    formArgList.Print();
+    //std::cout << "bin i = " << i << " , njets = " << i+7 << std::endl;
+    //std::cout << "process bin name : " << binName.str() << std::endl;
+    //std::cout << "Formula : " << form.str() << std::endl;
+    //formArgList.Print();
   }
 }
 
