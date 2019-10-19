@@ -31,13 +31,13 @@ setenv LD_LIBRARY_PATH ${PWD}:${LD_LIBRARY_PATH}
 ls -l
 
 mkdir ${inputRoot2016}
-xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2016}/njets_for_Aron.root     ${inputRoot2016}/.
-xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2016}/ttbar_systematics.root  ${inputRoot2016}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2016}/njets_for_Aron.root         ${inputRoot2016}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2016}/ttbar_systematics.root      ${inputRoot2016}/.
 xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2016}/qcdcr-syst-parameters.root  ${inputRoot2016}/.
 
 mkdir ${inputRoot2017}
-xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2017}/njets_for_Aron.root     ${inputRoot2017}/.
-xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2017}/ttbar_systematics.root  ${inputRoot2017}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2017}/njets_for_Aron.root         ${inputRoot2017}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2017}/ttbar_systematics.root      ${inputRoot2017}/.
 xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2017}/qcdcr-syst-parameters.root  ${inputRoot2017}/.
 
 eval `scramv1 runtime -csh`
@@ -46,27 +46,29 @@ combineCards.py Y16=Card2016.txt Y17=Card2017.txt > CardCombo.txt
 root -l -q -b 'make_MVA_8bin_ws.C("2016","'${inputRoot2016}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
 root -l -q -b 'make_MVA_8bin_ws.C("2017","'${inputRoot2017}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
 text2workspace.py Card${year}.txt -o ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType}
+set ws = ws_${year}_${signalType}_${mass}.root
+set fitOptions = "${ws} -m ${mass} --keyword-value MODEL=${signalType} --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH"
 
 if ($doAsym == 1) then
-    combine -M AsymptoticLimits   ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType} --verbose 2 --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH --rMax 5                        -n ${year}                               > log_${year}${signalType}${mass}_Asymp.txt
-    combine -M Significance       ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType} --verbose 2 --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH --rMax 5 -t -1 --expectSignal=1 -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_sig.txt
-    combine -M Significance       ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType} --verbose 2 --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH --rMax 5                        -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_noSig.txt
+    combine -M AsymptoticLimits ${fitOptions} --verbose 2 --rMax 5                        -n ${year}                               > log_${year}${signalType}${mass}_Asymp.txt
+    combine -M Significance     ${fitOptions} --verbose 2 --rMax 5 -t -1 --expectSignal=1 -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_sig.txt
+    combine -M Significance     ${fitOptions} --verbose 2 --rMax 5                        -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_noSig.txt
 endif
 if ($doFitDiag == 1) then
     if ($inject == 0) then
-        combine -M FitDiagnostics     ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType} --verbose 2 --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH --rMax 5 --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass}           > log_${year}${signalType}${mass}_FitDiag.txt
+        combine -M FitDiagnostics ${fitOptions} --verbose 2 --rMax 5 --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass} > log_${year}${signalType}${mass}_FitDiag.txt
     else
-        combine -M FitDiagnostics     ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType} --verbose 2 --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH --rMax 5 --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass} -t -1 --toysFrequentist --expectSignal=${inject}          > log_${year}${signalType}${mass}_FitDiag.txt
+        combine -M FitDiagnostics ${fitOptions} --verbose 2 --rMax 5 --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass} -t -1 --toysFrequentist --expectSignal=${inject} > log_${year}${signalType}${mass}_FitDiag.txt
     endif
 endif
 if ($doMulti == 1) then
-    combine -M MultiDimFit        ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType} --verbose 0 --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH --rMin -0.2 --rMax 2.0 --algo=grid --points=100                                -n SCAN_r_wSig                           > log_${year}${signalType}${mass}_multiDim.txt
+    combine -M MultiDimFit ${fitOptions} --verbose 0 --rMin -0.2 --rMax 2.0 --algo=grid --points=100 -n SCAN_r_wSig > log_${year}${signalType}${mass}_multiDim.txt
     rm log_${year}${signalType}${mass}_multiDim.txt
 endif
 if ($doImpact == 1) then
-    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ws_${year}_${signalType}_${mass}.root -m ${mass} --doInitialFit --robustFit 1 --rMin -10 > log_step1.txt
-    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ws_${year}_${signalType}_${mass}.root -m ${mass} --doFits --parallel 4 --rMin -10 > log_step2.txt
-    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ws_${year}_${signalType}_${mass}.root -m ${mass} -o impacts_${year}${signalType}${mass}.json > log_step3.txt
+    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} --doInitialFit --robustFit 1 --rMin -10 > log_step1.txt
+    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} --doFits --parallel 4 --rMin -10 > log_step2.txt
+    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} -o impacts_${year}${signalType}${mass}.json > log_step3.txt
     ../../CombineHarvester/CombineTools/scripts/plotImpacts.py -i impacts_${year}${signalType}${mass}.json -o impacts_${year}${signalType}${mass}_${dataType}
     rm higgsCombine_paramFit_Test_*root
     rm higgsCombine_initialFit_Test.MultiDimFit.*.root
