@@ -42,7 +42,18 @@ xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inpu
 
 eval `scramv1 runtime -csh`
 
-combineCards.py Y16=Card2016.txt Y17=Card2017.txt > CardCombo.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt                                                 > Card2016_2017.txt
+#combineCards.py Y16=Card2016.txt                  Y18pre=Card2018pre.txt                          > Card2016_2018pre.txt
+#combineCards.py Y16=Card2016.txt                                         Y18post=Card2018post.txt > Card2016_2018post.txt
+#combineCards.py                  Y17=Card2017.txt Y18pre=Card2018pre.txt                          > Card2017_2018pre.txt
+#combineCards.py                  Y17=Card2017.txt                        Y18post=Card2018post.txt > Card2017_2018post.txt
+combineCards.py                                   Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2018pre_2018post.txt
+#combineCards.py Y16=Card2016.txt                  Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2016_2018pre_2018post.txt
+#combineCards.py Y16=Card2016.txt Y17=Card2017.txt                        Y18post=Card2018post.txt > Card2016_2017_2018post.txt
+#combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt                          > Card2016_2017_2018pre.txt
+combineCards.py                  Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2017_2018pre_2018post.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2016_2017_2018pre_2018post.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > CardCombo.txt
 root -l -q -b 'make_MVA_8bin_ws.C("2016","'${inputRoot2016}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
 root -l -q -b 'make_MVA_8bin_ws.C("2017","'${inputRoot2017}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
 text2workspace.py Card${year}.txt -o ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType}

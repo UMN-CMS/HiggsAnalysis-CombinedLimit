@@ -189,7 +189,7 @@ def main():
     dirToTar  = ""
     for d in [".SCRAM", "biglib", "bin", "cfipython", "config", "doc", "external", "include", "lib", "logs", "objs", "python", "test", "tmp"]:
         dirToTar += "${CMSSW_VERSION}/%s/ " % d
-    for d in ["bin", "data", "doc", "interface", "macros", "scripts", "src", "obj", "exe", "lib", "test", "python"]:
+    for d in ["bin", "data", "doc", "interface", "macros", "scripts", "src", "test", "python"]:
         dirToTar += "${CMSSW_VERSION}/src/HiggsAnalysis/CombinedLimit/%s/ " % d
     dirToTar += "${CMSSW_VERSION}/src/CombineHarvester/ "
     system("tar --exclude=*.root --exclude=tmp --exclude=.git --exclude=*.pdf --exclude=*.png -zcf %s/${CMSSW_VERSION}.tar.gz -C ${CMSSW_BASE}/.. %s" % (options.outPath, dirToTar))
