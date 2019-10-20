@@ -2,16 +2,18 @@
 
 set inputRoot2016 = $1
 set inputRoot2017 = $2
-set signalType = $3
-set mass = $4
-set year = $5
-set dataType = $6
-set rVal = $7
-set seed = $8
-set numToys = $9
-set iterations = $10
-set doToyS = $11
-set syst = $12
+set inputRoot2018pre = $3
+set inputRoot2018post = $4
+set signalType = $5
+set mass = $6
+set year = $7
+set dataType = $8
+set rVal = $9
+set seed = $10
+set numToys = $11
+set iterations = $12
+set doToyS = $13
+set syst = $14
 set base_dir = `pwd`
 
 if ($syst == None) then
@@ -40,6 +42,16 @@ xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inpu
 xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2017}/ttbar_systematics.root     ${inputRoot2017}/.
 xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs/${inputRoot2017}/qcdcr-syst-parameters.root ${inputRoot2017}/.
 
+mkdir ${inputRoot2018pre}
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/${inputRoot2018pre}/njets_for_Aron.root         ${inputRoot2018pre}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/${inputRoot2018pre}/ttbar_systematics.root      ${inputRoot2018pre}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/${inputRoot2018pre}/qcdcr-syst-parameters.root  ${inputRoot2018pre}/.
+
+mkdir ${inputRoot2018post}
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/${inputRoot2018post}/njets_for_Aron.root         ${inputRoot2018post}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/${inputRoot2018post}/ttbar_systematics.root      ${inputRoot2018post}/.
+xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/${inputRoot2018post}/qcdcr-syst-parameters.root  ${inputRoot2018post}/.
+
 eval `scramv1 runtime -csh`
 
 combineCards.py Y16=Card2016.txt Y17=Card2017.txt                                                 > Card2016_2017.txt
@@ -54,8 +66,10 @@ combineCards.py                                   Y18pre=Card2018pre.txt Y18post
 combineCards.py                  Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2017_2018pre_2018post.txt
 combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2016_2017_2018pre_2018post.txt
 combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > CardCombo.txt
-root -l -q -b 'make_MVA_8bin_ws.C("2016","'${inputRoot2016}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
-root -l -q -b 'make_MVA_8bin_ws.C("2017","'${inputRoot2017}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
+root -l -q -b 'make_MVA_8bin_ws.C("2016",    "'${inputRoot2016}'",    "'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
+root -l -q -b 'make_MVA_8bin_ws.C("2017",    "'${inputRoot2017}'",    "'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
+root -l -q -b 'make_MVA_8bin_ws.C("2018pre", "'${inputRoot2018pre}'", "'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
+root -l -q -b 'make_MVA_8bin_ws.C("2018post","'${inputRoot2018post}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
 text2workspace.py Card${year}.txt -o ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType}
 set ws = ws_${year}_${signalType}_${mass}.root
 set fitOptions = "${ws} -m ${mass} --keyword-value MODEL=${signalType} -n ${year} --saveToys --saveHybridResult"
