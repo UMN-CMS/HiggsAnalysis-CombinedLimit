@@ -73,9 +73,9 @@ def main():
         doMulti=1
         doImpact=1
 
-    executable = "run_fits.tcsh"
+    executable = "run_fits.sh"
     if options.toy or options.toyS:
-        executable = "run_toys.tcsh"
+        executable = "run_toys.sh"
 
     fileParts = []
     fileParts.append("Universe   = vanilla\n")
