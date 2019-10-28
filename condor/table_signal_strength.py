@@ -1,7 +1,7 @@
 # make a table of the signal strength and associated signifances. 
 # Do this for every signal point
 
-# First do it in Data, for 2016, 2017, and Combo
+# First do it in Data, for 2016, 2017, 2018pre, 2018post, and Combo
 import optparse
 import ROOT
 from array import array
@@ -10,6 +10,8 @@ def makePValuePlot(dataSet):
     # CL observed pvalues
     pvalue_2016 = dataSet["data"]["2016"]["pList"]
     pvalue_2017 = dataSet["data"]["2017"]["pList"]
+    pvalue_2018pre = dataSet["data"]["2018pre"]["pList"]
+    pvalue_2018post = dataSet["data"]["2018post"]["pList"]
     pvalue_Combo = dataSet["data"]["Combo"]["pList"]
     xpoints = dataSet["data"]["2016"]["mList"]
     npoints = len(pvalue_2016)
@@ -18,7 +20,7 @@ def makePValuePlot(dataSet):
     Ymin = 0.00005
     #if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1 or dataSet["runtype"] == "Data":
     if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1:
-        Ymin = 0.000000000000000000005
+        Ymin = 5.0e-37
     Ymax = 1
 
     c1 = ROOT.TCanvas("c1","PValues",1000,1000)
@@ -63,13 +65,23 @@ def makePValuePlot(dataSet):
     gr_2017.SetLineStyle(3)
     gr_2017.SetLineWidth(3)
 
+    gr_2018pre = ROOT.TGraph(npoints, array('d', xpoints), array('d', pvalue_2018pre))
+    gr_2018pre.SetLineColor(ROOT.kGreen+1)
+    gr_2018pre.SetLineStyle(3)
+    gr_2018pre.SetLineWidth(3)
+
+    gr_2018post = ROOT.TGraph(npoints, array('d', xpoints), array('d', pvalue_2018post))
+    gr_2018post.SetLineColor(ROOT.kOrange+1)
+    gr_2018post.SetLineStyle(3)
+    gr_2018post.SetLineWidth(3)
+
     # Draw the 1sigma, 2sigma, and 3sigma lines
     # For 1 sigma: s = 0.68
     #   1 - (0.5 + s/2) = 0.5 - s/2
     entries = []
     numSigma = 8
     for s in range(1, numSigma+1):
-        sigma = 0.5 - ROOT.TMath.Erf(s/ROOT.TMath.Sqrt(2))/2
+        sigma = 0.5 - ROOT.TMath.Erf(float(s)/ROOT.TMath.Sqrt(2.0))/2.0
         L = ROOT.TLine(Xmin, sigma, Xmax, sigma)
         L.SetLineColor(2)
         L.SetLineWidth(2)
@@ -86,6 +98,8 @@ def makePValuePlot(dataSet):
 
     gr_2016.Draw("L,same")
     gr_2017.Draw("L,same")
+    gr_2018pre.Draw("L,same")
+    gr_2018post.Draw("L,same")
     gr_Combo.Draw("L,same")
 
     legend1 = ROOT.TLegend(0.44397,0.1,0.897487,0.25,"")
@@ -98,6 +112,8 @@ def makePValuePlot(dataSet):
     legend1.AddEntry(gr_Combo, "Combined Observed, L_{Int}=77.4 fb^{-1}", "l")
     legend1.AddEntry(gr_2016, "2016 Observed, L_{Int}=35.9 fb^{-1}", "l")
     legend1.AddEntry(gr_2017, "2017 Observed, L_{Int}=41.5 fb^{-1}", "l")
+    legend1.AddEntry(gr_2018pre, "2018pre Observed, L_{Int}=21.1 fb^{-1}", "l")
+    legend1.AddEntry(gr_2018post, "2018post Observed, L_{Int}=38.7 fb^{-1}", "l")
     legend1.SetBorderSize(0)
     legend1.SetFillStyle(0)
     legend1.Draw("same")
@@ -167,6 +183,7 @@ def makeSigTex(name, l):
     f.write( "\n" ) 
     f.write( "\\begin{document}\n" )
     f.write( "\\pagenumbering{gobble}\n" )
+
     f.write( "\n" )
 
     for dic in l:
@@ -200,7 +217,8 @@ def main():
     Mass & Best fit signal strength & Observed Significance & p-value\\\\ \hline
     """    
     path = options.basedir
-    runtypes = ["Data", "pseudoData", "pseudoDataS"]
+    runtypes = ["pseudoDataS"]
+    #runtypes = ["Data", "pseudoData", "pseudoDataS"]
     #runtypes = ["Data", "pseudoData", "pseudoDataS", "pseudodataS_0.3xRPV_350"]
     #runtypes = ["Data", "pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
     #runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
@@ -209,9 +227,11 @@ def main():
     #            "pseudodata_qcdCR", "pseudodata_2xqcdCR", "pseudodata_JECUp_JERDown_FSR", "pseudodataS_0.3xRPV_350",
     #            "pseudodata_0.2xLine", "pseudodata_0.05-0.2xLine", "pseudodata_0.05-0.2xLineNorm", "pseudodata_0.2-0.05xLine", 
     #            "pseudodataTTJets", "pseudodata_qcdCR_0.05-0.2xLine", "pseudodata_qcdCR_0.2xLine"]
-    models = ["RPV","SYY"]
-    years = ["2016","2017","Combo"]
+    models = ["RPV"]
+    #models = ["RPV","SYY"]
+    years = ["2016","2017","2018pre","2018post", "Combo"]
     masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
+    #masses = ["350","450","550","650","750","850"]
 
     # Loop over all jobs in get the info needed
     l=[]

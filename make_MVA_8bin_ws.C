@@ -220,8 +220,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   gSystem->Load("libHiggsAnalysisCombinedLimit.so");
     
   // Output file and workspace 
-  TFile *fOut = new TFile(("MVA_"+year+"_"+model+"_"+mass+"_ws.root").c_str(),"RECREATE");
-  RooWorkspace *wspace = new RooWorkspace("wspace","wspace");
+  TFile* fOut = new TFile(("MVA_"+year+"_"+model+"_"+mass+"_ws.root").c_str(),"RECREATE");
+  RooWorkspace* wspace = new RooWorkspace("wspace","wspace");
+  RooFit::Silence();
 
   wspace->factory("CMS_th1x[0,6]");
   wspace->var("CMS_th1x")->setBins(6);
@@ -233,7 +234,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   // file for obtaining histograms
   TFile* file = TFile::Open((infile_path+"/njets_for_Aron.root").c_str());
 
-  TH1D* data_th1_D1;
+  TH1D* data_th1_D1 = nullptr;
   if     (dataType == "data")        data_th1_D1 = (TH1D*)file->Get("D1_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
@@ -246,7 +247,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   TH1D* ttxMC_th1_D1 = (TH1D*)file->Get("D1_TTX_h_njets_pt30_1l");
   TH1D* sigMC_th1_D1 = (TH1D*)file->Get(("D1_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());
 
-  TH1D* data_th1_D2;
+  TH1D* data_th1_D2 = nullptr;
   if     (dataType == "data")        data_th1_D2 = (TH1D*)file->Get("D2_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
@@ -259,7 +260,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   TH1D* ttxMC_th1_D2 = (TH1D*)file->Get("D2_TTX_h_njets_pt30_1l");
   TH1D* sigMC_th1_D2 = (TH1D*)file->Get(("D2_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());
 
-  TH1D* data_th1_D3;
+  TH1D* data_th1_D3 = nullptr;
   if     (dataType == "data")        data_th1_D3 = (TH1D*)file->Get("D3_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
@@ -272,7 +273,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   TH1D* ttxMC_th1_D3 = (TH1D*)file->Get("D3_TTX_h_njets_pt30_1l");
   TH1D* sigMC_th1_D3 = (TH1D*)file->Get(("D3_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());
 
-  TH1D* data_th1_D4;
+  TH1D* data_th1_D4 = nullptr;
   if     (dataType == "data")        data_th1_D4 = (TH1D*)file->Get("D4_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
@@ -410,7 +411,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D1_qcdCR"},
   };
   
-  RooArgList *bkg_tt_bins_D1 = new RooArgList();
+  RooArgList* bkg_tt_bins_D1 = new RooArgList();
   std::string procName_D1 = "background_tt_D1_"+year;
   if (shared) 
   {
@@ -464,7 +465,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D2_qcdCR"},
   };
   
-  RooArgList *bkg_tt_bins_D2 = new RooArgList();
+  RooArgList* bkg_tt_bins_D2 = new RooArgList();
   std::string procName_D2 = "background_tt_D2_"+year;
   if (shared) 
   {
@@ -517,7 +518,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D3_qcdCR"},
   };
   
-  RooArgList *bkg_tt_bins_D3 = new RooArgList();
+  RooArgList* bkg_tt_bins_D3 = new RooArgList();
   std::string procName_D3 = "background_tt_D3_"+year;
   if (shared) 
   {
@@ -570,7 +571,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_qcdCR_"+year).c_str()),   tt_syst_file, "D4_qcdCR"},
   };
   
-  RooArgList *bkg_tt_bins_D4 = new RooArgList();
+  RooArgList* bkg_tt_bins_D4 = new RooArgList();
   std::string procName_D4 = "background_tt_D4_"+year;
   if (shared) 
   {
