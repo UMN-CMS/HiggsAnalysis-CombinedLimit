@@ -1,8 +1,7 @@
 #include "CMS_lumi.h"
 #include <iostream>
 
-void 
-CMS_lumi( TPad* pad, int iPeriod, int iPosX )
+void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 {            
     bool outOfFrame    = false;
     if( iPosX/10==0 ) 
