@@ -56,14 +56,14 @@ xrdcp root://cmseos.fnal.gov//store/user/lpcsusyhad/StealthStop/FitInputs_FullRu
 eval `scramv1 runtime -sh`
 
 combineCards.py Y16=Card2016.txt Y17=Card2017.txt                                                 > Card2016_2017.txt
-#combineCards.py Y16=Card2016.txt                  Y18pre=Card2018pre.txt                          > Card2016_2018pre.txt
-#combineCards.py Y16=Card2016.txt                                         Y18post=Card2018post.txt > Card2016_2018post.txt
-#combineCards.py                  Y17=Card2017.txt Y18pre=Card2018pre.txt                          > Card2017_2018pre.txt
-#combineCards.py                  Y17=Card2017.txt                        Y18post=Card2018post.txt > Card2017_2018post.txt
+combineCards.py Y16=Card2016.txt                  Y18pre=Card2018pre.txt                          > Card2016_2018pre.txt
+combineCards.py Y16=Card2016.txt                                         Y18post=Card2018post.txt > Card2016_2018post.txt
+combineCards.py                  Y17=Card2017.txt Y18pre=Card2018pre.txt                          > Card2017_2018pre.txt
+combineCards.py                  Y17=Card2017.txt                        Y18post=Card2018post.txt > Card2017_2018post.txt
 combineCards.py                                   Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2018pre_2018post.txt
-#combineCards.py Y16=Card2016.txt                  Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2016_2018pre_2018post.txt
-#combineCards.py Y16=Card2016.txt Y17=Card2017.txt                        Y18post=Card2018post.txt > Card2016_2017_2018post.txt
-#combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt                          > Card2016_2017_2018pre.txt
+combineCards.py Y16=Card2016.txt                  Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2016_2018pre_2018post.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt                        Y18post=Card2018post.txt > Card2016_2017_2018post.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt                          > Card2016_2017_2018pre.txt
 combineCards.py                  Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2017_2018pre_2018post.txt
 combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2016_2017_2018pre_2018post.txt
 combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > CardCombo.txt
