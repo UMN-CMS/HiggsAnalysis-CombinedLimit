@@ -30,12 +30,15 @@
 class NuisanceParam
 {
 public:
+    enum NuisanceType {NORMAL, RPRIME, RFIT};
+
     const RooAbsArg& r_name;
     const TH1D* h_r;
     const TH1D* h_rprime;
     RooArgList rprime_names;
     std::map<int, std::vector<double>> coefMap;
     RooArgList coefNames;
+    NuisanceType type;
 
     NuisanceParam(const RooAbsArg& r_name, std::map<int, std::vector<double>> coefMap, RooArgList coefNames) 
         : r_name(r_name)
@@ -43,6 +46,7 @@ public:
         , h_rprime(nullptr)
         , coefMap(coefMap)
         , coefNames(coefNames)
+        , type(RFIT)
     {        
     }
     
@@ -51,6 +55,7 @@ public:
         , h_r(h_r)
         , h_rprime(h_rprime)
         , rprime_names(rprime_names)
+        , type(RPRIME)
     {        
     }
 
@@ -58,6 +63,7 @@ public:
         : r_name(r_name)
         , h_r(h_r)
         , h_rprime(nullptr)
+        , type(NORMAL)
     {        
     }
 
@@ -184,18 +190,24 @@ void construct_formula(const std::string& procName, RooArgList& binlist, const R
     for(unsigned int j = 0; j < NPs.size(); j++)
     {
         double r = (NPs[j].h_r) ? NPs[j].h_r->GetBinContent(i+1) : 0.0;
-        if(NPs[j].h_rprime)
+        if(NPs[j].type == NuisanceParam::RPRIME)
         {
             double rprime = NPs[j].h_rprime->GetBinContent(i+1);
             addNPs(form, formArgList, r, NPs[j].r_name, rprime, NPs[j].rprime_names[i]);
         }
-        else if(!NPs[j].coefMap.empty())
+        else if(NPs[j].type == NuisanceParam::RFIT)
         {
+            if(NPs[j].coefMap.empty()) { std::cout<<"Error: coefMap is empty"<<std::endl; exit(0); }
             addNPs(form, formArgList, NPs[j].r_name, NPs[j].coefMap.find(i+1)->second, NPs[j].coefNames);
+        }
+        else if(NPs[j].type == NuisanceParam::NORMAL)
+        {
+            addNPs(form, formArgList, r, NPs[j].r_name);
         }
         else
         {
-            addNPs(form, formArgList, r, NPs[j].r_name);
+            std::cout<<"Error: NP type not found"<<std::endl;
+            exit(0);
         }
     }
 
@@ -371,6 +383,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   TTreeReaderValue<double> coef1(reader,"coef1");
   TTreeReaderValue<double> coef2(reader,"coef2");
   TTreeReaderValue<double> coef3(reader,"coef3");
+  std::string qcdcrYear = year;
+  if     (year == "2018pre" ) qcdcrYear = "2018";
+  else if(year == "2018post") qcdcrYear = "2019";
 
   std::map<std::string,std::map<std::string, std::map<int, std::vector<double>>>> qcdcrMap;
   while(reader.Next()) qcdcrMap[std::to_string(*yearTree)]["MVABin"+std::to_string(*MVAbin)][*Njets] = {*coef0, *coef1, *coef2, *coef3};
@@ -401,7 +416,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D1_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D1_pu"},
       {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin1"],
+          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin1"],
           {
               *wspace->var(("np_tt_qcdCRD1Coef1_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRD1Coef2_"+year).c_str()),
@@ -455,7 +470,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D2_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D2_pu"},
       {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin2"],
+          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin2"],
           {
               *wspace->var(("np_tt_qcdCRD2Coef1_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRD2Coef2_"+year).c_str()),
@@ -508,7 +523,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D3_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D3_pu"},
       {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin3"],
+          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin3"],
           {
               *wspace->var(("np_tt_qcdCRD3Coef1_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRD3Coef2_"+year).c_str()),
@@ -561,7 +576,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_htnjet_"+year).c_str()),  tt_syst_file, "D4_htnjet"},
       {*wspace->var(("np_tt_pu_"+year).c_str()),      tt_syst_file, "D4_pu"},
       {
-          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[year]["MVABin4"],
+          *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin4"],
           {
               *wspace->var(("np_tt_qcdCRD4Coef1_"+year).c_str()),
               *wspace->var(("np_tt_qcdCRD4Coef2_"+year).c_str()),
