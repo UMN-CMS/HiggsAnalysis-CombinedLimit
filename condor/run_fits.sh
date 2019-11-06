@@ -15,6 +15,7 @@ doImpact=${12}
 inject=${13}
 syst=${14}
 base_dir=`pwd`
+rMax=10
 
 if [ $syst == None ] 
 then
@@ -79,9 +80,9 @@ fitOptions="${ws} -m ${mass} --keyword-value MODEL=${signalType} --cminDefaultMi
 if [ $doAsym == 1 ] 
 then
     echo "Running Asymptotic fits"
-    combine -M AsymptoticLimits ${fitOptions} --verbose 2 --rMax 5                        -n ${year}                               > log_${year}${signalType}${mass}_Asymp.txt
-    combine -M Significance     ${fitOptions} --verbose 2 --rMax 5 -t -1 --expectSignal=1 -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_sig.txt
-    combine -M Significance     ${fitOptions} --verbose 2 --rMax 5                        -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_noSig.txt
+    combine -M AsymptoticLimits ${fitOptions} --verbose 2 --rMax $rMax                        -n ${year}                               > log_${year}${signalType}${mass}_Asymp.txt
+    combine -M Significance     ${fitOptions} --verbose 2 --rMax $rMax -t -1 --expectSignal=1 -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_sig.txt
+    combine -M Significance     ${fitOptions} --verbose 2 --rMax $rMax                        -n ${year}${signalType}${mass}_SignifExp > log_${year}${signalType}${mass}_Sign_noSig.txt
 fi
 
 # Run the fit diagnostics fits (takes forever to run)
@@ -90,9 +91,9 @@ then
     echo "Running FitDiagnostics"
     if [ $inject == 0 ] 
     then
-        combine -M FitDiagnostics ${fitOptions} --verbose 2 --rMax 5 --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass} > log_${year}${signalType}${mass}_FitDiag.txt
+        combine -M FitDiagnostics ${fitOptions} --verbose 2 --rMax $rMax --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass} > log_${year}${signalType}${mass}_FitDiag.txt
     else
-        combine -M FitDiagnostics ${fitOptions} --verbose 2 --rMax 5 --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass} -t -1 --toysFrequentist --expectSignal=${inject} > log_${year}${signalType}${mass}_FitDiag.txt
+        combine -M FitDiagnostics ${fitOptions} --verbose 2 --rMax $rMax --robustFit=1 --plots --saveShapes --saveNormalizations -n ${year}${signalType}${mass} -t -1 --toysFrequentist --expectSignal=${inject} > log_${year}${signalType}${mass}_FitDiag.txt
     fi
 fi
 

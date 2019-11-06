@@ -83,7 +83,7 @@ def main():
     fileParts.append("Should_Transfer_Files = YES\n")
     fileParts.append("WhenToTransferOutput = ON_EXIT\n")
     fileParts.append("request_disk = 1000000\n")
-    fileParts.append("request_memory = 4000\n")
+    fileParts.append("request_memory = 5000\n")
     fileParts.append("x509userproxy = $ENV(X509_USER_PROXY)\n\n")
     fileParts.append("Transfer_Input_Files = {0}/CMSSW_8_1_0.tar.gz, {0}/exestuff.tar.gz\n".format(options.outPath))
     
