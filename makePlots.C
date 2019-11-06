@@ -173,10 +173,11 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     writeExtraText = true;
     extraText = "Preliminary";
     iPeriod = 4;    // 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV 
-    if     (year=="2016")     lumi_13TeV = "35.9 fb^{-1}";
-    else if(year=="2017")     lumi_13TeV = "41.5 fb^{-1}";
-    else if(year=="2018pre")  lumi_13TeV = "21.1 fb^{-1}";
-    else if(year=="2018post") lumi_13TeV = "38.7 fb^{-1}";
+    if     (year=="2016")      lumi_13TeV = "35.9 fb^{-1}";
+    else if(year=="2017")      lumi_13TeV = "41.5 fb^{-1}";
+    else if(year=="2018pre")   lumi_13TeV = "21.1 fb^{-1}";
+    else if(year=="2018post")  lumi_13TeV = "38.7 fb^{-1}";
+    else if(year=="2016_2017") lumi_13TeV = "77.4 fb^{-1}";
 
     // second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
     // iPos=11 : top-left, left-aligned

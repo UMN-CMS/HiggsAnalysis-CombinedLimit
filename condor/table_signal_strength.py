@@ -13,6 +13,11 @@ def makePValuePlot(dataSet):
     pvalue_2018pre = dataSet["data"]["2018pre"]["pList"]
     pvalue_2018post = dataSet["data"]["2018post"]["pList"]
     pvalue_Combo = dataSet["data"]["Combo"]["pList"]
+    print pvalue_2016
+    print pvalue_2017
+    print pvalue_2018pre
+    print pvalue_2018post
+    print pvalue_Combo
     xpoints = dataSet["data"]["2016"]["mList"]
     npoints = len(pvalue_2016)
     Xmin = 300
@@ -20,6 +25,7 @@ def makePValuePlot(dataSet):
     Ymin = 0.00005
     #if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1 or dataSet["runtype"] == "Data":
     if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1:
+        #Ymin = 0.000000000000000000005
         Ymin = 5.0e-37
     Ymax = 1
 
@@ -102,7 +108,7 @@ def makePValuePlot(dataSet):
     gr_2018post.Draw("L,same")
     gr_Combo.Draw("L,same")
 
-    legend1 = ROOT.TLegend(0.44397,0.1,0.897487,0.25,"")
+    legend1 = ROOT.TLegend(0.6, 0.1, 0.95, 0.25,"")
     if dataSet["model"]=="RPV":
         legend1.SetHeader("pp #rightarrow #tilde{t}#bar{#tilde{t}}, #tilde{t} #rightarrow t #tilde{#chi}^{0}_{1},  #tilde{#chi}^{0}_{1} #rightarrow jjj");
     elif dataSet["model"]=="SYY":
@@ -150,7 +156,7 @@ def makePValuePlot(dataSet):
     hr.GetYaxis().SetRangeUser(-0.2, maxR*1.1)
     hr.GetYaxis().SetNdivisions(4, 2, 0)
     hr.Draw()
-
+    
     rvalue_Combo = array('d', dataSet["data"]["Combo"]["rList"])
     rpvalue_Combo = array('d',dataSet["data"]["Combo"]["rpList"])
     rmvalue_Combo = array('d', dataSet["data"]["Combo"]["rmList"])
@@ -164,11 +170,11 @@ def makePValuePlot(dataSet):
     r.SetLineWidth(3)
     r.Draw("PL same")
     c1.Update()
-
+    
     line = ROOT.TF1("line", "1", 300, 900)
     line.SetLineColor(ROOT.kRed)
     line.Draw("same")
-
+    
     line2 = ROOT.TF1("line", "1", 300, 900)
     line2.SetLineColor(ROOT.kBlack)
     line2.Draw("same")
@@ -183,7 +189,6 @@ def makeSigTex(name, l):
     f.write( "\n" ) 
     f.write( "\\begin{document}\n" )
     f.write( "\\pagenumbering{gobble}\n" )
-
     f.write( "\n" )
 
     for dic in l:
@@ -217,7 +222,11 @@ def main():
     Mass & Best fit signal strength & Observed Significance & p-value\\\\ \hline
     """    
     path = options.basedir
-    runtypes = ["pseudoDataS"]
+    runtypes = [
+        ("pseudoDataS",["2016","2017","2016_2017"]), ("pseudoDataS",["2018pre", "2018post", "Combo"]),
+        ("pseudoData", ["2016","2017","2016_2017"]), ("pseudoData", ["2018pre", "2018post", "Combo"]),
+        #("Data",       ["2016","2017","2016_2017"]), ("Data",       ["2018pre", "2018post", "Combo"]),
+        ]
     #runtypes = ["Data", "pseudoData", "pseudoDataS"]
     #runtypes = ["Data", "pseudoData", "pseudoDataS", "pseudodataS_0.3xRPV_350"]
     #runtypes = ["Data", "pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
@@ -229,65 +238,67 @@ def main():
     #            "pseudodataTTJets", "pseudodata_qcdCR_0.05-0.2xLine", "pseudodata_qcdCR_0.2xLine"]
     models = ["RPV"]
     #models = ["RPV","SYY"]
-    years = ["2016","2017","2018pre","2018post", "Combo"]
+    #years = ["2016","2017","2018pre","2018post", "Combo"]
     masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
     #masses = ["350","450","550","650","750","850"]
 
     # Loop over all jobs in get the info needed
     l=[]
     d=[]
-    for runtype in runtypes:        
+    fNumber=0
+    for t in runtypes:
+        runtype = t[0]
+        years = t[1]
         for model in models:
-            outFileName = "table_signal_strength_%s_%s_%s.tex" % (model, runtype, path)
+            outFileName = "table_signal_strength_%s_%s_%s_%i.tex" % (model, runtype, path, fNumber)
+            fNumber+=1
             file_table = open(outFileName,'w')
             file_table.write(pre_tabular)
             dataSet={"runtype":runtype,"model":model,"data":{}}
             for year in years:
                 data={"mList":[],"rList":[],"rmList":[],"rpList":[],"sList":[],"pList":[],"zero":[]}
-                file_table.write("\\multicolumn{4}{c}{%s} \\\\ \\hline \n"%year)
+                file_table.write("\\multicolumn{4}{c}{$%s$} \\\\ \\hline \n"%year)
                 for mass in masses:
                     print "Year %s, Model %s, Mass %s"%(year, model, mass)
                     filename_r = "%s/Fit_%s_%s/output-files/%s_%s_%s/log_%s%s%s_FitDiag.txt" % (path,runtype, year, model, mass, year, year, model, mass)
-                    info_r = ["-1","-1","-1"]
     
                     # Get r from fit jobs
+                    info_r = ["-1","0","0"]
+                    line_r = ""
                     if not ((model=="RPV" and year=="Combo" and mass=="0") or (model=="SYY" and year=="Combo" and mass=="0") ):
                         file_r=-1
                         try:
                             file_r = open(filename_r)
+                            for line in file_r:
+                                if "Best fit r" in line:        
+                                    if "Fit failed" in line:
+                                        info_r = ["Fit failed"]
+                                    else:
+                                        line_r = line.replace("Best fit r: ","").replace("(68% CL)","").strip().replace("/", " ")
+                                        info_r = line_r.split() # best fit r, -error, +error
                         except:
                             print "File not found:",filename_r 
-                            continue
-                        line_r = ""
-                        for line in file_r:
-                            if "Best fit r" in line:        
-                                if "Fit failed" in line:
-                                    info_r = ["Fit failed"]
-                                else:
-                                    line_r = line.replace("Best fit r: ","").replace("(68% CL)","").strip().replace("/", " ")
-                                    info_r = line_r.split() # best fit r, -error, +error
-        
+
                     # Get sigma and p-value from fit jobs
                     line_sig = "-1"
-                    line_pvalue = "-1"
+                    line_pvalue = "10"
                     if not ((model=="RPV" and year=="Combo" and mass=="0") or (model=="SYY" and year=="2017" and mass in ["0"])):
                         filename_sig = "%s/Fit_%s_%s/output-files/%s_%s_%s/log_%s%s%s_Sign_noSig.txt" % (path,runtype, year, model, mass, year, year, model, mass)
                         file_sig=-1
                         try:
                             file_sig = open(filename_sig)
+                            for line in file_sig:
+                                if "Significance:" in line:
+                                    line_sig = line.replace("Significance:", "").strip()
+                                elif "p-value" in line:
+                                    line_pvalue = line.replace("       (p-value =", "").strip()
+                                    line_pvalue = line_pvalue.replace(")","").strip()
                         except:
                             print "File not found:",filename_sig
-                            continue
-                        for line in file_sig:
-                            if "Significance:" in line:
-                                line_sig = line.replace("Significance:", "").strip()
-                            elif "p-value" in line:
-                                line_pvalue = line.replace("       (p-value =", "").strip()
-                                line_pvalue = line_pvalue.replace(")","").strip()
     
                     # Fill lists of data
                     data["mList"].append(abs(float(mass)))
-                    data["rList"].append(abs(float(info_r[0])))
+                    data["rList"].append(float(info_r[0]))
                     data["rmList"].append(abs(float(info_r[1])))
                     data["rpList"].append(abs(float(info_r[2])))
                     data["sList"].append(abs(float(line_sig)))
@@ -313,8 +324,18 @@ def main():
     
     # Make tex file with all signal strengths
     makeSigTex("table_signal_strength.tex", l)
-    
-    for dataSet in d:        
+
+    allData=[]
+    for dataSet1 in d:
+        for dataSet2 in d:
+            if dataSet1["runtype"] == dataSet2["runtype"] and dataSet1["model"] == dataSet2["model"] and dataSet1["data"] != dataSet2["data"]:
+                dataSet1["data"].update(dataSet2["data"])
+            else:
+                continue
+        if dataSet1 not in allData:
+            allData.append(dataSet1)
+
+    for dataSet in allData:        
         #if not (dataSet["runtype"] == "pseudoData" or dataSet["runtype"] == "pseudoDataS"):
             print "------------------------------------------"
             print dataSet["runtype"], dataSet["model"]        
