@@ -321,24 +321,16 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   RooRealVar  d_tt_D4(("d_tt_D4_" +year).c_str(),("d  of tt bkg shape D4 for "+year).c_str(),20,-2500,2500);
 
   double_t n7_tt_portion_D1 = TTonly ? data_th1_D1->GetBinContent(1) : data_th1_D1->GetBinContent(1) - otherMC_th1_D1->GetBinContent(1) - qcdMC_th1_D1->GetBinContent(1) - ttxMC_th1_D1->GetBinContent(1);
-  double_t n7_tt_portion_D1_low = n7_tt_portion_D1-6000;
-  if (n7_tt_portion_D1_low<0) n7_tt_portion_D1_low = 0;
-  RooRealVar N7_tt_D1(("N7_tt_D1_"+year).c_str(),"njets 7 for tt bkg in MVA D1",n7_tt_portion_D1,n7_tt_portion_D1_low,n7_tt_portion_D1+6000);
+  RooRealVar N7_tt_D1(("N7_tt_D1_"+year).c_str(), "njets 7 for tt bkg in MVA D1", n7_tt_portion_D1, 0.3*n7_tt_portion_D1, 2.0*n7_tt_portion_D1);
 
   double_t n7_tt_portion_D2 = TTonly ? data_th1_D2->GetBinContent(1) : data_th1_D2->GetBinContent(1) - otherMC_th1_D2->GetBinContent(1) - qcdMC_th1_D2->GetBinContent(1) - ttxMC_th1_D2->GetBinContent(1);
-  double_t n7_tt_portion_D2_low = n7_tt_portion_D2-5000;
-  if (n7_tt_portion_D2_low<0) n7_tt_portion_D2_low = 0;
-  RooRealVar N7_tt_D2(("N7_tt_D2_"+year).c_str(),"njets 7 for tt bkg in MVA D2",n7_tt_portion_D2,n7_tt_portion_D2_low,n7_tt_portion_D2+5000);
+  RooRealVar N7_tt_D2(("N7_tt_D2_"+year).c_str(), "njets 7 for tt bkg in MVA D2", n7_tt_portion_D2, 0.2*n7_tt_portion_D2, 2.0*n7_tt_portion_D2);
 
   double_t n7_tt_portion_D3 = TTonly ? data_th1_D3->GetBinContent(1) : data_th1_D3->GetBinContent(1) - otherMC_th1_D3->GetBinContent(1) - qcdMC_th1_D3->GetBinContent(1) - ttxMC_th1_D3->GetBinContent(1);
-  double_t n7_tt_portion_D3_low = n7_tt_portion_D3-4000;
-  if (n7_tt_portion_D3_low<0) n7_tt_portion_D3_low = 0;
-  RooRealVar N7_tt_D3(("N7_tt_D3_"+year).c_str(),"njets 7 for tt bkg in MVA D3",n7_tt_portion_D3,n7_tt_portion_D3_low,n7_tt_portion_D3+4000);
+  RooRealVar N7_tt_D3(("N7_tt_D3_"+year).c_str(), "njets 7 for tt bkg in MVA D3", n7_tt_portion_D3, 0.1*n7_tt_portion_D3, 2.0*n7_tt_portion_D3);
 
   double_t n7_tt_portion_D4 = TTonly ? data_th1_D4->GetBinContent(1) : data_th1_D4->GetBinContent(1) - otherMC_th1_D4->GetBinContent(1) - qcdMC_th1_D4->GetBinContent(1) - ttxMC_th1_D4->GetBinContent(1);
-  double_t n7_tt_portion_D4_low = n7_tt_portion_D4-3000;
-  if (n7_tt_portion_D4_low<0) n7_tt_portion_D4_low = 0;
-  RooRealVar N7_tt_D4(("N7_tt_D4_"+year).c_str(),"njets 7 for tt bkg in MVA D4",n7_tt_portion_D4,n7_tt_portion_D4_low,n7_tt_portion_D4+3000);
+  RooRealVar N7_tt_D4(("N7_tt_D4_"+year).c_str(), "njets 7 for tt bkg in MVA D4", n7_tt_portion_D4, 0.01*n7_tt_portion_D4, 2.0*n7_tt_portion_D4);
 
   // tt shape systematic nuisance parameters
   wspace->factory("np_tt_pdf[0.0]"); // fully correlated
