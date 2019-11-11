@@ -108,14 +108,14 @@ def makePValuePlot(dataSet):
     gr_2018post.Draw("L,same")
     gr_Combo.Draw("L,same")
 
-    legend1 = ROOT.TLegend(0.6, 0.1, 0.95, 0.25,"")
+    legend1 = ROOT.TLegend(0.5, 0.05, 0.9, 0.25,"")
     if dataSet["model"]=="RPV":
         legend1.SetHeader("pp #rightarrow #tilde{t}#bar{#tilde{t}}, #tilde{t} #rightarrow t #tilde{#chi}^{0}_{1},  #tilde{#chi}^{0}_{1} #rightarrow jjj");
     elif dataSet["model"]=="SYY":
         legend1.SetHeader("pp #rightarrow #tilde{t}#bar{#tilde{t}}, SYY coupling");
     elif dataSet["model"]=="SHH":
         legend1.SetHeader("pp #rightarrow #tilde{t}#bar{#tilde{t}}, SHH coupling");
-    legend1.AddEntry(gr_Combo, "Combined Observed, L_{Int}=77.4 fb^{-1}", "l")
+    legend1.AddEntry(gr_Combo, "Combined Observed, L_{Int}=137.2 fb^{-1}", "l")
     legend1.AddEntry(gr_2016, "2016 Observed, L_{Int}=35.9 fb^{-1}", "l")
     legend1.AddEntry(gr_2017, "2017 Observed, L_{Int}=41.5 fb^{-1}", "l")
     legend1.AddEntry(gr_2018pre, "2018pre Observed, L_{Int}=21.1 fb^{-1}", "l")
@@ -225,7 +225,7 @@ def main():
     runtypes = [
         ("pseudoDataS",["2016","2017","2016_2017"]), ("pseudoDataS",["2018pre", "2018post", "Combo"]),
         ("pseudoData", ["2016","2017","2016_2017"]), ("pseudoData", ["2018pre", "2018post", "Combo"]),
-        #("Data",       ["2016","2017","2016_2017"]), ("Data",       ["2018pre", "2018post", "Combo"]),
+        ("Data",       ["2016","2017","2016_2017"]), ("Data",       ["2018pre", "2018post", "Combo"]),
         ]
     #runtypes = ["Data", "pseudoData", "pseudoDataS"]
     #runtypes = ["Data", "pseudoData", "pseudoDataS", "pseudodataS_0.3xRPV_350"]

@@ -101,8 +101,7 @@ fi
 if [ $doMulti == 1 ] 
 then
     echo "Running MultiDimFit"
-    combine -M MultiDimFit ${fitOptions} --verbose 0 --rMin -0.2 --rMax 2.0 --algo=grid --points=100 -n SCAN_r_wSig > log_${year}${signalType}${mass}_multiDim.txt
-    rm log_${year}${signalType}${mass}_multiDim.txt
+    combine -M MultiDimFit ${fitOptions} --verbose 0 --rMin -0.2 --rMax 2.0 --algo=grid --points=100 -n SCAN_r_wSig > /dev/null
 fi
 
 # Run impact plots from the CombineHarvester repo
