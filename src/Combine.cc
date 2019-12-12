@@ -16,6 +16,7 @@
 
 #include <TCanvas.h>
 #include <TFile.h>
+#include <TFileCacheRead.h>
 #include <TGraphErrors.h>
 #include <TIterator.h>
 #include <TLine.h>
@@ -59,6 +60,8 @@
 #include "HiggsAnalysis/CombinedLimit/interface/AsimovUtils.h"
 #include "HiggsAnalysis/CombinedLimit/interface/CascadeMinimizer.h"
 #include "HiggsAnalysis/CombinedLimit/interface/ProfilingTools.h"
+#include "HiggsAnalysis/CombinedLimit/interface/RooMultiPdf.h"
+#include "HiggsAnalysis/CombinedLimit/interface/CMSHistFunc.h"
 
 #include "HiggsAnalysis/CombinedLimit/interface/Logger.h"
 
@@ -102,7 +105,7 @@ Combine::Combine() :
     ROOT::v5::TFormula::SetMaxima(10000);
     namespace po = boost::program_options;
     statOptions_.add_options()
-      ("systematics,S", po::value<bool>(&withSystematics)->default_value(true), "Include constrained systematic uncertainties, -S 0 will ignore systematics constraint terms in the datacard.")
+      //("systematics,S", po::value<bool>(&withSystematics)->default_value(true), "Include constrained systematic uncertainties, -S 0 will ignore systematics constraint terms in the datacard.")
       ("cl,C",   po::value<float>(&cl)->default_value(0.95), "Confidence Level")
       ("rMin",   po::value<float>(&rMin_), "Override minimum value for signal strength (default is 0)")
       ("rMax",   po::value<float>(&rMax_), "Override maximum value for signal strength (default is 20)")
@@ -120,8 +123,9 @@ Combine::Combine() :
       ("setParameterRanges", po::value<string>(&setPhysicsModelParameterRangeExpression_)->default_value(""), "Set the range of relevant physics model parameters. Give a colon separated list of parameter ranges. Example: CV=0.0,2.0:CF=0.0,5.0")      
       ("defineBackgroundOnlyModelParameters", po::value<string>(&defineBackgroundOnlyModelParameterExpression_)->default_value(""), "If no background only (null) model is explicitly provided in physics model, one will be defined as these values of the POIs (default is r=0)")      
       ("redefineSignalPOIs", po::value<string>(&redefineSignalPOIs_)->default_value(""), "Redefines the POIs to be this comma-separated list of variables from the workspace.")      
-      ("freezeParameters", po::value<string>(&freezeNuisances_)->default_value(""), "Set as constant all these parameters.")      
+      ("freezeParameters", po::value<string>(&freezeNuisances_)->default_value(""), "Set as constant all these parameters. use --freezeParameters allConstrainedNuisances to freeze all constrained nuisance parameters (i.e doesn't include rateParams etc)")      
       ("freezeNuisanceGroups", po::value<string>(&freezeNuisanceGroups_)->default_value(""), "Set as constant all these groups of nuisance parameters.")      
+      ("freezeWithAttributes", po::value<string>(&freezeWithAttributes_)->default_value(""), "Set as constant all variables carrying one of these attribute strings.")      
       ;
     ioOptions_.add_options()
       ("saveWorkspace", "Save workspace to output root file")
@@ -156,11 +160,12 @@ Combine::Combine() :
 }
 
 void Combine::applyOptions(const boost::program_options::variables_map &vm) {
-  if(withSystematics) {
+  /*if(withSystematics) {
     std::cout << ">>> including systematics" << std::endl;
   } else {
     std::cout << ">>> no systematics included" << std::endl;
   } 
+  */
   unbinned_ = vm.count("unbinned");
   generateBinnedWorkaround_ = vm.count("generateBinnedWorkaround");
   if (unbinned_ && generateBinnedWorkaround_) throw std::logic_error("You can't set generateBinnedWorkaround and unbinned options at the same time");
@@ -171,7 +176,7 @@ void Combine::applyOptions(const boost::program_options::variables_map &vm) {
   hintUsesStatOnly_ = vm.count("hintStatOnly");
   saveWorkspace_ = vm.count("saveWorkspace");
   toysNoSystematics_ = vm.count("toysNoSystematics");
-  if (!withSystematics) toysNoSystematics_ = true;  // if no systematics, also don't expect them for the toys
+  //if (!withSystematics) toysNoSystematics_ = true;  // if no systematics, also don't expect them for the toys
   toysFrequentist_ = vm.count("toysFrequentist");
   if (toysNoSystematics_ && toysFrequentist_) throw std::logic_error("You can't set toysNoSystematics and toysFrequentist options at the same time");
   if (modelConfigNameB_.find("%s") != std::string::npos) {
@@ -202,6 +207,8 @@ void Combine::applyOptions(const boost::program_options::variables_map &vm) {
   if (vm.count("keyword-value") ) {
     modelPoints_ = vm["keyword-value"].as<std::vector<std::string> >();
   }
+
+  makeToyGenSnapshot_ = (method == "FitDiagnostics" && !vm.count("justFit"));
 }
 
 bool Combine::mklimit(RooWorkspace *w, RooStats::ModelConfig *mc_s, RooStats::ModelConfig *mc_b, RooAbsData &data, double &limit, double &limitErr) {
@@ -211,10 +218,10 @@ bool Combine::mklimit(RooWorkspace *w, RooStats::ModelConfig *mc_s, RooStats::Mo
   try {
     double hint = 0, hintErr = 0; bool hashint = false;
     if (hintAlgo) {
-        if (hintUsesStatOnly_ && withSystematics) {
-            withSystematics = false;
+        if (hintUsesStatOnly_ ) { //&& withSystematics) {
+            //withSystematics = false;
             hashint = hintAlgo->run(w, mc_s, mc_b, data, hint, hintErr, 0);
-            withSystematics = true;
+            //withSystematics = true;
         } else {
             hashint = hintAlgo->run(w, mc_s, mc_b, data, hint, hintErr, 0);
         } 
@@ -264,7 +271,7 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
   } else {
     TString txtFile = fileToLoad.Data();
     TString options = TString::Format(" -m %f -D %s", mass_, dataset.c_str());
-    if (!withSystematics) options += " --stat ";
+    //if (!withSystematics) options += " --stat ";
     if (compiledExpr_)    options += " --compiled ";
     if (verbose > 1)      options += TString::Format(" --verbose %d", verbose-1);
     if (algo->name() == "FitDiagnostics" || algo->name() == "MultiDimFit") options += " --for-fits";
@@ -301,6 +308,11 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
     garbageCollect.tfile = fIn; // request that we close this file when done
 
     w = dynamic_cast<RooWorkspace *>(fIn->Get(workspaceName_.c_str()));
+
+    if (fIn->GetCacheRead()) {
+      fIn->GetCacheRead()->Close();
+    }
+
     if (w == 0) {  
         std::cerr << "Could not find workspace '" << workspaceName_ << "' in file " << fileToLoad << std::endl; fIn->ls(); 
         throw std::invalid_argument("Missing Workspace"); 
@@ -371,6 +383,10 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
         mc_bonly = new RooStats::ModelConfig(*mc);
         mc_bonly->SetPdf(*model_b);
     }
+
+    // Fix for large RooAddPdfs
+    utils::RooAddPdfFixer addpdfFixer;
+    addpdfFixer.FixAll(*w);
     
     // Specific settings should be executed before user specified ranges!
     RooRealVar *r = (RooRealVar*)POI->first();
@@ -400,7 +416,7 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
     //*********************************************
     //set physics model parameters    after loading the snapshot
     //*********************************************
-    if (setPhysicsModelParameterExpression_ != "") {
+    if (setPhysicsModelParameterExpression_ != "" && !runtimedef::get("SETPARAMETERS_AFTER_NLL")) {
       RooArgSet allParams(w->allVars());
       //if (w->genobj("discreteParams")) allParams.add(*(RooArgSet*)w->genobj("discreteParams"));
       allParams.add(w->allCats());
@@ -539,7 +555,6 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
       RooMsgService::instance().setGlobalKillBelow(RooFit::FATAL);
   }
 
-
   if (redefineSignalPOIs_ != "") {
       RooArgSet newPOIs(w->argSet(redefineSignalPOIs_.c_str()));
       TIterator *np = newPOIs.createIterator();
@@ -563,6 +578,7 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
           }
       } 
   }
+
   // Always reset the POIs to floating (post-fit workspaces can actually have them frozen in some cases, in any case they can be re-frozen in the next step 
   TIterator *pois = POI->createIterator();
   while (RooRealVar *arg = (RooRealVar*)pois->Next()) {
@@ -604,11 +620,60 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
                   matchingParams = matchingParams + target + ",";
               }
           }
+
           freezeNuisances_ = prestr+matchingParams+poststr;
           freezeNuisances_ = boost::replace_all_copy(freezeNuisances_, ",,", ","); 
+          
       }
 
-      RooArgSet toFreeze((freezeNuisances_=="all")?*nuisances:(w->argSet(freezeNuisances_.c_str())));
+      // expand regexps          
+      while (freezeNuisances_.find("var{") != std::string::npos) {          
+          size_t pos1 = freezeNuisances_.find("var{");
+          size_t pos2 = freezeNuisances_.find("}",pos1);
+          std::string prestr = freezeNuisances_.substr(0,pos1);
+          std::string poststr = freezeNuisances_.substr(pos2+1,freezeNuisances_.size()-pos2);
+          std::string reg_esp = freezeNuisances_.substr(pos1+4,pos2-pos1-4);
+          
+          // std::cout<<"interpreting "<<reg_esp<<" as regex "<<std::endl;
+          std::regex rgx( reg_esp, std::regex::ECMAScript);
+          
+          std::string matchingParams="";
+          std::auto_ptr<TIterator> iter(w->componentIterator());
+          for (RooAbsArg *a = (RooAbsArg*) iter->Next(); a != 0; a = (RooAbsArg*) iter->Next()) {
+
+              if ( ! (a->IsA()->InheritsFrom(RooRealVar::Class()) || a->IsA()->InheritsFrom(RooCategory::Class()))) continue;
+ 
+              const std::string &target = a->GetName();
+              // std::cout<<"var "<<target<<std::endl;
+              std::smatch match;
+              if (std::regex_match(target, match, rgx)) {
+                  matchingParams = matchingParams + target + ",";
+              }
+          }
+
+          freezeNuisances_ = prestr+matchingParams+poststr;
+          freezeNuisances_ = boost::replace_all_copy(freezeNuisances_, ",,", ","); 
+          
+      }
+
+      //RooArgSet toFreeze((freezeNuisances_=="all")?*nuisances:(w->argSet(freezeNuisances_.c_str())));
+      RooArgSet toFreeze;
+      if (freezeNuisances_=="allConstrainedNuisances") {
+          toFreeze.add(*nuisances);
+      } else {
+          std::vector<std::string> nuisToFreeze;
+          boost::split(nuisToFreeze, freezeNuisances_, boost::is_any_of(","), boost::token_compress_on);
+          for (int k=0; k<(int)nuisToFreeze.size(); k++) {
+              if (nuisToFreeze[k]=="") continue;
+              if (!w->fundArg(nuisToFreeze[k].c_str())) {
+                  std::cout<<"WARNING: cannot freeze nuisance parameter "<<nuisToFreeze[k].c_str()<<" if it doesn't exist!"<<std::endl;
+                  continue;
+              }
+              const RooAbsArg *arg = (RooAbsArg*)w->fundArg(nuisToFreeze[k].c_str());              
+              toFreeze.add(*arg);
+          }
+      }
+
       if (verbose > 0) {  
       	std::cout << "Freezing the following parameters: "; toFreeze.Print("");
         Logger::instance().log(std::string(Form("Combine.cc: %d -- Freezing the following parameters: ",__LINE__)),Logger::kLogLevelInfo,__func__); 
@@ -637,12 +702,12 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
 	  (*ng_it).erase(0,1);
 	} 
 
-	if (! w->set(Form("group_%s",(*ng_it).c_str()))){
+	if (!w->set(Form("group_%s",(*ng_it).c_str()))){
           std::cerr << "Unknown nuisance group: " << (*ng_it) << std::endl;
           throw std::invalid_argument("Unknown nuisance group name");
 	}
-        RooArgSet groupNuisances(*(w->set(Form("group_%s",(*ng_it).c_str()))));
-	RooArgSet toFreeze;
+  RooArgSet groupNuisances(*(w->set(Form("group_%s",(*ng_it).c_str()))));
+  RooArgSet toFreeze;
 
 	if (freeze_complement) {
 	  RooArgSet still_floating(*mc->GetNuisanceParameters());
@@ -664,6 +729,28 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
       }
   }
 
+  if (freezeWithAttributes_ != "") {
+    std::vector<string> nuisanceAttrs;
+    boost::algorithm::split(nuisanceAttrs,freezeWithAttributes_,boost::algorithm::is_any_of(","));
+    for (auto const& attr : nuisanceAttrs) {
+      RooArgSet toFreeze;
+      if (nuisances) {
+         RooAbsArg *arg = nullptr;
+         auto iter = nuisances->createIterator();
+         while ((arg = (RooAbsArg*)iter->Next())) {
+           if (arg->attributes().count(attr)) toFreeze.add(*arg);
+         }
+         if (verbose > 0) {  std::cout << "Freezing the following nuisance parameters: "; toFreeze.Print(""); }
+         utils::setAllConstant(toFreeze, true);
+         RooArgSet newnuis(*nuisances);
+         newnuis.remove(toFreeze, /*silent=*/true, /*byname=*/true);
+         mc->SetNuisanceParameters(newnuis);
+         if (mc_bonly) mc_bonly->SetNuisanceParameters(newnuis);
+         nuisances = mc->GetNuisanceParameters();
+      }
+    }
+  }
+
   if (mc->GetPriorPdf() == 0 && !noDefaultPrior_) {
       if (prior_ == "flat") {
           RooAbsPdf *prior = new RooUniform("prior","prior",*POI);
@@ -682,7 +769,10 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
           throw std::invalid_argument("Bad prior");
       }
   }
+  
+  if (nuisances == 0) withSystematics = false;
 
+  /*
   if (withSystematics && nuisances == 0) {
       std::cout << "The model has no constrained nuisance parameters. Please run the limit tool with no systematics (option -S 0)." << std::endl;
       std::cout << "To make things easier, I will assume you have done it." << std::endl;
@@ -692,14 +782,15 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
     std::cout << "Will set nuisance parameters to constants: " ;
     utils::setAllConstant(*nuisances, true);
   }
+  */
 
   bool validModel = validateModel_ ? utils::checkModel(*mc, false) : true;
   if (validateModel_ && verbose) std::cout << "Sanity checks on the model: " << (validModel ? "OK" : "FAIL") << std::endl;
 
   // make sure these things are set consistently with what we expect
-  if (floatAllNuisances_  && mc->GetNuisanceParameters() && withSystematics) utils::setAllConstant(*mc->GetNuisanceParameters(), false);
+  if (floatAllNuisances_  && mc->GetNuisanceParameters()) utils::setAllConstant(*mc->GetNuisanceParameters(), false);
   if (freezeAllGlobalObs_ && mc->GetGlobalObservables()) utils::setAllConstant(*mc->GetGlobalObservables(), true);
-  if (floatAllNuisances_  && mc_bonly && mc_bonly->GetNuisanceParameters() && withSystematics) utils::setAllConstant(*mc_bonly->GetNuisanceParameters(), false);
+  if (floatAllNuisances_  && mc_bonly && mc_bonly->GetNuisanceParameters()) utils::setAllConstant(*mc_bonly->GetNuisanceParameters(), false);
   if (freezeAllGlobalObs_ && mc_bonly && mc_bonly->GetGlobalObservables()) utils::setAllConstant(*mc_bonly->GetGlobalObservables(), true);
 
   // Setup the CascadeMinimizer with discrete nuisances 
@@ -825,13 +916,23 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
     }
   }
 
+  if (runtimedef::get("FAST_VERTICAL_MORPH")) {
+    CMSHistFunc::EnableFastVertical();
+  }
+
 
   // Ok now we're ready to go lets save a "clean snapshot" for the current parameters state
   // w->allVars() misses the RooCategories, useful for some things - so need to include them. Set up a utils function for that 
-  w->saveSnapshot("clean", utils::returnAllVars(w));
+  if (nToys <= 0 && runtimedef::get("NO_INITIAL_SNAP")) {
+      if (verbose >= 3) std::cout << "Skipping snapshot" << std::endl;
+  } else {
+      if (verbose >= 3) std::cout << "Saving snapshot 'clean'" << std::endl;
+      w->saveSnapshot("clean", utils::returnAllVars(w));
+      if (verbose >= 3) std::cout << "Saved snapshot 'clean'" << std::endl;
+  }
   
   if (nToys <= 0) { // observed or asimov
-    w->saveSnapshot("toyGenSnapshot",utils::returnAllVars(w));
+    if (makeToyGenSnapshot_) w->saveSnapshot("toyGenSnapshot",utils::returnAllVars(w));
     iToy = nToys;
     if (iToy == -1) {
      if (readToysFromHere != 0){
@@ -852,7 +953,7 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
             gobs.assignValueOnly(*snap);
             w->saveSnapshot("clean", utils::returnAllVars(w));
         }
-      }
+     }
       else{
         if (genPdf == 0) throw std::invalid_argument("You can't generate background-only toys if you have no background-only pdf in the workspace and you have set --noMCbonly");
         if (toysFrequentist_) {
@@ -887,6 +988,7 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
 	    if (saveToys_) commitPoint(false,-2);
 
             dobs = newToyMC.generateAsimov(weightVar_,verbose); // as simple as that
+
         }
       }
     } else if (dobs == 0) {
@@ -900,8 +1002,8 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
             if (snap) writeToysHere->WriteTObject(snap, "toy_asimov_snapshot");
         }
     }
-    std::cout << "Computing results starting from " << (iToy == 0 ? "observation (a-posteriori)" : "expected outcome (a-priori)") << std::endl;
-    if (verbose) Logger::instance().log(std::string(Form("Combine.cc: %d -- Computing results starting from %s",__LINE__,(iToy == 0 ? "observation (a-posteriori)" : "expected outcome (a-priori)"))),Logger::kLogLevelInfo,__func__);
+    //std::cout << "Computing" <<  (iToy==0 ? " observed " :" expected ")<<" results starting from " << ((toysFrequentist_ && !bypassFrequentistFit_) ? " post-fit " : " pre-fit ") << " (nuisance) parameters " << std::endl;
+    //if (verbose) Logger::instance().log(std::string(Form("Combine.cc: %d -- Computing %s results starting from %s parameters",__LINE__, (iToy==0 ? " observed " :" expected "), ( (toysFrequentist_ && !bypassFrequentistFit_) ? "post-fit" : "pre-fit") )),Logger::kLogLevelInfo,__func__);
     if (MH) MH->setVal(mass_);    
     if (verbose > (isExtended ? 3 : 2)) utils::printRAD(dobs);
     if (mklimit(w,mc,mc_bonly,*dobs,limit,limitErr)) commitPoint(0,g_quantileExpected_); //tree->Fill();
@@ -949,6 +1051,12 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
     algo->setNToys(nToys);
 
     for (iToy = 1; iToy <= nToys; ++iToy) {
+
+      // Reset ranges --> for likelihood scans
+      if (setPhysicsModelParameterRangeExpression_ != "") {
+	utils::setModelParameterRanges( setPhysicsModelParameterRangeExpression_, w->allVars());
+      }
+
       algo->setToyNumber(iToy-1);
       RooAbsData *absdata_toy = 0;
       if (readToysFromHere == 0) {
@@ -1006,9 +1114,9 @@ void Combine::run(TString hlfFile, const std::string &dataset, double &limit, do
         }
       }
       if (verbose > (isExtended ? 3 : 2)) utils::printRAD(absdata_toy);
-      if (!toysFrequentist_) w->saveSnapshot("toyGenSnapshot",utils::returnAllVars(w));
+      if (!toysFrequentist_ && makeToyGenSnapshot_) w->saveSnapshot("toyGenSnapshot",utils::returnAllVars(w));
       w->loadSnapshot("clean");
-      if (toysFrequentist_) w->saveSnapshot("toyGenSnapshot",utils::returnAllVars(w));
+      if (toysFrequentist_ && makeToyGenSnapshot_) w->saveSnapshot("toyGenSnapshot",utils::returnAllVars(w));
       //if (verbose > 1) utils::printPdf(w, "model_b");
       if (mklimit(w,mc,mc_bonly,*absdata_toy,limit,limitErr)) {
 	commitPoint(0,g_quantileExpected_);//tree->Fill();
@@ -1126,8 +1234,6 @@ void Combine::addDiscreteNuisances(RooWorkspace *w){
       	      if (verbose) Logger::instance().log(std::string(Form("Combine.cc: %d -- Adding discrete %s ",__LINE__,cat->GetName())),Logger::kLogLevelInfo,__func__);
 	    }
             (CascadeMinimizerGlobalConfigs::O().pdfCategories).add(*arg);
-
-	    
           }
         }
     } 
@@ -1151,7 +1257,9 @@ void Combine::addDiscreteNuisances(RooWorkspace *w){
     RooArgSet clients;
     utils::getClients(CascadeMinimizerGlobalConfigs::O().pdfCategories,(w->allPdfs()),clients);
     TIterator *it = clients.createIterator();
-    while (RooAbsArg *arg = (RooAbsArg*)it->Next()) { 
+    // clients.Print();
+    while (RooAbsArg *arg = (RooAbsArg*)it->Next()) {
+      (CascadeMinimizerGlobalConfigs::O().allRooMultiPdfs).add(*(dynamic_cast<RooMultiPdf*>(arg)));
       RooAbsPdf *pdf = dynamic_cast<RooAbsPdf*>(arg);
       RooArgSet *pdfPars = pdf->getParameters((const RooArgSet*)0);
       std::auto_ptr<TIterator> iter_v(pdfPars->createIterator());

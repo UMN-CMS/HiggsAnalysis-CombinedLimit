@@ -91,7 +91,8 @@ private:
   std::string freezeNuisances_;
   std::string floatNuisances_;
   std::string freezeNuisanceGroups_;
-  
+  std::string freezeWithAttributes_;
+
   // input-output related variables
   bool saveWorkspace_;
   std::string workspaceName_;
@@ -109,6 +110,7 @@ private:
   bool optSimPdf_;
   bool noMCbonly_;
   bool noDefaultPrior_;
+  bool makeToyGenSnapshot_;
   bool floatAllNuisances_;
   bool freezeAllGlobalObs_;
   std::vector<std::string> librariesToLoad_;

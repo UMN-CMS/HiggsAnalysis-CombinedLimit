@@ -24,7 +24,7 @@ class CascadeMinimizer {
         // run hesse
         bool hesse(int verbose = 0 );
         // do a new minimization, assuming a plausible initial state
-        bool improve(int verbose=0, bool cascade=true);
+        bool improve(int verbose=0, bool cascade=true, bool forceResetMinimizer=false);
         // declare nuisance parameters for pre-fit
         void setNuisanceParameters(const RooArgSet *nuis) { nuisances_ = nuis; }
         RooMinimizer & minimizer() { return *minimizer_; }
@@ -36,7 +36,8 @@ class CascadeMinimizer {
         static const boost::program_options::options_description & options() { return options_; }
         void trivialMinimize(const RooAbsReal &nll, RooRealVar &r, int points=100) const ;
         //void collectIrrelevantNuisances(RooAbsCollection &irrelevant) const ;
-        void setAutoBounds(const RooArgSet *pois) ; 
+	bool freezeDiscParams(const bool);
+        void setAutoBounds(const RooArgSet *pois) ;
         void setAutoMax(const RooArgSet *pois) ; 
 	double tolerance() {return defaultMinimizerTolerance_;};
 	std::string algo() {return defaultMinimizerAlgo_;};
@@ -58,6 +59,9 @@ class CascadeMinimizer {
 		,std::vector<std::vector<bool> > & );
        
         bool iterativeMinimize(double &,int,bool); 
+
+        void remakeMinimizer() ;
+
         /// options configured from command line
         static boost::program_options::options_description options_;
         /// compact information about an algorithm
@@ -124,6 +128,7 @@ class CascadeMinimizerGlobalConfigs{
 	  RooListProxy allFloatingParameters; 
 	  RooListProxy parametersOfInterest; 
 	  RooListProxy allRooMultiPdfParams;
+	  RooListProxy allRooMultiPdfs;
 
 	  static CascadeMinimizerGlobalConfigs& O(){
 

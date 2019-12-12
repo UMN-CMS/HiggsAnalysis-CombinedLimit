@@ -222,6 +222,7 @@ bool FitDiagnostics::runSpecific(RooWorkspace *w, RooStats::ModelConfig *mc_s, R
 	for (std::vector<RooPlot *>::iterator it = plots.begin(), ed = plots.end(); it != ed; ++it) {
 	    (*it)->Draw(); 
 	    c1->Print((out_+"/"+(*it)->GetName()+"_prefit.png").c_str());
+	    c1->SetLogy();c1->Print((out_+"/"+(*it)->GetName()+"_prefit_logy.png").c_str()); c1->SetLogy(false);
 	    if (fitOut.get() && currentToy_< 1) fitOut->WriteTObject(*it, (std::string((*it)->GetName())+"_prefit").c_str());
 	}
       }
@@ -290,15 +291,15 @@ bool FitDiagnostics::runSpecific(RooWorkspace *w, RooStats::ModelConfig *mc_s, R
 
       if (!robustHesse_ && res_b->covQual() < 3){
           if(!saveWithUncertainties_){
-              std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."<<std::endl;
-              Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
+              std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."<<std::endl;
+              Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
           } else if (ignoreCovWarning_) {
-              std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."<<std::endl;
-              Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
+              std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."<<std::endl;
+              Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
           } else {
               saveWithUncertainties_=false;
-              std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."<<std::endl;
-              Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
+              std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."<<std::endl;
+              Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in b-only fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
           }
       }
       if ( verbose > 0 ) Logger::instance().log(std::string(Form("FitDiagnostics.cc: %d -- Fit B-only, status = %d, numBadNLL = %d, covariance quality = %d",__LINE__,fitStatus_,numbadnll_,res_b->covQual())),Logger::kLogLevelDebug,__func__);
@@ -308,6 +309,7 @@ bool FitDiagnostics::runSpecific(RooWorkspace *w, RooStats::ModelConfig *mc_s, R
           for (std::vector<RooPlot *>::iterator it = plots.begin(), ed = plots.end(); it != ed; ++it) {
               c1->cd(); (*it)->Draw(); 
               c1->Print((out_+"/"+(*it)->GetName()+"_fit_b.png").c_str());
+              c1->SetLogy(); c1->Print((out_+"/"+(*it)->GetName()+"_fit_b_logy.png").c_str()); c1->SetLogy(false);
               if (fitOut.get() && currentToy_< 1) fitOut->WriteTObject(*it, (std::string((*it)->GetName())+"_fit_b").c_str());
           }
       }
@@ -398,15 +400,15 @@ bool FitDiagnostics::runSpecific(RooWorkspace *w, RooStats::ModelConfig *mc_s, R
          saveWithUncertainties_=saveWithUncertsRequested_; //Reset saveWithUncertainties flag to original value in case it has been set to false due to covariance matrix issues in the b-only fit.
          if (!robustHesse_ && res_s->covQual() < 3){
              if(!saveWithUncertainties_){
-                 std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."<<std::endl;
-                 Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
+                 std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."<<std::endl;
+                 Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
              } else if (ignoreCovWarning_) {
-                  std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."<<std::endl;
-                  Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
+                  std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."<<std::endl;
+                  Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. Caution: by passing --ignoreCovWarning the shapes and uncertainties will be stored as configured via the command line despite this issue. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
              } else {
                   saveWithUncertainties_=false;
-                  std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."<<std::endl;
-                  Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-hcomb.gitbooks.io/combine/content/part3/nonstandard.html#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
+                  std::cerr<<"[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."<<std::endl;
+                  Logger::instance().log(std::string("[WARNING]: Unable to determine uncertainties on all fit parameters in s+b fit. The option --saveWithUncertainties will be ignored as it would lead to incorrect results. Have a look at https://cms-analysis.github.io/HiggsAnalysis-CombinedLimit/part3/nonstandard/#fit-parameter-uncertainties for more information."),Logger::kLogLevelError,__func__);
              }
          }
          if ( verbose > 0 ) Logger::instance().log(std::string(Form("FitDiagnostics.cc: %d -- Fit S+B, status = %d, numBadNLL = %d, covariance quality = %d",__LINE__,fitStatus_,numbadnll_,res_s->covQual())),Logger::kLogLevelDebug,__func__);
@@ -419,6 +421,7 @@ bool FitDiagnostics::runSpecific(RooWorkspace *w, RooStats::ModelConfig *mc_s, R
           for (std::vector<RooPlot *>::iterator it = plots.begin(), ed = plots.end(); it != ed; ++it) {
               c1->cd(); (*it)->Draw(); 
               c1->Print((out_+"/"+(*it)->GetName()+"_fit_s.png").c_str());
+              c1->SetLogy(); c1->Print((out_+"/"+(*it)->GetName()+"_fit_s_logy.png").c_str()); c1->SetLogy(false);
               if (fitOut.get() && currentToy_< 1) fitOut->WriteTObject(*it, (std::string((*it)->GetName())+"_fit_s").c_str());
           }
       }
@@ -1039,28 +1042,28 @@ void FitDiagnostics::createFitResultTrees(const RooStats::ModelConfig &mc, bool 
 	 t_fit_b_  = new TTree("tree_fit_b","tree_fit_b");
 	 t_fit_sb_ = new TTree("tree_fit_sb","tree_fit_sb");
 
-    	 t_fit_b_->Branch("fit_status",&fitStatus_,"fit_status/Int_t");
-   	 t_fit_sb_->Branch("fit_status",&fitStatus_,"fit_status/Int_t");
+    	 t_fit_b_->Branch("fit_status",&fitStatus_,"fit_status/I");
+   	 t_fit_sb_->Branch("fit_status",&fitStatus_,"fit_status/I");
 
-	 t_fit_b_->Branch(poiName.c_str(),&mu_,Form("%s/Double_t",poiName.c_str()));
-	 t_fit_sb_->Branch(poiName.c_str(),&mu_,Form("%s/Double_t",poiName.c_str()));
+	 t_fit_b_->Branch(poiName.c_str(),&mu_,Form("%s/D",poiName.c_str()));
+	 t_fit_sb_->Branch(poiName.c_str(),&mu_,Form("%s/D",poiName.c_str()));
 	 
-	 t_fit_b_->Branch(Form("%sErr",poiName.c_str()),&muErr_,Form("%sErr/Double_t",poiName.c_str()));
-	 t_fit_sb_->Branch(Form("%sErr",poiName.c_str()),&muErr_,Form("%sErr/Double_t",poiName.c_str()));
+	 t_fit_b_->Branch(Form("%sErr",poiName.c_str()),&muErr_,Form("%sErr/D",poiName.c_str()));
+	 t_fit_sb_->Branch(Form("%sErr",poiName.c_str()),&muErr_,Form("%sErr/D",poiName.c_str()));
 
-	 t_fit_b_->Branch(Form("%sLoErr",poiName.c_str()),&muLoErr_,Form("%sLoErr/Double_t",poiName.c_str()));
-	 t_fit_sb_->Branch(Form("%sLoErr",poiName.c_str()),&muLoErr_,Form("%sLoErr/Double_t",poiName.c_str()));
+	 t_fit_b_->Branch(Form("%sLoErr",poiName.c_str()),&muLoErr_,Form("%sLoErr/D",poiName.c_str()));
+	 t_fit_sb_->Branch(Form("%sLoErr",poiName.c_str()),&muLoErr_,Form("%sLoErr/D",poiName.c_str()));
 
-	 t_fit_b_->Branch(Form("%sHiErr",poiName.c_str()),&muHiErr_,Form("%sHiErr/Double_t",poiName.c_str()));
-	 t_fit_sb_->Branch(Form("%sHiErr",poiName.c_str()),&muHiErr_,Form("%sHiErr/Double_t",poiName.c_str()));
+	 t_fit_b_->Branch(Form("%sHiErr",poiName.c_str()),&muHiErr_,Form("%sHiErr/D",poiName.c_str()));
+	 t_fit_sb_->Branch(Form("%sHiErr",poiName.c_str()),&muHiErr_,Form("%sHiErr/D",poiName.c_str()));
 
-	 t_fit_b_->Branch("numbadnll",&numbadnll_,"numbadnll/Int_t");
-	 t_fit_sb_->Branch("numbadnll",&numbadnll_,"numbadnll/Int_t");
+	 t_fit_b_->Branch("numbadnll",&numbadnll_,"numbadnll/I");
+	 t_fit_sb_->Branch("numbadnll",&numbadnll_,"numbadnll/I");
 
-	 t_fit_b_->Branch("nll_min",&nll_bonly_,"nll_min/Double_t");
-	 t_fit_sb_->Branch("nll_min",&nll_sb_,"nll_min/Double_t");
+	 t_fit_b_->Branch("nll_min",&nll_bonly_,"nll_min/D");
+	 t_fit_sb_->Branch("nll_min",&nll_sb_,"nll_min/D");
 
-	 t_fit_sb_->Branch("nll_nll0",&nll_nll0_,"nll_nll0/Double_t");
+	 t_fit_sb_->Branch("nll_nll0",&nll_nll0_,"nll_nll0/D");
 
 	 int count=0; 
          // fill the maps for the nuisances, and global observables
@@ -1104,9 +1107,9 @@ void FitDiagnostics::createFitResultTrees(const RooStats::ModelConfig &mc, bool 
                  RooRealVar *rrv = dynamic_cast<RooRealVar *>(a);        
 		 std::string name = rrv->GetName();
 		 globalObservables_[count]=0;
-		 t_fit_sb_->Branch(name.c_str(),&(globalObservables_[count]),Form("%s/Double_t",name.c_str()));
-		 t_fit_b_->Branch(name.c_str(),&(globalObservables_[count]),Form("%s/Double_t",name.c_str()));
-		 t_prefit_->Branch(name.c_str(),&(globalObservables_[count]),Form("%s/Double_t",name.c_str()));
+		 t_fit_sb_->Branch(name.c_str(),&(globalObservables_[count]),Form("%s/D",name.c_str()));
+		 t_fit_b_->Branch(name.c_str(),&(globalObservables_[count]),Form("%s/D",name.c_str()));
+		 t_prefit_->Branch(name.c_str(),&(globalObservables_[count]),Form("%s/D",name.c_str()));
 		 count++;
 	  }         
 	  count = 0;
@@ -1115,9 +1118,9 @@ void FitDiagnostics::createFitResultTrees(const RooStats::ModelConfig &mc, bool 
                  RooRealVar *rrv = dynamic_cast<RooRealVar *>(a);        
 		 std::string name = rrv->GetName();
 		 nuisanceParameters_[count] = 0;
-		 t_fit_sb_->Branch(name.c_str(),&(nuisanceParameters_[count]),Form("%s/Double_t",name.c_str()));
-		 t_fit_b_->Branch(name.c_str(),&(nuisanceParameters_[count]),Form("%s/Double_t",name.c_str()));
-		 t_prefit_->Branch(name.c_str(),&(nuisanceParameters_[count]),Form("%s/Double_t",name.c_str()));
+		 t_fit_sb_->Branch(name.c_str(),&(nuisanceParameters_[count]),Form("%s/D",name.c_str()));
+		 t_fit_b_->Branch(name.c_str(),&(nuisanceParameters_[count]),Form("%s/D",name.c_str()));
+		 t_prefit_->Branch(name.c_str(),&(nuisanceParameters_[count]),Form("%s/D",name.c_str()));
 		 count++;
           }
 
@@ -1130,9 +1133,9 @@ void FitDiagnostics::createFitResultTrees(const RooStats::ModelConfig &mc, bool 
 		 std::string name = rcv->GetName();
 		 processNormalizations_[count] = -999;
 		 //std::cout << " Creating the TREE -- " << count << ", Branch Name =  " << name << ", Param name " << rcv->GetName() << std::endl; 
-		 t_fit_sb_->Branch(name.c_str(),&(processNormalizations_[count]),Form("%s/Double_t",name.c_str()));
-		 t_fit_b_->Branch(name.c_str(),&(processNormalizations_[count]),Form("%s/Double_t",name.c_str()));
-		 t_prefit_->Branch(name.c_str(),&(processNormalizations_[count]),Form("%s/Double_t",name.c_str()));
+		 t_fit_sb_->Branch(name.c_str(),&(processNormalizations_[count]),Form("%s/D",name.c_str()));
+		 t_fit_b_->Branch(name.c_str(),&(processNormalizations_[count]),Form("%s/D",name.c_str()));
+		 t_prefit_->Branch(name.c_str(),&(processNormalizations_[count]),Form("%s/D",name.c_str()));
 		 count++;
          }
 	 count = 0;
@@ -1145,9 +1148,9 @@ void FitDiagnostics::createFitResultTrees(const RooStats::ModelConfig &mc, bool 
 		 for (int iBin = 1; iBin <= bins; iBin++){
 		     processNormalizationsShapes_[count] = -999;
 		     TString label = Form("%s_%d",pair->first.c_str(),iBin);
-		     t_fit_sb_->Branch(label,&(processNormalizationsShapes_[count]),label+"/Double_t");
-		     t_fit_b_->Branch(label,&(processNormalizationsShapes_[count]),label+"/Double_t");
-		     t_prefit_->Branch(label,&(processNormalizationsShapes_[count]),label+"/Double_t");
+		     t_fit_sb_->Branch(label,&(processNormalizationsShapes_[count]),label+"/D");
+		     t_fit_b_->Branch(label,&(processNormalizationsShapes_[count]),label+"/D");
+		     t_prefit_->Branch(label,&(processNormalizationsShapes_[count]),label+"/D");
 		     count++;
 		 }
 		delete hist;
