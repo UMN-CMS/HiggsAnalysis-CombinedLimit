@@ -224,8 +224,12 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     gStyle->SetTitleOffset( 1, "y");
 
     // *****
-    // Extract limit results from set of root files produced by Higgs Combine tool
-    std::vector<double> xpoints = {300,350,400,450,500,550,600,650,700,750,800,850,900};  // mass points
+    // Extract limit results from set of root files produced by Higgs Combine tool    
+    int minFitMass = 300;
+    int maxFitMass = 1050;
+    int step = 50;
+    std::vector<double> xpoints;
+    for(int i = minFitMass-step; i < maxFitMass; xpoints.push_back(i+=step));
     const int npoints = xpoints.size();
 
     // Arrays for storing results
@@ -290,9 +294,13 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
   
     // cross sections and uncertainties from
     //  https://twiki.cern.ch/twiki/bin/view/LHCPhysics/SUSYCrossSections13TeVstopsbottom
-    const std::vector<double>& stop_pair_Br =           {10.0, 4.43, 2.15, 1.11, 0.609, 0.347, 0.205, 0.125, 0.0783, 0.0500, 0.0326, 0.0216, 0.0145};
-    const std::vector<double>& stop_pair_Br1SPpercent = {6.65, 6.79, 6.99, 7.25,  7.53,  7.81,  8.12,  8.45,    8.8,   9.16,   9.53,   9.93,  10.33};
-    const std::vector<double>& stop_pair_Br1SMpercent = {6.65, 6.79, 6.99, 7.25,  7.53,  7.81,  8.12,  8.45,    8.8,   9.16,   9.53,   9.93,  10.33};
+    const std::vector<double>& stop_pair_Br =           { 10.00, 4.43, 2.15, 1.11,  0.609, 0.347, 0.205, 0.125, 0.0783, 0.0500, 0.0326, 0.0216,  0.0145, 
+                                                          0.00991, 0.00683, 0.00476, 0.00335, 0.00238, 0.00170, 0.00122, 0.000887, 0.000646, 0.000473,
+    };
+    const std::vector<double>& stop_pair_Br1SPpercent = {  6.65, 6.79, 6.99, 7.25,  7.530, 7.810, 8.120, 8.450, 8.8000, 9.1600, 9.5300, 9.9300, 10.3300, 
+                                                          10.76, 11.2, 11.65, 12.12, 12.62, 13.13, 13.66, 14.21, 14.78, 15.37,
+    };
+    const std::vector<double>& stop_pair_Br1SMpercent = stop_pair_Br1SPpercent;
 
     // For stop pair production
     sigBr = stop_pair_Br;
@@ -308,7 +316,8 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     }
 
     bool projectingRLimitLogY = true;
-    double projectingXmin = 250, projectingXmax = 950;
+    //double projectingXmin = 250, projectingXmax = 950;
+    double projectingXmin = xpoints.front()-50, projectingXmax = xpoints.back()+50;
     double projectingRLimitYmin = 0.005, projectingRLimitYmax = 100;
     std::string projectingRLimitXYtitles = ";m_{#tilde{t}} [GeV]; 95% CL upper limit on #sigma#bf{#it{#Beta}} [pb]";
     ssave = ssave_base+today+"_CLs";
