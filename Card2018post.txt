@@ -34,8 +34,18 @@ pdf shape              1      -      1      -      1      1      -      1      -
 ht_2018post  shape     -      -      1      -      1      -      -      1      -      1      -      -      1      -      1      -      -      1      -      1
 scl  shape             1      -      1      -      1      1      -      1      -      1      1      -      1      -      1      1      -      1      -      1
 pu_2018post shape      1      -      1      -      1      1      -      1      -      1      1      -      1      -      1      1      -      1      -      1
+#prf_2018post shape     -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Shape systematics on ttbar
+#np_tt_095PT_2018post param 0.0 1.0
+#np_tt_MADGRAPH_2018post param 0.0 1.0
+#np_tt_CP2CP5_2017_2018post param 0.0 1.0
+#p_tt_prf_2018post param 0.0 1.0
+np_tt_erdOn_2018post param 0.0 1.0
+np_tt_hdampUp_2018post param 0.0 1.0
+np_tt_hdampDown_2018post param 0.0 1.0
+np_tt_underlyingEvtUp_2018post param 0.0 1.0
+np_tt_underlyingEvtDown_2018post param 0.0 1.0
 np_tt_JECUp_2018post param 0.0 1.0
 np_tt_JERUp_2018post param 0.0 1.0
 np_tt_JECDown_2018post param 0.0 1.0
