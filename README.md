@@ -34,38 +34,32 @@ Now copy input root files from eos (only needed for local, condor jobs copy the 
 ```
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
 cmsenv
-cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs/Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix .
-cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs/Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix .
-
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2016_v1.2
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2017_v1.2
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2018pre_v1.2
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2018post_v1.2
 ```
 
 ### Running Local Examples
 
 To combine the datacards for 2016 and 2017:
 ```
-combineCards.py Y16=Card2016.txt Y17=Card2017.txt > ComboCard.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt                                                 > Card2016_2017.txt
+combineCards.py                                   Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2018pre_2018post.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt                          > Card2016_2017_2018pre.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > Card2016_2017_2018pre_2018post.txt
+combineCards.py Y16=Card2016.txt Y17=Card2017.txt Y18pre=Card2018pre.txt Y18post=Card2018post.txt > CardCombo.txt
+
 ```
 
 To make a RooFit workspace that contains our PDF definitions and input histograms:
 
-For 2016 RPV:
+For 2016, 2017, 2018pre/post RPV 350:
 ```
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","350","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","450","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","550","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","650","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","750","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2016","Keras_V1.2.8_Approval_StatErrPlusFullDev_12JetFix","RPV","850","pseudodata")'
-```
-
-For 2017 RPV:
-```
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","350","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","450","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","550","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","650","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","750","pseudodata")'
-root -l -q 'make_MVA_8bin_ws.C("2017","Keras_V3.0.4_Approval_StatErrPlusFullDev_12JetFix","RPV","850","pseudodata")'
+root -l -q 'make_MVA_8bin_ws.C("2016",    "Keras_2016_v1.2",    "RPV","350","pseudodata","")'
+root -l -q 'make_MVA_8bin_ws.C("2017",    "Keras_2017_v1.2",    "RPV","350","pseudodataS_0.3xRPV_350","")'
+root -l -q 'make_MVA_8bin_ws.C("2018pre", "Keras_2018pre_v1.2", "RPV","350","pseudodataS_0.3xRPV_350","")'
+root -l -q 'make_MVA_8bin_ws.C("2018post","Keras_2018post_v1.2","RPV","350","pseudodataS_0.3xRPV_350","")'
 ```
 
 Can substitute other input directories, models, and mass points,
@@ -76,34 +70,14 @@ The workspace goes into a file called MVA_<year>_<model>_<mass>_ws.root
 
 Convert the card file (and the PDFs and input histograms references therein) into a workspace:
 
-For 2016 RPV:
+For 2016 RPV 350:
 ```
 text2workspace.py Card2016.txt -o ws_2016_RPV_350.root -m 350 --keyword-value MODEL=RPV
-text2workspace.py Card2016.txt -o ws_2016_RPV_450.root -m 450 --keyword-value MODEL=RPV
-text2workspace.py Card2016.txt -o ws_2016_RPV_550.root -m 550 --keyword-value MODEL=RPV
-text2workspace.py Card2016.txt -o ws_2016_RPV_650.root -m 650 --keyword-value MODEL=RPV
-text2workspace.py Card2016.txt -o ws_2016_RPV_750.root -m 750 --keyword-value MODEL=RPV
-text2workspace.py Card2016.txt -o ws_2016_RPV_850.root -m 850 --keyword-value MODEL=RPV
 ```
 
-For 2017 RPV:
-```
-text2workspace.py Card2017.txt -o ws_2017_RPV_350.root -m 350 --keyword-value MODEL=RPV
-text2workspace.py Card2017.txt -o ws_2017_RPV_450.root -m 450 --keyword-value MODEL=RPV
-text2workspace.py Card2017.txt -o ws_2017_RPV_550.root -m 550 --keyword-value MODEL=RPV
-text2workspace.py Card2017.txt -o ws_2017_RPV_650.root -m 650 --keyword-value MODEL=RPV
-text2workspace.py Card2017.txt -o ws_2017_RPV_750.root -m 750 --keyword-value MODEL=RPV
-text2workspace.py Card2017.txt -o ws_2017_RPV_850.root -m 850 --keyword-value MODEL=RPV
-```
-
-For 2016 + 2017 RPV:
+For 2016 + 2017 + 2018pre + 2018post RPV 350:
 ```
 text2workspace.py CardCombo.txt -o ws_Combo_RPV_350.root -m 350 --keyword-value MODEL=RPV
-text2workspace.py CardCombo.txt -o ws_Combo_RPV_450.root -m 450 --keyword-value MODEL=RPV
-text2workspace.py CardCombo.txt -o ws_Combo_RPV_550.root -m 550 --keyword-value MODEL=RPV
-text2workspace.py CardCombo.txt -o ws_Combo_RPV_650.root -m 650 --keyword-value MODEL=RPV
-text2workspace.py CardCombo.txt -o ws_Combo_RPV_750.root -m 750 --keyword-value MODEL=RPV
-text2workspace.py CardCombo.txt -o ws_Combo_RPV_850.root -m 850 --keyword-value MODEL=RPV
 ```
 
 Can substitute other models.
@@ -114,24 +88,14 @@ fed to combine in the following commands.
 
 Calculate quick asymptotic limits:
 
-For 2016 RPV:
+For 2016 RPV 350:
 ```
 combine -M AsymptoticLimits ws_2016_RPV_350.root -m 350 --keyword-value MODEL=RPV --verbose 2 -n 2016 > log_2016RPV350_Asymp.txt
-combine -M AsymptoticLimits ws_2016_RPV_450.root -m 450 --keyword-value MODEL=RPV --verbose 2 -n 2016 > log_2016RPV450_Asymp.txt
-combine -M AsymptoticLimits ws_2016_RPV_550.root -m 550 --keyword-value MODEL=RPV --verbose 2 -n 2016 > log_2016RPV550_Asymp.txt
-combine -M AsymptoticLimits ws_2016_RPV_650.root -m 650 --keyword-value MODEL=RPV --verbose 2 -n 2016 > log_2016RPV650_Asymp.txt
-combine -M AsymptoticLimits ws_2016_RPV_750.root -m 750 --keyword-value MODEL=RPV --verbose 2 -n 2016 > log_2016RPV750_Asymp.txt
-combine -M AsymptoticLimits ws_2016_RPV_850.root -m 850 --keyword-value MODEL=RPV --verbose 2 -n 2016 > log_2016RPV850_Asymp.txt
 ```
 
-For 2017 RPV:
+For 2016 + 2017 + 2018pre + 2018post RPV 350:
 ```
-combine -M AsymptoticLimits ws_2017_RPV_350.root -m 350 --keyword-value MODEL=RPV --verbose 2 -n 2017 > log_2017RPV350_Asymp.txt
-combine -M AsymptoticLimits ws_2017_RPV_450.root -m 450 --keyword-value MODEL=RPV --verbose 2 -n 2017 > log_2017RPV450_Asymp.txt
-combine -M AsymptoticLimits ws_2017_RPV_550.root -m 550 --keyword-value MODEL=RPV --verbose 2 -n 2017 > log_2017RPV550_Asymp.txt
-combine -M AsymptoticLimits ws_2017_RPV_650.root -m 650 --keyword-value MODEL=RPV --verbose 2 -n 2017 > log_2017RPV650_Asymp.txt
-combine -M AsymptoticLimits ws_2017_RPV_750.root -m 750 --keyword-value MODEL=RPV --verbose 2 -n 2017 > log_2017RPV750_Asymp.txt
-combine -M AsymptoticLimits ws_2017_RPV_850.root -m 850 --keyword-value MODEL=RPV --verbose 2 -n 2017 > log_2017RPV850_Asymp.txt
+combine -M AsymptoticLimits ws_Combo_RPV_350.root -m 350 --keyword-value MODEL=RPV --verbose 2 -n Combo > log_ComboRPV350_Asymp.txt
 ```
 
 Outputs files with names such as:
@@ -143,7 +107,7 @@ and a log file with a name such as log_2017RPV650_Asymp.txt
 
 To make a limit plot:
 
-Collect the above asymptotic limit root files into a results directory, such as fit_results_v5_Jan17_2019
+Collect the above asymptotic limit root files for all mass points into a results directory, such as fit_results_v5_Jan17_2019
 
 ```
 root -l -q 'makePlots.C+("Jan17_2019","fit_results_v5_Jan17_2019","2017","RPV")'
