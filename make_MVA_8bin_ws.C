@@ -44,6 +44,17 @@ private:
         return useNP;
     }
 
+    template<typename T> T* getSysHist(TFile* tt_syst_file, const std::string& h_name)
+    {
+        auto* h = static_cast<T*>(tt_syst_file->Get(h_name.c_str()));
+        if(h == nullptr) 
+        {
+            std::cout<<"Error: This histogram \""<<h_name<<"\" was not found in the ttbar_systematic.root file"<<std::endl;
+            exit(0);
+        }
+        return h;
+    } 
+
 public:
     enum NuisanceType {NORMAL, RPRIME, RFIT};
 
@@ -87,7 +98,7 @@ public:
     }
 
     NuisanceParam(const RooAbsArg& r_name, TFile* tt_syst_file, const std::string& h_name, const std::pair<std::string, std::vector<int>>& yearMatch = {}) 
-        : NuisanceParam(r_name, (TH1D*)tt_syst_file->Get(h_name.c_str()), yearMatch) 
+        : NuisanceParam(r_name, getSysHist<TH1D>(tt_syst_file, h_name), yearMatch) 
     {
     }
 };
@@ -210,7 +221,7 @@ void construct_formula(const std::string& procName, RooArgList& binlist, const R
     {
         if(!NPs[j].useNP) continue;
 
-        double r = (NPs[j].h_r) ? NPs[j].h_r->GetBinContent(i+1) : 0.0;
+        double r = (NPs[j].h_r) ? NPs[j].h_r->GetBinContent(i+1) : 1.0;
         if(NPs[j].type == NuisanceParam::RPRIME)
         {
             double rprime = NPs[j].h_rprime->GetBinContent(i+1);
