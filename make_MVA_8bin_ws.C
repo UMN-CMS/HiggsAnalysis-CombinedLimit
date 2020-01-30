@@ -251,8 +251,8 @@ void construct_formula(const std::string& procName, RooArgList& binlist, const R
 
     //std::cout << "bin i = " << i << " , njets = " << i+7 << std::endl;
     //std::cout << "process bin name : " << binName.str() << std::endl;
-    std::cout << "Formula : " << form.str() << std::endl;
-    formArgList.Print();
+    //std::cout << "Formula : " << form.str() << std::endl;
+    //formArgList.Print();
   }
 }
 
@@ -441,9 +441,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D1_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D1_CP2CP5_2017"},
       {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D1_prf", {year,{2017}}},
-      //{*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D1_erdOn"},
-      //{*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D1_hdampUp"},
-      //{*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D1_hdampDown"},
+      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D1_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D1_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D1_hdampDown"},
       {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D1_underlyingEvtUp"},
       {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D1_underlyingEvtDown"},
       {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D1_JECUp"},
@@ -504,9 +504,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D2_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D2_CP2CP5_2017"},
       {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D2_prf", {year,{2017}}},
-      //{*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D2_erdOn"},
-      //{*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D2_hdampUp"},
-      //{*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D2_hdampDown"},
+      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D2_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D2_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D2_hdampDown"},
       {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D2_underlyingEvtUp"},
       {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D2_underlyingEvtDown"},
       {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D2_JECUp"},
@@ -566,9 +566,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D3_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D3_CP2CP5_2017"},
       {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D3_prf", {year,{2017}}},
-      //{*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D3_erdOn"},
-      //{*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D3_hdampUp"},
-      //{*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D3_hdampDown"},
+      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D3_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D3_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D3_hdampDown"},
       {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D3_underlyingEvtUp"},
       {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D3_underlyingEvtDown"},
       {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D3_JECUp"},
@@ -628,9 +628,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D4_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D4_CP2CP5_2017"},
       {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D4_prf", {year,{2017}}},
-      //{*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D4_erdOn"},
-      //{*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D4_hdampUp"},
-      //{*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D4_hdampDown"},
+      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D4_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D4_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D4_hdampDown"},
       {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D4_underlyingEvtUp"},
       {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D4_underlyingEvtDown"},
       {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D4_JECUp"},
