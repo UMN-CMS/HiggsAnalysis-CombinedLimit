@@ -34,10 +34,10 @@ Now copy input root files from eos (only needed for local, condor jobs copy the 
 ```
 cd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
 cmsenv
-cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2016_v1.2
-cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2017_v1.2
-cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2018pre_v1.2
-cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2018post_v1.2
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2016_v1.2 .
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2017_v1.2 .
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2018pre_v1.2 .
+cp -r /eos/uscms/store/user/lpcsusyhad/StealthStop/FitInputs_FullRun2/Keras_2018post_v1.2 .
 ```
 
 ### Running Local Examples
