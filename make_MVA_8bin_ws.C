@@ -282,6 +282,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if     (dataType == "data")        data_th1_D1 = (TH1D*)file->Get("D1_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataSCP5") data_th1_D1 = (TH1D*)file->Get(("D1_pseudodataS_"+model+"CP5_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
   else if(dataType == "pseudodataA" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataB" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataC" ) data_th1_D1 = (TH1D*)file->Get("D1_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
@@ -295,6 +296,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if     (dataType == "data")        data_th1_D2 = (TH1D*)file->Get("D2_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataSCP5") data_th1_D2 = (TH1D*)file->Get(("D2_pseudodataS_"+model+"CP5_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
   else if(dataType == "pseudodataA" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataB" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataC" ) data_th1_D2 = (TH1D*)file->Get("D2_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
@@ -308,6 +310,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if     (dataType == "data")        data_th1_D3 = (TH1D*)file->Get("D3_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataSCP5") data_th1_D3 = (TH1D*)file->Get(("D3_pseudodataS_"+model+"CP5_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
   else if(dataType == "pseudodataA" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataB" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataC" ) data_th1_D3 = (TH1D*)file->Get("D3_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
@@ -321,6 +324,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   if     (dataType == "data")        data_th1_D4 = (TH1D*)file->Get("D4_data_h_njets_pt30_1l");  // Actual data -- be careful
   else if(dataType == "pseudodata" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodata_h_njets_pt30_1l"); // without signal
   else if(dataType == "pseudodataS") data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataS_"+model+"_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
+  else if(dataType == "pseudodataSCP5") data_th1_D4 = (TH1D*)file->Get(("D4_pseudodataS_"+model+"CP5_"+mass+"_h_njets_pt30_1l").c_str());  // with signal
   else if(dataType == "pseudodataA" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodataFunc28_24_236_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataB" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodataFunc28_24_18_h_njets_pt30_1l"); //
   else if(dataType == "pseudodataC" ) data_th1_D4 = (TH1D*)file->Get("D4_pseudodataFunc28_24_-20_h_njets_pt30_1l"); //
