@@ -369,19 +369,21 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   RooRealVar N7_tt_D4(("N7_tt_D4_"+year).c_str(), "njets 7 for tt bkg in MVA D4", n7_tt_portion_D4, 0.01*n7_tt_portion_D4, 2.0*n7_tt_portion_D4);
 
   // tt shape systematic nuisance parameters
-  wspace->factory("np_tt_pdf[0.0]"); // fully correlated
-  wspace->factory("np_tt_FSR[0.0]"); // fully correlated
-  wspace->factory("np_tt_ISR[0.0]"); // fully correlated
-  wspace->factory("np_tt_scl[0.0]"); // fully correlated
+  std::string corrYear = (year == "2016") ? "2016" : "2017_2018";
+
+  wspace->factory(("np_tt_pdf_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_FSR_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_ISR_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_scl_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_erdOn_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_hdampUp_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_hdampDown_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_underlyingEvtUp_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory(("np_tt_underlyingEvtDown_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
   wspace->factory(("np_tt_095PT_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_MADGRAPH_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_CP2CP5_2017_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_prf_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_erdOn_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_hdampUp_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_hdampDown_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_underlyingEvtUp_"+year+"[0.0]").c_str()); // uncorrelated
-  wspace->factory(("np_tt_underlyingEvtDown_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_JECUp_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_JECDown_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_JERUp_"+year+"[0.0]").c_str()); // uncorrelated
@@ -437,30 +439,30 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D1
   const std::vector<NuisanceParam>& nuisanceParams_D1 = {
-      {*wspace->var("np_tt_pdf"),                               tt_syst_file, "D1_pdf"},
-      {*wspace->var("np_tt_FSR"),                               tt_syst_file, "D1_FSR"},
-      {*wspace->var("np_tt_ISR"),                               tt_syst_file, "D1_ISR"},
-      {*wspace->var("np_tt_scl"),                               tt_syst_file, "D1_scl"},
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),             tt_syst_file, "D1_095PT"},
-      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D1_MADGRAPH"},
-      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D1_CP2CP5_2017"},
-      {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D1_prf", {year,{2017}}},
-      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D1_erdOn"},
-      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D1_hdampUp"},
-      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D1_hdampDown"},
-      {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D1_underlyingEvtUp"},
-      {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D1_underlyingEvtDown"},
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D1_JECUp"},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()),           tt_syst_file, "D1_JECDown"},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()),             tt_syst_file, "D1_JERUp"},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()),           tt_syst_file, "D1_JERDown"},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),               tt_syst_file, "D1_btg"},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),               tt_syst_file, "D1_lep"},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),               tt_syst_file, "D1_nom"},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),                tt_syst_file, "D1_ht"},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),            tt_syst_file, "D1_httail"},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),            tt_syst_file, "D1_htnjet"},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),                tt_syst_file, "D1_pu"},
+      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D1_095PT"},
+      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D1_MADGRAPH"},
+      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D1_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D1_pdf"},
+      {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D1_FSR"},
+      {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D1_ISR"},
+      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D1_scl"},
+      {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D1_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D1_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D1_hdampDown"},
+      {*wspace->var(("np_tt_underlyingEvtUp_"+corrYear).c_str()),   tt_syst_file, "D1_underlyingEvtUp"},
+      {*wspace->var(("np_tt_underlyingEvtDown_"+corrYear).c_str()), tt_syst_file, "D1_underlyingEvtDown"},
+      {*wspace->var(("np_tt_prf_"+year).c_str()),                   tt_syst_file, "D1_prf", {year,{2017}}},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),                 tt_syst_file, "D1_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()),               tt_syst_file, "D1_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),                 tt_syst_file, "D1_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()),               tt_syst_file, "D1_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),                   tt_syst_file, "D1_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),                   tt_syst_file, "D1_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),                   tt_syst_file, "D1_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),                    tt_syst_file, "D1_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),                tt_syst_file, "D1_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),                tt_syst_file, "D1_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),                    tt_syst_file, "D1_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin1"],
           {
@@ -489,7 +491,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   wspace->import(background_tt_D1,RooFit::RecycleConflictNodes());
   RooAddition tt_norm_D1((procName_D1+"_norm").c_str(),"",*bkg_tt_bins_D1);
   wspace->import(tt_norm_D1,RooFit::RecycleConflictNodes());
-  
+
   // ----------------------------------------------------
   // ---------------------- MVA bin 2  ------------------
   // ----------------------------------------------------  
@@ -500,30 +502,30 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D2
   const std::vector<NuisanceParam>& nuisanceParams_D2 = {
-      {*wspace->var("np_tt_pdf"),                               tt_syst_file, "D2_pdf"},
-      {*wspace->var("np_tt_FSR"),                               tt_syst_file, "D2_FSR"},
-      {*wspace->var("np_tt_ISR"),                               tt_syst_file, "D2_ISR"},
-      {*wspace->var("np_tt_scl"),                               tt_syst_file, "D2_scl"},
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),             tt_syst_file, "D2_095PT"},
-      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D2_MADGRAPH"},
-      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D2_CP2CP5_2017"},
-      {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D2_prf", {year,{2017}}},
-      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D2_erdOn"},
-      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D2_hdampUp"},
-      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D2_hdampDown"},
-      {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D2_underlyingEvtUp"},
-      {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D2_underlyingEvtDown"},
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D2_JECUp"},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()),           tt_syst_file, "D2_JECDown"},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()),             tt_syst_file, "D2_JERUp"},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()),           tt_syst_file, "D2_JERDown"},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),               tt_syst_file, "D2_btg"},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),               tt_syst_file, "D2_lep"},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),               tt_syst_file, "D2_nom"},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),                tt_syst_file, "D2_ht"},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),            tt_syst_file, "D2_httail"},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),            tt_syst_file, "D2_htnjet"},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),                tt_syst_file, "D2_pu"},
+      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D2_095PT"},
+      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D2_MADGRAPH"},
+      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D2_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D2_pdf"},
+      {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D2_FSR"},
+      {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D2_ISR"},
+      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D2_scl"},
+      {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D2_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D2_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D2_hdampDown"},
+      {*wspace->var(("np_tt_underlyingEvtUp_"+corrYear).c_str()),   tt_syst_file, "D2_underlyingEvtUp"},
+      {*wspace->var(("np_tt_underlyingEvtDown_"+corrYear).c_str()), tt_syst_file, "D2_underlyingEvtDown"},
+      {*wspace->var(("np_tt_prf_"+year).c_str()),                   tt_syst_file, "D2_prf", {year,{2017}}},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),                 tt_syst_file, "D2_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()),               tt_syst_file, "D2_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),                 tt_syst_file, "D2_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()),               tt_syst_file, "D2_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),                   tt_syst_file, "D2_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),                   tt_syst_file, "D2_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),                   tt_syst_file, "D2_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),                    tt_syst_file, "D2_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),                tt_syst_file, "D2_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),                tt_syst_file, "D2_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),                    tt_syst_file, "D2_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin2"],
           {
@@ -562,30 +564,30 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D3
   const std::vector<NuisanceParam>& nuisanceParams_D3 = {
-      {*wspace->var("np_tt_pdf"),                               tt_syst_file, "D3_pdf"},
-      {*wspace->var("np_tt_FSR"),                               tt_syst_file, "D3_FSR"},
-      {*wspace->var("np_tt_ISR"),                               tt_syst_file, "D3_ISR"},
-      {*wspace->var("np_tt_scl"),                               tt_syst_file, "D3_scl"},
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),             tt_syst_file, "D3_095PT"},
-      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D3_MADGRAPH"},
-      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D3_CP2CP5_2017"},
-      {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D3_prf", {year,{2017}}},
-      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D3_erdOn"},
-      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D3_hdampUp"},
-      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D3_hdampDown"},
-      {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D3_underlyingEvtUp"},
-      {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D3_underlyingEvtDown"},
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D3_JECUp"},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()),           tt_syst_file, "D3_JECDown"},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()),             tt_syst_file, "D3_JERUp"},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()),           tt_syst_file, "D3_JERDown"},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),               tt_syst_file, "D3_btg"},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),               tt_syst_file, "D3_lep"},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),               tt_syst_file, "D3_nom"},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),                tt_syst_file, "D3_ht"},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),            tt_syst_file, "D3_httail"},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),            tt_syst_file, "D3_htnjet"},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),                tt_syst_file, "D3_pu"},
+      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D3_095PT"},
+      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D3_MADGRAPH"},
+      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D3_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D3_pdf"},
+      {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D3_FSR"},
+      {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D3_ISR"},
+      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D3_scl"},
+      {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D3_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D3_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D3_hdampDown"},
+      {*wspace->var(("np_tt_underlyingEvtUp_"+corrYear).c_str()),   tt_syst_file, "D3_underlyingEvtUp"},
+      {*wspace->var(("np_tt_underlyingEvtDown_"+corrYear).c_str()), tt_syst_file, "D3_underlyingEvtDown"},
+      {*wspace->var(("np_tt_prf_"+year).c_str()),                   tt_syst_file, "D3_prf", {year,{2017}}},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),                 tt_syst_file, "D3_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()),               tt_syst_file, "D3_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),                 tt_syst_file, "D3_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()),               tt_syst_file, "D3_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),                   tt_syst_file, "D3_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),                   tt_syst_file, "D3_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),                   tt_syst_file, "D3_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),                    tt_syst_file, "D3_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),                tt_syst_file, "D3_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),                tt_syst_file, "D3_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),                    tt_syst_file, "D3_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin3"],
           {
@@ -624,30 +626,30 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D4
   const std::vector<NuisanceParam>& nuisanceParams_D4 = {
-      {*wspace->var("np_tt_pdf"),                               tt_syst_file, "D4_pdf"},
-      {*wspace->var("np_tt_FSR"),                               tt_syst_file, "D4_FSR"},
-      {*wspace->var("np_tt_ISR"),                               tt_syst_file, "D4_ISR"},
-      {*wspace->var("np_tt_scl"),                               tt_syst_file, "D4_scl"},
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),             tt_syst_file, "D4_095PT"},
-      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),          tt_syst_file, "D4_MADGRAPH"},
-      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),       tt_syst_file, "D4_CP2CP5_2017"},
-      {*wspace->var(("np_tt_prf_"+year).c_str()),               tt_syst_file, "D4_prf", {year,{2017}}},
-      {*wspace->var(("np_tt_erdOn_"+year).c_str()),             tt_syst_file, "D4_erdOn"},
-      {*wspace->var(("np_tt_hdampUp_"+year).c_str()),           tt_syst_file, "D4_hdampUp"},
-      {*wspace->var(("np_tt_hdampDown_"+year).c_str()),         tt_syst_file, "D4_hdampDown"},
-      {*wspace->var(("np_tt_underlyingEvtUp_"+year).c_str()),   tt_syst_file, "D4_underlyingEvtUp"},
-      {*wspace->var(("np_tt_underlyingEvtDown_"+year).c_str()), tt_syst_file, "D4_underlyingEvtDown"},
-      {*wspace->var(("np_tt_JECUp_"+year).c_str()),             tt_syst_file, "D4_JECUp"},
-      {*wspace->var(("np_tt_JECDown_"+year).c_str()),           tt_syst_file, "D4_JECDown"},
-      {*wspace->var(("np_tt_JERUp_"+year).c_str()),             tt_syst_file, "D4_JERUp"},
-      {*wspace->var(("np_tt_JERDown_"+year).c_str()),           tt_syst_file, "D4_JERDown"},
-      {*wspace->var(("np_tt_btg_"+year).c_str()),               tt_syst_file, "D4_btg"},
-      {*wspace->var(("np_tt_lep_"+year).c_str()),               tt_syst_file, "D4_lep"},
-      {*wspace->var(("np_tt_nom_"+year).c_str()),               tt_syst_file, "D4_nom"},
-      {*wspace->var(("np_tt_ht_"+year).c_str()),                tt_syst_file, "D4_ht"},
-      {*wspace->var(("np_tt_httail_"+year).c_str()),            tt_syst_file, "D4_httail"},
-      {*wspace->var(("np_tt_htnjet_"+year).c_str()),            tt_syst_file, "D4_htnjet"},
-      {*wspace->var(("np_tt_pu_"+year).c_str()),                tt_syst_file, "D4_pu"},
+      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D4_095PT"},
+      //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D4_MADGRAPH"},
+      //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D4_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D4_pdf"},
+      {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D4_FSR"},
+      {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D4_ISR"},
+      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D4_scl"},
+      {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D4_erdOn"},
+      {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D4_hdampUp"},
+      {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D4_hdampDown"},
+      {*wspace->var(("np_tt_underlyingEvtUp_"+corrYear).c_str()),   tt_syst_file, "D4_underlyingEvtUp"},
+      {*wspace->var(("np_tt_underlyingEvtDown_"+corrYear).c_str()), tt_syst_file, "D4_underlyingEvtDown"},
+      {*wspace->var(("np_tt_prf_"+year).c_str()),                   tt_syst_file, "D4_prf", {year,{2017}}},
+      {*wspace->var(("np_tt_JECUp_"+year).c_str()),                 tt_syst_file, "D4_JECUp"},
+      {*wspace->var(("np_tt_JECDown_"+year).c_str()),               tt_syst_file, "D4_JECDown"},
+      {*wspace->var(("np_tt_JERUp_"+year).c_str()),                 tt_syst_file, "D4_JERUp"},
+      {*wspace->var(("np_tt_JERDown_"+year).c_str()),               tt_syst_file, "D4_JERDown"},
+      {*wspace->var(("np_tt_btg_"+year).c_str()),                   tt_syst_file, "D4_btg"},
+      {*wspace->var(("np_tt_lep_"+year).c_str()),                   tt_syst_file, "D4_lep"},
+      {*wspace->var(("np_tt_nom_"+year).c_str()),                   tt_syst_file, "D4_nom"},
+      {*wspace->var(("np_tt_ht_"+year).c_str()),                    tt_syst_file, "D4_ht"},
+      {*wspace->var(("np_tt_httail_"+year).c_str()),                tt_syst_file, "D4_httail"},
+      {*wspace->var(("np_tt_htnjet_"+year).c_str()),                tt_syst_file, "D4_htnjet"},
+      {*wspace->var(("np_tt_pu_"+year).c_str()),                    tt_syst_file, "D4_pu"},
       {
           *wspace->var(("np_tt_qcdCR_"+year).c_str()), qcdcrMap[qcdcrYear]["MVABin4"],
           {
@@ -716,10 +718,10 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_btgDown", "SIG_btg_"+year+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_lepUp",   "SIG_lep_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_lepDown", "SIG_lep_"+year+"Down", {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pdfUp",   "SIG_pdfUp",            {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pdfDown", "SIG_pdfDown",          {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclUp",   "SIG_sclUp",            {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclDown", "SIG_sclDown",          {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pdfUp",   "SIG_pdf_"+corrYear+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pdfDown", "SIG_pdf_"+corrYear+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclUp",   "SIG_scl_"+corrYear+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclDown", "SIG_scl_"+corrYear+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_puUp",    "SIG_pu_"+year+"Up",    {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_puDown",  "SIG_pu_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfUp",   "SIG_prf_"+year+"Up",   {"D1","D2","D3","D4"});
@@ -734,10 +736,10 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_btgDown", "OTHER_btg_"+year+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_lepUp",   "OTHER_lep_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_lepDown", "OTHER_lep_"+year+"Down", {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pdfUp",   "OTHER_pdfUp",            {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pdfDown", "OTHER_pdfDown",          {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclUp",   "OTHER_sclUp",            {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclDown", "OTHER_sclDown",          {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pdfUp",   "OTHER_pdf_"+corrYear+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pdfDown", "OTHER_pdf_"+corrYear+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclUp",   "OTHER_scl_"+corrYear+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclDown", "OTHER_scl_"+corrYear+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_htUp",    "OTHER_ht_"+year+"Up",    {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_htDown",  "OTHER_ht_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_puUp",    "OTHER_pu_"+year+"Up",    {"D1","D2","D3","D4"});
@@ -754,10 +756,10 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_btgDown", "TTX_btg_"+year+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_lepUp",   "TTX_lep_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_lepDown", "TTX_lep_"+year+"Down", {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pdfUp",   "TTX_pdfUp",            {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pdfDown", "TTX_pdfDown",          {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclUp",   "TTX_sclUp",            {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclDown", "TTX_sclDown",          {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pdfUp",   "TTX_pdf_"+corrYear+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pdfDown", "TTX_pdf_"+corrYear+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclUp",   "TTX_scl_"+corrYear+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclDown", "TTX_scl_"+corrYear+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_htUp",    "TTX_ht_"+year+"Up",    {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_htDown",  "TTX_ht_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_puUp",    "TTX_pu_"+year+"Up",    {"D1","D2","D3","D4"});
