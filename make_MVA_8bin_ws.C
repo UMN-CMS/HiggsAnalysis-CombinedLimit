@@ -726,7 +726,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_puDown",  "SIG_pu_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfUp",   "SIG_prf_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfDown", "SIG_prf_"+year+"Down", {"D1","D2","D3","D4"});
-  
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pTScaled","SIG_pTS_"+year+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pTScaled","SIG_pTS_"+year+"Down", {"D1","D2","D3","D4"});
+
   // "OTHER" background systematics
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_JECUp",   "OTHER_JEC_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_JECDown", "OTHER_JEC_"+year+"Down", {"D1","D2","D3","D4"});
@@ -746,6 +748,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_puDown",  "OTHER_pu_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_prfUp",   "OTHER_prf_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_prfDown", "OTHER_prf_"+year+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pTScaled","OTHER_pTS_"+year+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pTScaled","OTHER_pTS_"+year+"Down", {"D1","D2","D3","D4"});
     
   // "TTX" background systematics
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_JECUp",   "TTX_JEC_"+year+"Up",   {"D1","D2","D3","D4"});
@@ -766,7 +770,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_puDown",  "TTX_pu_"+year+"Down",  {"D1","D2","D3","D4"});    
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_prfUp",   "TTX_prf_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_prfDown", "TTX_prf_"+year+"Down", {"D1","D2","D3","D4"});    
-    
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pTScaled","TTX_pTS_"+year+"Up",   {"D1","D2","D3","D4"});    
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pTScaled","TTX_pTS_"+year+"Down", {"D1","D2","D3","D4"});    
+
   // =================================================================================
   // Statistics-based Uncertainties
   
