@@ -30,10 +30,10 @@ def main():
     # Parse command line arguments
     parser = optparse.OptionParser("usage: %prog [options]\n")
 
-    parser.add_option ('--inPut_2016',     dest='inputRoot2016',     type='string', default = 'Keras_2016_v1.1',     help="input root file directory: 2016")
-    parser.add_option ('--inPut_2017',     dest='inputRoot2017',     type='string', default = 'Keras_2017_v1.1',     help="input root file directory: 2017")
-    parser.add_option ('--inPut_2018pre',  dest='inputRoot2018pre',  type='string', default = 'Keras_2018pre_v1.0',  help="input root file directory: 2018pre")
-    parser.add_option ('--inPut_2018post', dest='inputRoot2018post', type='string', default = 'Keras_2018post_v1.0', help="input root file directory: 2018post")
+    parser.add_option ('--inPut_2016',     dest='inputRoot2016',     type='string', default = 'Keras_2016_v1.2',     help="input root file directory: 2016")
+    parser.add_option ('--inPut_2017',     dest='inputRoot2017',     type='string', default = 'Keras_2017_v1.2',     help="input root file directory: 2017")
+    parser.add_option ('--inPut_2018pre',  dest='inputRoot2018pre',  type='string', default = 'Keras_2018pre_v1.2',  help="input root file directory: 2018pre")
+    parser.add_option ('--inPut_2018post', dest='inputRoot2018post', type='string', default = 'Keras_2018post_v1.2', help="input root file directory: 2018post")
     parser.add_option ('-d',               dest='signalType',        type='string', default = '',                    help="List of signal model, comma separated")
     parser.add_option ('-t',               dest='dataType',          type='string', default = 'data',                help="Specify if running over data or pseudo data")
     parser.add_option ('--syst',           dest='syst',              type='string', default = 'None',                help="Specify what systimatic variation you want when picking a dataType")

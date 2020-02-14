@@ -35,11 +35,12 @@ ht_2018pre shape      -      -      1      -      1      -      -      1      - 
 scl_2017_2018 shape   1      -      1      -      1      1      -      1      -      1      1      -      1      -      1      1      -      1      -      1
 pu_2018pre shape      1      -      1      -      1      1      -      1      -      1      1      -      1      -      1      1      -      1      -      1
 #prf_2018pre shape     -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -      -
+pTS_2018pre shape     1      -      1      -      1      1      -      1      -      1      1      -      1      -      1      1      -      1      -      1
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Shape systematics on ttbar
-#np_tt_095PT_2018pre param 0.0 1.0
 #np_tt_MADGRAPH_2018pre param 0.0 1.0
 #np_tt_CP2CP5_2017_2018pre param 0.0 1.0
+np_tt_pTScaled_2018pre param 0.0 1.0
 #np_tt_prf_2018pre param 0.0 1.0
 np_tt_erdOn_2017_2018 param 0.0 1.0
 np_tt_hdampUp_2017_2018 param 0.0 1.0

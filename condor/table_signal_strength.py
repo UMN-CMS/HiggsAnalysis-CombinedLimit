@@ -25,7 +25,6 @@ def makePValuePlot(dataSet):
     Ymin = 0.00005
     #if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1 or dataSet["runtype"] == "Data":
     if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1:
-        #Ymin = 0.000000000000000000005
         Ymin = 5.0e-37
     Ymax = 1
 
@@ -41,7 +40,7 @@ def makePValuePlot(dataSet):
     ROOT.gPad.SetLogy()
     ROOT.gPad.SetTicks(1,1)
 
-    h = ROOT.TH1F("dummy","dummy",1, 300, 900)
+    h = ROOT.TH1F("dummy","dummy",1, Xmin, Xmax)
     h.SetMaximum(Ymax)
     h.SetMinimum(Ymin)
     h.SetTitle("")
@@ -51,7 +50,7 @@ def makePValuePlot(dataSet):
     h.GetXaxis().SetTitleSize(0.05)
     h.GetYaxis().SetLabelSize(0.05)
     h.GetYaxis().SetTitleSize(0.05)
-    h.GetYaxis().SetTitleOffset(1.0)
+    h.GetYaxis().SetTitleOffset(1.1)
     h.GetXaxis().SetTitle("m_{#tilde{t}} [GeV]")
     h.GetYaxis().SetTitle("Local p-value")
     h.Draw()
@@ -93,7 +92,7 @@ def makePValuePlot(dataSet):
         L.SetLineWidth(2)
         L.Draw("same")
 
-        S = ROOT.TPaveText(910,sigma-0.25*sigma,930,sigma+0.5*sigma,"")
+        S = ROOT.TPaveText(Xmax+10,sigma-0.25*sigma,Xmax+30,sigma+0.5*sigma,"")
         S.SetBorderSize(0)
         S.SetFillStyle(0)
         S.SetTextColor(2)
@@ -141,7 +140,7 @@ def makePValuePlot(dataSet):
     ROOT.gPad.SetTicks(1,1)
 
     # Make ratio of Data over total stack
-    hr = ROOT.TH1F("dummyr","dummyr",1, 300, 900)
+    hr = ROOT.TH1F("dummyr","dummyr",1, Xmin, Xmax)
     hr.SetStats(0)
     hr.SetTitle("")
     hr.GetXaxis().SetTitle("m_{#tilde{t}} [GeV]")
@@ -171,15 +170,15 @@ def makePValuePlot(dataSet):
     r.Draw("PL same")
     c1.Update()
     
-    line = ROOT.TF1("line", "1", 300, 900)
+    line = ROOT.TF1("line", "1", Xmin, Xmax)
     line.SetLineColor(ROOT.kRed)
     line.Draw("same")
     
-    line2 = ROOT.TF1("line", "1", 300, 900)
+    line2 = ROOT.TF1("line", "1", Xmin, Xmax)
     line2.SetLineColor(ROOT.kBlack)
     line2.Draw("same")
 
-    c1.Print(dataSet["runtype"]+"_"+dataSet["model"]+".pdf")
+    c1.Print(dataSet["runtype"]+"_"+dataSet["model"]+dataSet["pdfName"]+".pdf")
     del c1
 
 def makeSigTex(name, l):    
@@ -214,7 +213,9 @@ def makeSigTex(name, l):
 def main():
     parser = optparse.OptionParser("usage: %prog [options]\n")
     parser.add_option ('--basedir', dest='basedir',  type='string', default = '.', help="Path to output files")
+    parser.add_option ('--pdfName', dest='pdfName',  type='string', default = '',  help="name to add at the end of pdf")
     options, args = parser.parse_args()
+    pdfName = "_"+options.pdfName if options.pdfName != '' else options.pdfName
 
     ROOT.gROOT.SetBatch(True)
 
@@ -222,10 +223,14 @@ def main():
     Mass & Best fit signal strength & Observed Significance & p-value\\\\ \hline
     """    
     path = options.basedir
+    #runtypes = [
+    #    ("pseudoDataS",["2016","2017"]), ("pseudoDataS",["2018pre", "2018post", "Combo"]),
+    #    #("pseudoData", ["2016","2017"]), ("pseudoData", ["2018pre", "2018post", "Combo"]),
+    #    ]
     runtypes = [
         ("pseudoDataS",["2016","2017","2016_2017"]), ("pseudoDataS",["2018pre", "2018post", "Combo"]),
         ("pseudoData", ["2016","2017","2016_2017"]), ("pseudoData", ["2018pre", "2018post", "Combo"]),
-        ("Data",       ["2016","2017","2016_2017"]), ("Data",       ["2018pre", "2018post", "Combo"]),
+        #("Data",       ["2016","2017","2016_2017"]), ("Data",       ["2018pre", "2018post", "Combo"]),
         ]
     #runtypes = ["Data", "pseudoData", "pseudoDataS"]
     #runtypes = ["Data", "pseudoData", "pseudoDataS", "pseudodataS_0.3xRPV_350"]
@@ -236,11 +241,9 @@ def main():
     #            "pseudodata_qcdCR", "pseudodata_2xqcdCR", "pseudodata_JECUp_JERDown_FSR", "pseudodataS_0.3xRPV_350",
     #            "pseudodata_0.2xLine", "pseudodata_0.05-0.2xLine", "pseudodata_0.05-0.2xLineNorm", "pseudodata_0.2-0.05xLine", 
     #            "pseudodataTTJets", "pseudodata_qcdCR_0.05-0.2xLine", "pseudodata_qcdCR_0.2xLine"]
-    models = ["RPV"]
-    #models = ["RPV","SYY"]
-    #years = ["2016","2017","2018pre","2018post", "Combo"]
-    masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
-    #masses = ["350","450","550","650","750","850"]
+    models = ["RPV","SYY"]
+    masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900","950","1000","1050","1100","1150","1200","1250","1300","1350","1400"]
+    #masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
 
     # Loop over all jobs in get the info needed
     l=[]
@@ -254,7 +257,7 @@ def main():
             fNumber+=1
             file_table = open(outFileName,'w')
             file_table.write(pre_tabular)
-            dataSet={"runtype":runtype,"model":model,"data":{}}
+            dataSet={"runtype":runtype,"model":model,"data":{},"pdfName":pdfName}
             for year in years:
                 data={"mList":[],"rList":[],"rmList":[],"rpList":[],"sList":[],"pList":[],"zero":[]}
                 file_table.write("\\multicolumn{4}{c}{$%s$} \\\\ \\hline \n"%year)

@@ -380,7 +380,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   wspace->factory(("np_tt_hdampDown_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
   wspace->factory(("np_tt_underlyingEvtUp_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
   wspace->factory(("np_tt_underlyingEvtDown_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
-  wspace->factory(("np_tt_095PT_"+year+"[0.0]").c_str()); // uncorrelated
+  wspace->factory(("np_tt_pTScaled_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_MADGRAPH_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_CP2CP5_2017_"+year+"[0.0]").c_str()); // uncorrelated
   wspace->factory(("np_tt_prf_"+year+"[0.0]").c_str()); // uncorrelated
@@ -439,9 +439,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D1
   const std::vector<NuisanceParam>& nuisanceParams_D1 = {
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D1_095PT"},
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D1_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D1_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pTScaled_"+year).c_str()),              tt_syst_file, "D1_pTScaled"},
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D1_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D1_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D1_ISR"},
@@ -502,9 +502,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D2
   const std::vector<NuisanceParam>& nuisanceParams_D2 = {
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D2_095PT"},
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D2_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D2_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pTScaled_"+year).c_str()),              tt_syst_file, "D2_pTScaled"},
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D2_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D2_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D2_ISR"},
@@ -564,9 +564,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D3
   const std::vector<NuisanceParam>& nuisanceParams_D3 = {
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D3_095PT"},
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D3_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D3_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pTScaled_"+year).c_str()),              tt_syst_file, "D3_pTScaled"},
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D3_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D3_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D3_ISR"},
@@ -626,9 +626,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   //list of nuisance parameters for tt bkg D4
   const std::vector<NuisanceParam>& nuisanceParams_D4 = {
-      //{*wspace->var(("np_tt_095PT_"+year).c_str()),                 tt_syst_file, "D4_095PT"},
       //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, "D4_MADGRAPH"},
       //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, "D4_CP2CP5_2017"},
+      {*wspace->var(("np_tt_pTScaled_"+year).c_str()),              tt_syst_file, "D4_pTScaled"},
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D4_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D4_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D4_ISR"},
@@ -726,7 +726,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_puDown",  "SIG_pu_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfUp",   "SIG_prf_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfDown", "SIG_prf_"+year+"Down", {"D1","D2","D3","D4"});
-  
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pTScaled","SIG_pTS_"+year+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pTScaled","SIG_pTS_"+year+"Down", {"D1","D2","D3","D4"});
+
   // "OTHER" background systematics
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_JECUp",   "OTHER_JEC_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_JECDown", "OTHER_JEC_"+year+"Down", {"D1","D2","D3","D4"});
@@ -746,6 +748,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_puDown",  "OTHER_pu_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_prfUp",   "OTHER_prf_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_prfDown", "OTHER_prf_"+year+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pTScaled","OTHER_pTS_"+year+"Up",   {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pTScaled","OTHER_pTS_"+year+"Down", {"D1","D2","D3","D4"});
     
   // "TTX" background systematics
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_JECUp",   "TTX_JEC_"+year+"Up",   {"D1","D2","D3","D4"});
@@ -766,7 +770,9 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_puDown",  "TTX_pu_"+year+"Down",  {"D1","D2","D3","D4"});    
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_prfUp",   "TTX_prf_"+year+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_prfDown", "TTX_prf_"+year+"Down", {"D1","D2","D3","D4"});    
-    
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pTScaled","TTX_pTS_"+year+"Up",   {"D1","D2","D3","D4"});    
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pTScaled","TTX_pTS_"+year+"Down", {"D1","D2","D3","D4"});    
+
   // =================================================================================
   // Statistics-based Uncertainties
   

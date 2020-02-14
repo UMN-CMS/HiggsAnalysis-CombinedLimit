@@ -225,8 +225,8 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
 
     // *****
     // Extract limit results from set of root files produced by Higgs Combine tool    
-    int minFitMass = 300;
-    int maxFitMass = 1050;
+    int minFitMass =  300;
+    int maxFitMass = 1400;
     int step = 50;
     std::vector<double> xpoints;
     for(int i = minFitMass-step; i < maxFitMass; xpoints.push_back(i+=step));
@@ -318,7 +318,7 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     bool projectingRLimitLogY = true;
     //double projectingXmin = 250, projectingXmax = 950;
     double projectingXmin = xpoints.front()-50, projectingXmax = xpoints.back()+50;
-    double projectingRLimitYmin = 0.005, projectingRLimitYmax = 100;
+    double projectingRLimitYmin = 0.0005, projectingRLimitYmax = 100;
     std::string projectingRLimitXYtitles = ";m_{#tilde{t}} [GeV]; 95% CL upper limit on #sigma#bf{#it{#Beta}} [pb]";
     ssave = ssave_base+today+"_CLs";
 
