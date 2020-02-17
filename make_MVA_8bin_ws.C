@@ -778,20 +778,22 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   
   // MC stat uncertainty histograms
   const std::vector<std::string>& nJetBin = {"1","2","3","4","5","6"};
+  std::string mcYear = (year == "2018pre" || year == "2018post") ? "2018" : year;
+  std::cout<<mcYear<<std::endl;
   for(const auto& i : nJetBin)
   {
       // Particular signal model and mass point
-      WriteHisto2WS<TH1D>(file, model+"_"+mass+"_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "SIG");      
-      WriteHisto2WS<TH1D>(file, model+"_"+mass+"_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "SIG");      
+      WriteHisto2WS<TH1D>(file, model+"_"+mass+"_mcStatBin"+i+"Up",   i+"_"+mcYear+"Up",   {"D1","D2","D3","D4"}, "SIG");      
+      WriteHisto2WS<TH1D>(file, model+"_"+mass+"_mcStatBin"+i+"Down", i+"_"+mcYear+"Down", {"D1","D2","D3","D4"}, "SIG");      
       // OTHER backgrounds
-      WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "OTHER");      
-      WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "OTHER");      
+      WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Up",   i+"_"+mcYear+"Up",   {"D1","D2","D3","D4"}, "OTHER");      
+      WriteHisto2WS<TH1D>(file, "OTHER_mcStatBin"+i+"Down", i+"_"+mcYear+"Down", {"D1","D2","D3","D4"}, "OTHER");      
       // QCD backgrounds
-      WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "QCD");      
-      WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "QCD");      
+      WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Up",   i+"_"+mcYear+"Up",   {"D1","D2","D3","D4"}, "QCD");      
+      WriteHisto2WS<TH1D>(file, "QCD_mcStatBin"+i+"Down", i+"_"+mcYear+"Down", {"D1","D2","D3","D4"}, "QCD");      
       // TTX backgrounds
-      WriteHisto2WS<TH1D>(file, "TTX_mcStatBin"+i+"Up",   i+"_"+year+"Up",   {"D1","D2","D3","D4"}, "TTX");      
-      WriteHisto2WS<TH1D>(file, "TTX_mcStatBin"+i+"Down", i+"_"+year+"Down", {"D1","D2","D3","D4"}, "TTX");      
+      WriteHisto2WS<TH1D>(file, "TTX_mcStatBin"+i+"Up",   i+"_"+mcYear+"Up",   {"D1","D2","D3","D4"}, "TTX");      
+      WriteHisto2WS<TH1D>(file, "TTX_mcStatBin"+i+"Down", i+"_"+mcYear+"Down", {"D1","D2","D3","D4"}, "TTX");      
   }
   
   //Finally write out the work space
