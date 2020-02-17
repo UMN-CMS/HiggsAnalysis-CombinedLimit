@@ -779,7 +779,6 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   // MC stat uncertainty histograms
   const std::vector<std::string>& nJetBin = {"1","2","3","4","5","6"};
   std::string mcYear = (year == "2018pre" || year == "2018post") ? "2018" : year;
-  std::cout<<mcYear<<std::endl;
   for(const auto& i : nJetBin)
   {
       // Particular signal model and mass point
