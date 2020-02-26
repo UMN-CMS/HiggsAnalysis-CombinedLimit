@@ -374,7 +374,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   wspace->factory(("np_tt_pdf_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
   wspace->factory(("np_tt_FSR_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
   wspace->factory(("np_tt_ISR_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
-  wspace->factory(("np_tt_scl_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
+  wspace->factory("np_tt_scl[0.0]"); // correlated
   wspace->factory(("np_tt_erdOn_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
   wspace->factory(("np_tt_hdampUp_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
   wspace->factory(("np_tt_hdampDown_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
@@ -445,7 +445,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D1_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D1_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D1_ISR"},
-      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D1_scl"},
+      {*wspace->var("np_tt_scl"),                                   tt_syst_file, "D1_scl"},
       {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D1_erdOn"},
       {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D1_hdampUp"},
       {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D1_hdampDown"},
@@ -508,7 +508,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D2_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D2_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D2_ISR"},
-      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D2_scl"},
+      {*wspace->var("np_tt_scl"),                                   tt_syst_file, "D2_scl"},
       {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D2_erdOn"},
       {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D2_hdampUp"},
       {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D2_hdampDown"},
@@ -570,7 +570,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D3_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D3_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D3_ISR"},
-      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D3_scl"},
+      {*wspace->var("np_tt_scl"),                                   tt_syst_file, "D3_scl"},
       {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D3_erdOn"},
       {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D3_hdampUp"},
       {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D3_hdampDown"},
@@ -632,7 +632,7 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
       {*wspace->var(("np_tt_pdf_"+corrYear).c_str()),               tt_syst_file, "D4_pdf"},
       {*wspace->var(("np_tt_FSR_"+corrYear).c_str()),               tt_syst_file, "D4_FSR"},
       {*wspace->var(("np_tt_ISR_"+corrYear).c_str()),               tt_syst_file, "D4_ISR"},
-      {*wspace->var(("np_tt_scl_"+corrYear).c_str()),               tt_syst_file, "D4_scl"},
+      {*wspace->var("np_tt_scl"),                                   tt_syst_file, "D4_scl"},
       {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, "D4_erdOn"},
       {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, "D4_hdampUp"},
       {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, "D4_hdampDown"},
@@ -720,8 +720,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_lepDown", "SIG_lep_"+year+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pdfUp",   "SIG_pdf_"+corrYear+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pdfDown", "SIG_pdf_"+corrYear+"Down", {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclUp",   "SIG_scl_"+corrYear+"Up",   {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclDown", "SIG_scl_"+corrYear+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclUp",   "SIG_sclUp",            {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_sclDown", "SIG_sclDown",          {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_puUp",    "SIG_pu_"+year+"Up",    {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_puDown",  "SIG_pu_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfUp",   "SIG_prf_"+year+"Up",   {"D1","D2","D3","D4"});
@@ -740,8 +740,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_lepDown", "OTHER_lep_"+year+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pdfUp",   "OTHER_pdf_"+corrYear+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pdfDown", "OTHER_pdf_"+corrYear+"Down", {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclUp",   "OTHER_scl_"+corrYear+"Up",   {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclDown", "OTHER_scl_"+corrYear+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclUp",   "OTHER_sclUp",            {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_sclDown", "OTHER_sclDown",          {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_htUp",    "OTHER_ht_"+year+"Up",    {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_htDown",  "OTHER_ht_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_puUp",    "OTHER_pu_"+year+"Up",    {"D1","D2","D3","D4"});
@@ -762,8 +762,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_lepDown", "TTX_lep_"+year+"Down", {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pdfUp",   "TTX_pdf_"+corrYear+"Up",   {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pdfDown", "TTX_pdf_"+corrYear+"Down", {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclUp",   "TTX_scl_"+corrYear+"Up",   {"D1","D2","D3","D4"});
-  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclDown", "TTX_scl_"+corrYear+"Down", {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclUp",   "TTX_sclUp",            {"D1","D2","D3","D4"});
+  WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_sclDown", "TTX_sclDown",          {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_htUp",    "TTX_ht_"+year+"Up",    {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_htDown",  "TTX_ht_"+year+"Down",  {"D1","D2","D3","D4"});
   WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_puUp",    "TTX_pu_"+year+"Up",    {"D1","D2","D3","D4"});
