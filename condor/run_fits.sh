@@ -74,7 +74,8 @@ root -l -q -b 'make_MVA_8bin_ws.C("2018pre", "'${inputRoot2018pre}'", "'${signal
 root -l -q -b 'make_MVA_8bin_ws.C("2018post","'${inputRoot2018post}'","'${signalType}'","'${mass}'","'${dataType}'","'${syst}'")'
 text2workspace.py Card${year}.txt -o ws_${year}_${signalType}_${mass}.root -m ${mass} --keyword-value MODEL=${signalType}
 ws=ws_${year}_${signalType}_${mass}.root
-fitOptions="${ws} -m ${mass} --keyword-value MODEL=${signalType} --cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH"
+fallBack="--cminDefaultMinimizerStrategy 1 --cminFallbackAlgo Minuit2,Migrad,0:0.1 --cminFallbackAlgo Minuit2,Migrad,1:1.0 --cminFallbackAlgo Minuit2,Migrad,0:1.0 --X-rtd MINIMIZER_MaxCalls=999999999 --X-rtd MINIMIZER_analytic --X-rtd FAST_VERTICAL_MORPH"
+fitOptions="${ws} -m ${mass} --keyword-value MODEL=${signalType} ${fallBack}"
 
 # Run the asympotic fits
 if [ $doAsym == 1 ] 
@@ -108,8 +109,8 @@ fi
 if [ $doImpact == 1 ] 
 then
     echo "Running Impacts"
-    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} --doInitialFit --robustFit 1 --rMin -10 > log_step1.txt
-    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} --doFits --parallel 4 --rMin -10 > log_step2.txt
+    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} --doInitialFit --robustFit 1 ${fallBack} > log_step1.txt
+    ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} --doFits --parallel 4 ${fallBack} > log_step2.txt
     ../../CombineHarvester/CombineTools/scripts/combineTool.py -M Impacts -d ${ws} -m ${mass} -o impacts_${year}${signalType}${mass}.json > log_step3.txt
     ../../CombineHarvester/CombineTools/scripts/plotImpacts.py -i impacts_${year}${signalType}${mass}.json -o impacts_${year}${signalType}${mass}_${dataType}
     rm higgsCombine_paramFit_Test_*root
