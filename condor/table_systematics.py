@@ -108,18 +108,18 @@ nonttbar_file_2018post = ROOT.TFile.Open("../Keras_2018post_v1.2/njets_for_Aron.
 ttbar_file_2018post    = ROOT.TFile.Open("../Keras_2018post_v1.2/ttbar_systematics.root")
 
 s = AllSources()
-s.sources_nonttbar          = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl", "ht"]])
-s.sources_nonttbar_2017     = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl", "ht"]])
-s.sources_nonttbar_2018pre  = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl", "ht"]])
-s.sources_nonttbar_2018post = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl", "ht"]])
-s.sources_signal            = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl"]])
-s.sources_signal_2017       = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl"]])
-s.sources_signal_2018pre    = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl"]])
-s.sources_signal_2018post   = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","scl"]])
-s.sources_ttbar             = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
-s.sources_ttbar_2017        = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
-s.sources_ttbar_2018pre     = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
-s.sources_ttbar_2018post    = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
+s.sources_nonttbar          = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl", "ht"]])
+s.sources_nonttbar_2017     = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl", "ht"]])
+s.sources_nonttbar_2018pre  = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl", "ht"]])
+s.sources_nonttbar_2018post = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl", "ht"]])
+s.sources_signal            = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl"]])
+s.sources_signal_2017       = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl"]])
+s.sources_signal_2018pre    = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl"]])
+s.sources_signal_2018post   = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl"]])
+s.sources_ttbar             = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
+s.sources_ttbar_2017        = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
+s.sources_ttbar_2018pre     = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
+s.sources_ttbar_2018post    = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","pTScaled"]])
 
 mvas = ["D1","D2","D3","D4"]
 
@@ -142,16 +142,18 @@ line_btg   = s.makeLine("b tagging", "btg","btg","btg","btg", "btg","btg","btg",
 line_lep   = s.makeLine("lepton id/iso/trigger", "lep","lep","lep","lep", "lep","lep","lep","lep", "lep","lep","lep","lep")
 line_ht    = s.makeLine("HT scale factor", "ht","ht","ht","ht", "ht","ht","ht","ht", None,None,None,None)
 line_pdf   = s.makeLine("PDF", "pdf","pdf","pdf","pdf", "pdf","pdf","pdf","pdf", "pdf","pdf","pdf","pdf")
+line_pu    = s.makeLine("Pileup", "pu","pu","pu","pu", "pu","pu","pu","pu", "pu","pu","pu","pu")
 line_scl   = s.makeLine("Fact/Renorm scale", "scl","scl","scl","scl", "scl","scl","scl","scl", "scl","scl","scl","scl")
 line_isr   = s.makeLine("ISR", "ISR","ISR","ISR","ISR", None,None,None,None, None,None,None,None)
 line_fsr   = s.makeLine("FSR", "FSR","FSR","FSR","FSR", None,None,None,None, None,None,None,None)
 line_nom   = s.makeLine("Nominal shape difference", "nom","nom","nom","nom", None,None,None,None, None,None,None,None)
 line_shape = s.makeLine("CR shape difference", "qcdCR","qcdCR","qcdCR","qcdCR", None,None,None,None, None,None,None,None)
+line_jetpt = s.makeLine("Jet \\pt", "pTScaled","pTScaled","pTScaled","pTScaled", None,None,None,None, None,None,None,None)
 line_hdamp = s.makeLine("ME-PS Matching", "hdampUp","hdampUp","hdampUp","hdampUp", None,None,None,None, None,None,None,None)
 line_erdOn = s.makeLine("Color Reconnection", "erdOn","erdOn","erdOn","erdOn", None,None,None,None, None,None,None,None)
 line_under = s.makeLine("Underlying Event", "underlyingEvtUp","underlyingEvtUp","underlyingEvtUp","underlyingEvtUp", None,None,None,None, None,None,None,None)
 
-table.write("\n".join([line_JEC,line_JER,line_btg,line_lep,line_ht,line_pdf,line_scl, line_isr, line_fsr, line_nom, line_shape, line_hdamp, line_erdOn, line_under]))
+table.write("\n".join([line_JEC,line_JER,line_btg,line_lep,line_ht,line_pdf,line_pu,line_scl, line_isr, line_fsr, line_nom, line_shape, line_jetpt, line_hdamp, line_erdOn, line_under]))
 
 posttex="""
 \end{tabular}
