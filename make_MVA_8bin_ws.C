@@ -31,29 +31,29 @@ class NuisanceParam
 {
 private:
     const bool useNPYear(const std::pair<std::string, std::vector<int>>& yearMatch)
+    {
+        bool useNP = true;
+        if(yearMatch.second.size())
         {
-            bool useNP = true;
-            if(yearMatch.second.size())
+            useNP = false;
+            for(auto year : yearMatch.second)
             {
-                useNP = false;
-                for(auto year : yearMatch.second)
-                {
-                    if(std::to_string(year) == yearMatch.first)  useNP = true;
-                }
+                if(std::to_string(year) == yearMatch.first)  useNP = true;
             }
-            return useNP;
         }
+        return useNP;
+    }
 
     template<typename T> T* getSysHist(TFile* tt_syst_file, const std::string& h_name)
+    {
+        auto* h = static_cast<T*>(tt_syst_file->Get(h_name.c_str()));
+        if(h == nullptr) 
         {
-            auto* h = static_cast<T*>(tt_syst_file->Get(h_name.c_str()));
-            if(h == nullptr) 
-            {
-                std::cout<<"Error: This histogram \""<<h_name<<"\" was not found in the ttbar_systematic.root file"<<std::endl;
-                exit(0);
-            }
-            return h;
-        } 
+            std::cout<<"Error: This histogram \""<<h_name<<"\" was not found in the ttbar_systematic.root file"<<std::endl;
+            exit(0);
+        }
+        return h;
+    } 
 
 public:
     enum NuisanceType {NORMAL, RPRIME, RFIT};
@@ -75,8 +75,8 @@ public:
         , coefNames(coefNames)
         , type(RFIT)
         , useNP(true)
-        {        
-        }
+    {        
+    }
     
     NuisanceParam(const RooAbsArg& r_name, const TH1D* h_r, const TH1D* h_rprime, RooArgList rprime_names) 
         : r_name(r_name)
@@ -85,25 +85,26 @@ public:
         , rprime_names(rprime_names)
         , type(RPRIME)
         , useNP(true)
-        {        
-        }
+    {        
+    }
 
     NuisanceParam(const RooAbsArg& r_name, const TH1D* h_r, const std::pair<std::string, std::vector<int>>& yearMatch = {}) 
         : r_name(r_name)
         , h_r(h_r)
         , h_rprime(nullptr)
         , type(NORMAL)
-        {
-            useNP = useNPYear(yearMatch);
-        }
+    {
+        useNP = useNPYear(yearMatch);
+    }
 
     NuisanceParam(const RooAbsArg& r_name, TFile* tt_syst_file, const std::string& h_name, const std::pair<std::string, std::vector<int>>& yearMatch = {}) 
         : NuisanceParam(r_name, getSysHist<TH1D>(tt_syst_file, h_name), yearMatch) 
-        {
-        }
+    {
+    }
 };
 
-Double_t step(double_t x) {
+Double_t step(double_t x) 
+{
     return 1;
 }
 
