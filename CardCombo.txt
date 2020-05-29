@@ -1,7 +1,7 @@
 Combination of Y16=Card2016.txt  Y17=Card2017.txt  Y18pre=Card2018pre.txt  Y18post=Card2018post.txt
 imax 16 number of bins
 jmax 4 number of processes minus 1
-kmax 448 number of nuisance parameters
+kmax 452 number of nuisance parameters
 ----------------------------------------------------------------------------------------------------------------------------------
 shapes OTHER       Y16_D1      MVA_2016_$MODEL_$MASS_ws.root otherMC_th1_D1 D1_$PROCESS_$SYSTEMATIC
 shapes QCD         Y16_D1      MVA_2016_$MODEL_$MASS_ws.root qcdMC_th1_D1 D1_$PROCESS_$SYSTEMATIC
@@ -469,7 +469,7 @@ np_tt_JECUp_2016  param  0.0 1.0
 d_tt_2018pre  param  0 500
 np_tt_FSR_2017_2018  param  0.0 1.0
 np_tt_qcdCRD2Coef1_2018pre  param  0.0 1.0
-np_tt_pTScaled_2018pre  param  0.0 1.0
+np_tt_ht_2018post  param  0.0 1.0
 np_tt_btg_2018pre  param  0.0 1.0
 np_tt_qcdCRD2Coef3_2018post  param  0.0 1.0
 np_tt_qcdCRD3Coef3_2017  param  0.0 1.0
@@ -486,17 +486,15 @@ np_tt_btg_2016  param  0.0 1.0
 np_tt_hdampDown_2017_2018  param  0.0 1.0
 np_tt_qcdCRD3Coef1_2017  param  0.0 1.0
 np_tt_prf_2017  param  0.0 1.0
-np_tt_pTScaled_2017  param  0.0 1.0
-np_tt_pTScaled_2016  param  0.0 1.0
 np_tt_underlyingEvtDown_2017_2018  param  0.0 1.0
 d_tt_2016     param  0 500
 np_tt_ht_2018pre  param  0.0 1.0
 np_tt_qcdCRD1Coef3_2018post  param  0.0 1.0
 np_tt_qcdCRD3Coef2_2018pre  param  0.0 1.0
 np_tt_JECUp_2018post  param  0.0 1.0
+np_tt_noHT_2018post  param  0.0 1.0
 np_tt_qcdCRD4Coef3_2016  param  0.0 1.0
 np_tt_qcdCRD4Coef3_2017  param  0.0 1.0
-np_tt_qcdCRD3Coef3_2018post  param  0.0 1.0
 np_tt_FSR_2016  param  0.0 1.0
 np_tt_JERDown_2018post  param  0.0 1.0
 np_tt_JERUp_2016  param  0.0 1.0
@@ -511,6 +509,7 @@ np_tt_pu_2018post  param  0.0 1.0
 np_tt_qcdCRD1Coef3_2018pre  param  0.0 1.0
 np_tt_htnjet_2018post  param  0.0 1.0
 np_tt_qcdCRD1Coef2_2018pre  param  0.0 1.0
+np_tt_mpTScaled_2018post  param  0.0 1.0
 np_tt_pdf_2016  param  0.0 1.0
 np_tt_btg_2018post  param  0.0 1.0
 np_tt_JERDown_2017  param  0.0 1.0
@@ -519,11 +518,12 @@ np_tt_qcdCRD1Coef2_2018post  param  0.0 1.0
 np_tt_hdampDown_2016  param  0.0 1.0
 np_tt_qcdCRD2Coef2_2018post  param  0.0 1.0
 np_tt_qcdCRD4Coef3_2018pre  param  0.0 1.0
-np_tt_ht_2018post  param  0.0 1.0
+np_tt_qcdCRD3Coef3_2018post  param  0.0 1.0
 np_tt_httail_2018pre  param  0.0 1.0
 np_tt_qcdCR_2017  param  0.0 1.0
 np_tt_qcdCR_2016  param  0.0 1.0
 np_tt_qcdCRD3Coef3_2018pre  param  0.0 1.0
+np_tt_mpTScaled_2018pre  param  0.0 1.0
 np_tt_JERUp_2018pre  param  0.0 1.0
 np_tt_qcdCRD2Coef3_2016  param  0.0 1.0
 np_tt_qcdCRD2Coef3_2017  param  0.0 1.0
@@ -531,14 +531,16 @@ np_tt_httail_2018post  param  0.0 1.0
 np_tt_erdOn_2016  param  0.0 1.0
 np_tt_qcdCRD2Coef1_2016  param  0.0 1.0
 np_tt_qcdCRD2Coef1_2017  param  0.0 1.0
+np_tt_mpTScaled_2017  param  0.0 1.0
+np_tt_mpTScaled_2016  param  0.0 1.0
 d_tt_2018post  param  0 500
 np_tt_qcdCRD4Coef1_2018pre  param  0.0 1.0
 np_tt_nom_2016  param  0.0 1.0
 np_tt_nom_2017  param  0.0 1.0
+np_tt_qcdCRD4Coef2_2018post  param  0.0 1.0
 np_tt_ht_2017  param  0.0 1.0
 np_tt_ht_2016  param  0.0 1.0
 np_tt_JECDown_2018post  param  0.0 1.0
-np_tt_pTScaled_2018post  param  0.0 1.0
 np_tt_JERDown_2018pre  param  0.0 1.0
 np_tt_qcdCRD3Coef1_2018pre  param  0.0 1.0
 np_tt_qcdCRD3Coef1_2016  param  0.0 1.0
@@ -551,8 +553,10 @@ np_tt_pu_2018pre  param  0.0 1.0
 np_tt_qcdCRD1Coef1_2018pre  param  0.0 1.0
 np_tt_JECDown_2016  param  0.0 1.0
 np_tt_JECDown_2017  param  0.0 1.0
+np_tt_noHT_2018pre  param  0.0 1.0
 d_tt_2017     param  0 500
-np_tt_qcdCRD4Coef2_2018post  param  0.0 1.0
+np_tt_noHT_2016  param  0.0 1.0
+np_tt_noHT_2017  param  0.0 1.0
 np_tt_qcdCRD4Coef1_2016  param  0.0 1.0
 np_tt_qcdCRD4Coef1_2017  param  0.0 1.0
 np_tt_qcdCRD2Coef1_2018post  param  0.0 1.0

@@ -288,7 +288,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
     wspace->factory(("np_tt_hdampDown_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
     wspace->factory(("np_tt_underlyingEvtUp_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
     wspace->factory(("np_tt_underlyingEvtDown_"+corrYear+"[0.0]").c_str()); // uncorrelated for 2016 only
-    wspace->factory(("np_tt_pTScaled_"+year+"[0.0]").c_str()); // uncorrelated
+    wspace->factory(("np_tt_mpTScaled_"+year+"[0.0]").c_str()); // uncorrelated
+    wspace->factory(("np_tt_noHT_"+year+"[0.0]").c_str()); // uncorrelated
     wspace->factory(("np_tt_MADGRAPH_"+year+"[0.0]").c_str()); // uncorrelated
     wspace->factory(("np_tt_CP2CP5_2017_"+year+"[0.0]").c_str()); // uncorrelated
     wspace->factory(("np_tt_prf_"+year+"[0.0]").c_str()); // uncorrelated
@@ -377,7 +378,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
             std::vector<NuisanceParam> temp = {
                 //{*wspace->var(("np_tt_MADGRAPH_"+year).c_str()),              tt_syst_file, bin+"_MADGRAPH"},
                 //{*wspace->var(("np_tt_CP2CP5_2017_"+year).c_str()),           tt_syst_file, bin+"_CP2CP5_2017"},
-                {*wspace->var(("np_tt_pTScaled_"+year).c_str()),              tt_syst_file, bin+"_pTScaled"},
+                {*wspace->var(("np_tt_mpTScaled_"+year).c_str()),             tt_syst_file, bin+"_mpTScaled"},
+                {*wspace->var(("np_tt_noHT_"+year).c_str()),                  tt_syst_file, bin+"_noHT"},
                 {*wspace->var(("np_tt_erdOn_"+corrYear).c_str()),             tt_syst_file, bin+"_erdOn"},
                 {*wspace->var(("np_tt_hdampUp_"+corrYear).c_str()),           tt_syst_file, bin+"_hdampUp"},
                 {*wspace->var(("np_tt_hdampDown_"+corrYear).c_str()),         tt_syst_file, bin+"_hdampDown"},
@@ -467,8 +469,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
         {
             WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfUp",   "SIG_prf_"+year+"Up",   bin);
             WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_prfDown", "SIG_prf_"+year+"Down", bin);
-            WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pTScaled","SIG_pTS_"+year+"Up",   bin);
-            WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_pTScaled","SIG_pTS_"+year+"Down", bin);
+            //WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_mpTScaled","SIG_pTS_"+year+"Up",   bin);
+            //WriteHisto2WS<TH1D>(file, model+"_"+mass+"_h_njets_pt30_1l_mpTScaled","SIG_pTS_"+year+"Down", bin);
         }
 
         // "OTHER" background systematics
@@ -492,8 +494,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
         {
             WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_prfUp",   "OTHER_prf_"+year+"Up",   bin);
             WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_prfDown", "OTHER_prf_"+year+"Down", bin);
-            WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pTScaled","OTHER_pTS_"+year+"Up",   bin);
-            WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_pTScaled","OTHER_pTS_"+year+"Down", bin);
+            //WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_mpTScaled","OTHER_pTS_"+year+"Up",   bin);
+            //WriteHisto2WS<TH1D>(file, "OTHER_h_njets_pt30_1l_mpTScaled","OTHER_pTS_"+year+"Down", bin);
         }
     
         // "TTX" background systematics
@@ -517,8 +519,8 @@ void make_MVA_8bin_ws(const std::string year = "2016", const std::string infile_
         {
             WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_prfUp",   "TTX_prf_"+year+"Up",   bin);
             WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_prfDown", "TTX_prf_"+year+"Down", bin);    
-            WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pTScaled","TTX_pTS_"+year+"Up",   bin);    
-            WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_pTScaled","TTX_pTS_"+year+"Down", bin);    
+            //WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_mpTScaled","TTX_pTS_"+year+"Up",   bin);    
+            //WriteHisto2WS<TH1D>(file, "TTX_h_njets_pt30_1l_mpTScaled","TTX_pTS_"+year+"Down", bin);    
         }
 
         // =================================================================================
