@@ -116,10 +116,10 @@ s.sources_signal            = dict([(n,[]) for n in ["JEC","JER","btg","lep","pd
 s.sources_signal_2017       = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl"]])
 s.sources_signal_2018pre    = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl"]])
 s.sources_signal_2018post   = dict([(n,[]) for n in ["JEC","JER","btg","lep","pdf","pu","scl"]])
-s.sources_ttbar             = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
-s.sources_ttbar_2017        = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
-s.sources_ttbar_2018pre     = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
-s.sources_ttbar_2018post    = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
+s.sources_ttbar             = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","httail", "htnjet","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
+s.sources_ttbar_2017        = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","httail", "htnjet","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
+s.sources_ttbar_2018pre     = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","httail", "htnjet","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
+s.sources_ttbar_2018post    = dict([(n,[]) for n in ["JECUp","JERUp","btg","lep","pdf","pu","ht","httail", "htnjet","scl","ISR","FSR","nom","qcdCR","hdampUp","underlyingEvtUp","erdOn","mpTScaled","noHT"]])
 
 mvas = ["D1","D2","D3","D4"]
 
@@ -140,7 +140,9 @@ line_JEC    = s.makeLine("Jet energy scale", "JECUp","JECUp","JECUp","JECUp", "J
 line_JER    = s.makeLine("Jet energy resolution", "JERUp","JERUp","JERUp","JERUp", "JER","JER","JER","JER", "JER","JER","JER","JER")
 line_btg    = s.makeLine("\\cPqb tagging", "btg","btg","btg","btg", "btg","btg","btg","btg", "btg","btg","btg","btg")
 line_lep    = s.makeLine("Lepton id/iso/trigger", "lep","lep","lep","lep", "lep","lep","lep","lep", "lep","lep","lep","lep")
-line_ht     = s.makeLine("\\HT scale factor", "ht","ht","ht","ht", "ht","ht","ht","ht", None,None,None,None)
+line_ht     = s.makeLine("\\HT (fit extrapolation)", "ht","ht","ht","ht", "ht","ht","ht","ht", None,None,None,None)
+line_httail = s.makeLine("\\HT (high \\HT tail corr.)", "httail","httail","httail","httail", None, None, None, None, None,None,None,None)
+line_htnjet = s.makeLine("\\HT (\\njets dependence)", "htnjet","htnjet","htnjet","htnjet", None, None, None, None, None,None,None,None)
 line_pdf    = s.makeLine("PDF", "pdf","pdf","pdf","pdf", "pdf","pdf","pdf","pdf", "pdf","pdf","pdf","pdf")
 line_pu     = s.makeLine("PU Reweighting", "pu","pu","pu","pu", "pu","pu","pu","pu", "pu","pu","pu","pu")
 line_scl    = s.makeLine("Fact/Renorm scale", "scl","scl","scl","scl", "scl","scl","scl","scl", "scl","scl","scl","scl")
@@ -154,7 +156,7 @@ line_hdamp  = s.makeLine("ME-PS Matching", "hdampUp","hdampUp","hdampUp","hdampU
 line_erdOn  = s.makeLine("Color Reconnection", "erdOn","erdOn","erdOn","erdOn", None,None,None,None, None,None,None,None)
 line_under  = s.makeLine("Underlying Event", "underlyingEvtUp","underlyingEvtUp","underlyingEvtUp","underlyingEvtUp", None,None,None,None, None,None,None,None)
 
-table.write("\n".join([line_JEC,line_JER,line_btg,line_lep,line_ht,line_pdf,line_pu,line_scl, line_isr, line_fsr, line_nom, line_shape, line_jetmpt, line_noht, line_hdamp, line_erdOn, line_under]))
+table.write("\n".join([line_JEC,line_JER,line_btg,line_lep,line_ht,line_httail,line_htnjet,line_pdf,line_pu,line_scl, line_isr, line_fsr, line_nom, line_shape, line_jetmpt, line_noht, line_hdamp, line_erdOn, line_under]))
 
 posttex="""
 \end{tabular}
