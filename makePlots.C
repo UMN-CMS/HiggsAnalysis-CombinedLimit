@@ -31,7 +31,7 @@
 #include "TLegend.h"
 #include "CMS_lumi.C"
 
-void makePlots(const string today = "Jan17_2019", const string filedir = "fit_results_v5_Jan17_2019", const string year = "2017", const string model = "RPV", const string fitType = "AsymptoticLimits") 
+void makePlots(const string today = "Jan17_2019", const string filedir = "fit_results_v5_Jan17_2019", const string year = "2017", const string model = "RPV", const string limType = "Observed", const string fitType = "AsymptoticLimits") 
 {
     // =============================================================
     TStyle *tdrStyle = new TStyle("tdrStyle","Style for P-TDR");
@@ -112,7 +112,6 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     tdrStyle->SetPadRightMargin(0.03);
 
     // For the Global title:
-
     tdrStyle->SetOptTitle(0);
     tdrStyle->SetTitleFont(42);
     tdrStyle->SetTitleColor(1);
@@ -127,7 +126,6 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     // tdrStyle->SetTitleBorderSize(2);
 
     // For the axis titles:
-
     tdrStyle->SetTitleColor(1, "XYZ");
     tdrStyle->SetTitleFont(42, "XYZ");
     tdrStyle->SetTitleSize(0.06, "XYZ");
@@ -138,14 +136,12 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     // tdrStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
   
     // For the axis labels:
-
     tdrStyle->SetLabelColor(1, "XYZ");
     tdrStyle->SetLabelFont(42, "XYZ");
     tdrStyle->SetLabelOffset(0.007, "XYZ");
     tdrStyle->SetLabelSize(0.05, "XYZ");
 
     // For the axis:
-
     tdrStyle->SetAxisColor(1, "XYZ");
     tdrStyle->SetStripDecimals(kTRUE);
     tdrStyle->SetTickLength(0.03, "XYZ");
@@ -227,6 +223,7 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     // Extract limit results from set of root files produced by Higgs Combine tool    
     int minFitMass =  300;
     int maxFitMass = 1400;
+    //int maxFitMass = 900;
     int step = 50;
     std::vector<double> xpoints;
     for(int i = minFitMass-step; i < maxFitMass; xpoints.push_back(i+=step));
@@ -537,7 +534,7 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     legend->SetTextSize(0.04);
     legend->AddEntry(grGreen,"68% expected", "f");
     legend->AddEntry(grYellow,"95% expected", "f");
-    if(DRAW_OBS) legend->AddEntry(grObs,"Observed limit", "lp");
+    if(DRAW_OBS) legend->AddEntry(grObs,(limType+" limit").c_str(), "lp");
 
     if (model=="RPV")
         legend->AddEntry(grTheoryErr,"#sigma_{#tilde{t}#bar{#tilde{t}}} (NNLO+NNLL)", "lf");
@@ -603,4 +600,5 @@ void makePlots(const string today = "Jan17_2019", const string filedir = "fit_re
     cCanvas->Print(seps.c_str());
     cCanvas->Print(sgif.c_str());
     cCanvas->Print(spdf.c_str());
+    cCanvas->Print((ssave+"_"+limType+".pdf").c_str());
 }
