@@ -7,25 +7,31 @@ import ROOT
 from array import array
 
 def makePValuePlot(dataSet):
+    comboName = dataSet["comboName"]
+    expOrObs = "Observed" if dataSet["runtype"] == "Data" else "Expected"
+
     # CL observed pvalues
     pvalue_2016 = dataSet["data"]["2016"]["pList"]
     pvalue_2017 = dataSet["data"]["2017"]["pList"]
-    pvalue_2018pre = dataSet["data"]["2018pre"]["pList"]
-    pvalue_2018post = dataSet["data"]["2018post"]["pList"]
-    pvalue_Combo = dataSet["data"]["Combo"]["pList"]
+    if comboName == "Combo":
+        pvalue_2018pre = dataSet["data"]["2018pre"]["pList"]
+        pvalue_2018post = dataSet["data"]["2018post"]["pList"]
+    pvalue_Combo = dataSet["data"][comboName]["pList"]
     print pvalue_2016
     print pvalue_2017
-    print pvalue_2018pre
-    print pvalue_2018post
+    if comboName == "Combo":
+        print pvalue_2018pre
+        print pvalue_2018post
     print pvalue_Combo
     xpoints = dataSet["data"]["2016"]["mList"]
     npoints = len(pvalue_2016)
     Xmin = 300
-    Xmax = 900
+    Xmax = 1200 if comboName == "Combo" else 900 
     Ymin = 0.00005
     #if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1 or dataSet["runtype"] == "Data":
     if dataSet["runtype"].find("pseudoDataS") != -1 or dataSet["runtype"].find("pseudodataS") != -1:
-        Ymin = 5.0e-37
+        #Ymin = 5.0e-37
+        Ymin = 5.0e-23
     Ymax = 1
 
     c1 = ROOT.TCanvas("c1","PValues",1000,1000)
@@ -70,15 +76,16 @@ def makePValuePlot(dataSet):
     gr_2017.SetLineStyle(3)
     gr_2017.SetLineWidth(3)
 
-    gr_2018pre = ROOT.TGraph(npoints, array('d', xpoints), array('d', pvalue_2018pre))
-    gr_2018pre.SetLineColor(ROOT.kGreen+1)
-    gr_2018pre.SetLineStyle(3)
-    gr_2018pre.SetLineWidth(3)
-
-    gr_2018post = ROOT.TGraph(npoints, array('d', xpoints), array('d', pvalue_2018post))
-    gr_2018post.SetLineColor(ROOT.kOrange+1)
-    gr_2018post.SetLineStyle(3)
-    gr_2018post.SetLineWidth(3)
+    if comboName == "Combo":
+        gr_2018pre = ROOT.TGraph(npoints, array('d', xpoints), array('d', pvalue_2018pre))
+        gr_2018pre.SetLineColor(ROOT.kGreen+1)
+        gr_2018pre.SetLineStyle(3)
+        gr_2018pre.SetLineWidth(3)
+    
+        gr_2018post = ROOT.TGraph(npoints, array('d', xpoints), array('d', pvalue_2018post))
+        gr_2018post.SetLineColor(ROOT.kOrange+1)
+        gr_2018post.SetLineStyle(3)
+        gr_2018post.SetLineWidth(3)
 
     # Draw the 1sigma, 2sigma, and 3sigma lines
     # For 1 sigma: s = 0.68
@@ -103,8 +110,9 @@ def makePValuePlot(dataSet):
 
     gr_2016.Draw("L,same")
     gr_2017.Draw("L,same")
-    gr_2018pre.Draw("L,same")
-    gr_2018post.Draw("L,same")
+    if comboName == "Combo":
+        gr_2018pre.Draw("L,same")
+        gr_2018post.Draw("L,same")
     gr_Combo.Draw("L,same")
 
     legend1 = ROOT.TLegend(0.5, 0.05, 0.9, 0.25,"")
@@ -114,11 +122,15 @@ def makePValuePlot(dataSet):
         legend1.SetHeader("pp #rightarrow #tilde{t}#bar{#tilde{t}}, SYY coupling");
     elif dataSet["model"]=="SHH":
         legend1.SetHeader("pp #rightarrow #tilde{t}#bar{#tilde{t}}, SHH coupling");
-    legend1.AddEntry(gr_Combo, "Combined Observed, L_{Int}=137.2 fb^{-1}", "l")
-    legend1.AddEntry(gr_2016, "2016 Observed, L_{Int}=35.9 fb^{-1}", "l")
-    legend1.AddEntry(gr_2017, "2017 Observed, L_{Int}=41.5 fb^{-1}", "l")
-    legend1.AddEntry(gr_2018pre, "2018pre Observed, L_{Int}=21.1 fb^{-1}", "l")
-    legend1.AddEntry(gr_2018post, "2018post Observed, L_{Int}=38.7 fb^{-1}", "l")
+    if comboName == "Combo":
+        legend1.AddEntry(gr_Combo, "Combined "+expOrObs+", L_{Int}=137.2 fb^{-1}", "l")
+    else:
+        legend1.AddEntry(gr_Combo, "Combined "+expOrObs+", L_{Int}=77.4 fb^{-1}", "l")
+    legend1.AddEntry(gr_2016, "2016 "+expOrObs+", L_{Int}=35.9 fb^{-1}", "l")
+    legend1.AddEntry(gr_2017, "2017 "+expOrObs+", L_{Int}=41.5 fb^{-1}", "l")
+    if comboName == "Combo":
+        legend1.AddEntry(gr_2018pre, "2018pre "+expOrObs+", L_{Int}=21.1 fb^{-1}", "l")
+        legend1.AddEntry(gr_2018post, "2018post "+expOrObs+", L_{Int}=38.7 fb^{-1}", "l")
     legend1.SetBorderSize(0)
     legend1.SetFillStyle(0)
     legend1.Draw("same")
@@ -156,9 +168,9 @@ def makePValuePlot(dataSet):
     hr.GetYaxis().SetNdivisions(4, 2, 0)
     hr.Draw()
     
-    rvalue_Combo = array('d', dataSet["data"]["Combo"]["rList"])
-    rpvalue_Combo = array('d',dataSet["data"]["Combo"]["rpList"])
-    rmvalue_Combo = array('d', dataSet["data"]["Combo"]["rmList"])
+    rvalue_Combo = array('d', dataSet["data"][comboName]["rList"])
+    rpvalue_Combo = array('d',dataSet["data"][comboName]["rpList"])
+    rmvalue_Combo = array('d', dataSet["data"][comboName]["rmList"])
     zero = array('d', dataSet["data"]["2016"]["zero"])
     rband = ROOT.TGraphAsymmErrors(npoints, array('d', xpoints), rvalue_Combo, zero, zero, rmvalue_Combo, rpvalue_Combo)
     rband.SetFillColor(ROOT.kGreen+1)
@@ -213,7 +225,8 @@ def makeSigTex(name, l):
 def main():
     parser = optparse.OptionParser("usage: %prog [options]\n")
     parser.add_option ('--basedir', dest='basedir',  type='string', default = '.', help="Path to output files")
-    parser.add_option ('--pdfName', dest='pdfName',  type='string', default = '',  help="name to add at the end of pdf")
+    parser.add_option ('--pdfName', dest='pdfName',  type='string', default = '',  help="Name to add at the end of pdf")
+    parser.add_option ('--oldSetUp', action='store_true', help="Bool to run code with old setup")
     options, args = parser.parse_args()
     pdfName = "_"+options.pdfName if options.pdfName != '' else options.pdfName
 
@@ -223,27 +236,25 @@ def main():
     Mass & Best fit signal strength & Observed Significance & p-value\\\\ \hline
     """    
     path = options.basedir
-    #runtypes = [
-    #    ("pseudoDataS",["2016","2017"]), ("pseudoDataS",["2018pre", "2018post", "Combo"]),
-    #    #("pseudoData", ["2016","2017"]), ("pseudoData", ["2018pre", "2018post", "Combo"]),
-    #    ]
-    runtypes = [
-        ("pseudoDataS",["2016","2017","2016_2017"]), ("pseudoDataS",["2018pre", "2018post", "Combo"]),
-        ("pseudoData", ["2016","2017","2016_2017"]), ("pseudoData", ["2018pre", "2018post", "Combo"]),
-        #("Data",       ["2016","2017","2016_2017"]), ("Data",       ["2018pre", "2018post", "Combo"]),
-        ]
-    #runtypes = ["Data", "pseudoData", "pseudoDataS"]
-    #runtypes = ["Data", "pseudoData", "pseudoDataS", "pseudodataS_0.3xRPV_350"]
-    #runtypes = ["Data", "pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
-    #runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp"]
-    #runtypes = ["pseudodataS_0.3xRPV_350"]
-    #runtypes = ["pseudoDataS", "pseudoDataS_RPV_350", "pseudoDataS_RPV_550", "pseudoData", "pseudoData_JECUp", 
-    #            "pseudodata_qcdCR", "pseudodata_2xqcdCR", "pseudodata_JECUp_JERDown_FSR", "pseudodataS_0.3xRPV_350",
-    #            "pseudodata_0.2xLine", "pseudodata_0.05-0.2xLine", "pseudodata_0.05-0.2xLineNorm", "pseudodata_0.2-0.05xLine", 
-    #            "pseudodataTTJets", "pseudodata_qcdCR_0.05-0.2xLine", "pseudodata_qcdCR_0.2xLine"]
-    models = ["RPV","SYY"]
-    masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900","950","1000","1050","1100","1150","1200","1250","1300","1350","1400"]
-    #masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
+
+    if options.oldSetUp:
+        runtypes = [
+            #("pseudoDataS",["2016","2017","2016_2017"]),
+            #("pseudoData", ["2016","2017","2016_2017"]),
+            ("Data",       ["2016","2017","2016_2017"]),
+            ]
+        comboName = "2016_2017"        
+        masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900"]
+        models = ["RPV","SYY"]
+    else:        
+        runtypes = [
+            ("pseudoDataS",["2016","2017"]), ("pseudoDataS",["2018pre", "2018post", "Combo"]),
+            ("pseudoData", ["2016","2017"]), ("pseudoData", ["2018pre", "2018post", "Combo"]),
+            ("Data",       ["2016","2017"]), ("Data",       ["2018pre", "2018post", "Combo"]),
+            ]
+        comboName = "Combo"
+        masses = ["300","350","400","450","500","550","600","650","700","750","800","850","900","950","1000","1050","1100","1150","1200","1250","1300","1350","1400"]
+        models = ["RPV","SYY"]
 
     # Loop over all jobs in get the info needed
     l=[]
@@ -257,7 +268,7 @@ def main():
             fNumber+=1
             file_table = open(outFileName,'w')
             file_table.write(pre_tabular)
-            dataSet={"runtype":runtype,"model":model,"data":{},"pdfName":pdfName}
+            dataSet={"runtype":runtype,"model":model,"data":{},"pdfName":pdfName,"comboName":comboName}
             for year in years:
                 data={"mList":[],"rList":[],"rmList":[],"rpList":[],"sList":[],"pList":[],"zero":[]}
                 file_table.write("\\multicolumn{4}{c}{$%s$} \\\\ \\hline \n"%year)
