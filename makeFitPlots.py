@@ -13,7 +13,11 @@ parser.add_argument( '--plotbkg', action = 'store_true', dest = 'bkgdfit', defau
 parser.add_argument( '--twosigfit', action = 'store_true', dest = 'twosigfit', default = False, help = 'Plot SYY 850 signal in the fit' )
 parser.add_argument( '--bkgonlyfit', action = 'store_true', dest = 'bkgonlyfit', default = False, help = 'Plot background only fit results' )
 parser.add_argument( '--compshapes', action = 'store_true', dest = 'compshapes', default = False, help = 'Plot individual shapes of bkgds' )
-parser.add_argument( '--mass', dest = 'mass', default = "450", help = 'Set signal used in the fit' )
+parser.add_argument( '--mass1', dest = 'mass1', default = "450", help = 'Set mass for first reference signal' )
+parser.add_argument( '--mass2', dest = 'mass2', default = "600", help = 'Set mass for second reference signal' )
+parser.add_argument( '--model1', dest = 'model1', default = "RPV", help = 'Set model for first reference signal' )
+parser.add_argument( '--model2', dest = 'model2', default = "SYY", help = 'Set model for second reference signal' )
+
 parser.add_argument( '--path', dest = 'path', required=True, help = 'Input path' )
 
 args = parser.parse_args()
@@ -63,8 +67,8 @@ def main() :
             #Define the name of the bin, which is used in the naming convention of the root file
             mvaBin                      = prefix+mvaBinList[ itBin ]
     
-            sigHistFullR                  = inputRootFile.Get( "sigHistFullR_"+mvaBin )
-            sigHist850                  = inputRootFile.Get( "sigHist850_"+mvaBin )
+            sigRefHist1                  = inputRootFile.Get( "sigRefHist1_"+mvaBin )
+            sigRefHist2                  = inputRootFile.Get( "sigRefHist2_"+mvaBin )
             sigHist                     = inputRootFile.Get( "sigHist_"+mvaBin )
             ttHist                     = inputRootFile.Get( "ttHist_"+mvaBin )
             qcdHist                     = inputRootFile.Get( "qcdHist_"+mvaBin )
@@ -172,11 +176,11 @@ def main() :
             l1.AddEntry( fitHist, "Fit" )
             l1.AddEntry( dataGraph, "N observed", "pl" )
             if( args.bkgonlyfit ) :
-                l1.AddEntry( sigHistFullR, "RPV m_{#tilde t} = "+args.mass+" GeV" )
+                l1.AddEntry( sigRefHist1, args.model1+" m_{#tilde t} = "+args.mass1+" GeV" )
             else :
                 l1.AddEntry( sigHist, "Fit Signal" )
             if( args.twosigfit ) :
-                l1.AddEntry( sigHist850, "SYY m_{#tilde t} = 850 GeV" )
+                l1.AddEntry( sigRefHist2, args.model2+" m_{#tilde t} = "+args.mass2+" GeV" )
             if( args.bkgdfit ) :
                 l1.AddEntry( bkgdHist, "Fit Background" )
             if( args.compshapes ):

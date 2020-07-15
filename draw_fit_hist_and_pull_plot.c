@@ -326,11 +326,11 @@
       std::string signame = "sigHist_"; signame += bin_name;
       th_fit_sig->Write(signame.c_str());
 
-      std::string signame450 = "sigHistFullR_"; signame450 += bin_name;
-      th_sig_norm_1->Write(signame450.c_str());
+      std::string signame1 = "sigRefHist1_"; signame1 += bin_name;
+      th_sig_norm_1->Write(signame1.c_str());
 
-      std::string signame850 = "sigHist850_"; signame850 += bin_name;
-      th_sig2_norm_1->Write(signame850.c_str());
+      std::string signame2 = "sigRefHist2_"; signame2 += bin_name;
+      th_sig2_norm_1->Write(signame2.c_str());
 
       th_fit -> SetYTitle( "Events" ) ;
       th_fit -> SetTitleSize( yTitleSize, "y" ) ;
