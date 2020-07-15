@@ -370,8 +370,8 @@ This would extract the background-only fit as well as the two signal shapes for 
 The next step is to run `makeFitPlots.py` using this newly created ROOT file as input. An example call to that script would be:
 
 ```
-python makeFitPlots.py --twosigfit --bkgonlyfit
+python makeFitPlots.py --twosigfit --bkgonlyfit --mass1 450 --model1 RPV --mass2 850 --model2 RPV
 
 ```
 
-where we specify the `--bkgonlyfit` to match with how `draw_hist_and_pull_plot.C` was run and then the `--twosigfit` requests that both signal shapes be plotted as well.
+where we specify the `--bkgonlyfit` to match with how `draw_hist_and_pull_plot.C` was run and then the `--twosigfit` requests that both signal shapes be plotted as well. Along with the `--twosigfit` option, one needs to specify the masses and model corresponding to the two signals. In this case they are both RPV and the masses 450 and 850 are provided.
