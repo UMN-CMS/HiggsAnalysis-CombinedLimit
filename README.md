@@ -356,16 +356,16 @@ root -l -q 'makePlots.C("<date>_pseudodata2017","condor/Fit_pseudoData_2017/outp
 
 ```
 
-Examples for making pull plots
+### Examples for making pull plots
 
-The first script run `draw_hist_and_pull_plot.C` and the output of which is run over by `makeFitPlots.py`. A couple of example calls would be:
+The first script run is `draw_hist_and_pull_plot.C` and the output of this script is run over by `makeFitPlots.py`. A couple of example calls are given below.
 
 ```
 root -q -l -b 'draw_fit_hist_and_pull.c("condor/FullRun2_Unblinded_Jun15/Fit_Data_Combo/output-files/", "RPV_450_Combo/fitDiagnosticsComboRPV450.root", "RPV 450", "Y16_",     "RPV450Combo16s", 1, 1, 1, "RPV_850_Combo/fitDiagnosticsComboRPV850.root", "RPV 850")'
 
 python makeFitPlots.py  --plotbkg --mass1 450 --model1 RPV
 ```
-This would extract the Combo signal+background fit for 2016 as well as the RPV 450 signal shape. All these histograms get put into a ROOT file called `KELVIN_RPV450Combo16s.root`. Then we call `makeFitPlots.py` and ask for it to plot the background and pass the information about the signal used in the fit.
+This would extract the Combo signal+background fit for 2016 as well as the RPV 450 signal shape and RPV 850 signal shape. All of these histograms get put into a ROOT file called `KELVIN_RPV450Combo16s.root`. Then we call `makeFitPlots.py` and ask for it to plot the background and pass the information about the signal used in the fit. Since we are running on a signal+background fit (RPV 450), the signal fit component is plotted rather than the raw shape.
 
 ```
 root -q -l -b 'draw_fit_hist_and_pull.c("condor/FullRun2_Unblinded_Jun15/Fit_Data_Combo/output-files/", "RPV_450_Combo/fitDiagnosticsComboRPV450.root", "RPV 450", "Y16_",     "RPV450Combo16b", 0, 1, 1, "RPV_850_Combo/fitDiagnosticsComboRPV850.root", "RPV 850")'
@@ -373,4 +373,4 @@ root -q -l -b 'draw_fit_hist_and_pull.c("condor/FullRun2_Unblinded_Jun15/Fit_Dat
 python makeFitPlots.py --twosigfit --bkgonlyfit --mass1 450 --model1 RPV --mass2 850 --model2 RPV
 ```
 
-This would extract the background-only fit as well as RPV 450 signal shape and RPV 850 signal shape. All these histograms get put into a ROOT file called `KELVIN_RPV450Combo16b.root`. Then we call `makeFitPlots.py` and ask it to show both signal shapes (thus we pass information about both signals---model and mass) and explicitly say we want background only.
+This would extract the background-only fit as well as RPV 450 signal shape and RPV 850 signal shape. All these histograms get put into a ROOT file called `KELVIN_RPV450Combo16b.root`. Then we call `makeFitPlots.py` and ask it to show both signal shapes (thus we pass information about both signals---model and mass) and explicitly say we want the background-only fit.
