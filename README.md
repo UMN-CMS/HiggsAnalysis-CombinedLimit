@@ -374,4 +374,4 @@ python makeFitPlots.py --twosigfit --bkgonlyfit --mass1 450 --model1 RPV --mass2
 
 ```
 
-where we specify the `--bkgonlyfit` to match with how `draw_hist_and_pull_plot.C` was run and then the `--twosigfit` requests that both signal shapes be plotted as well. Along with the `--twosigfit` option, one needs to specify the masses and model corresponding to the two signals. In this case they are both RPV and the masses 450 and 850 are provided.
+where we specify the `--bkgonlyfit` to match with how `draw_hist_and_pull_plot.C` was run and then the `--twosigfit` requests that both signal shapes be plotted as well. Along with the `--twosigfit` option, one needs to specify the masses and model corresponding to the two signals. In this case they are both RPV and the masses 450 and 850 are provided. Conversely, if we do not specify `--bkgonlyfit` then the fitted signal component replaces the mass1/model1 signal shape.
