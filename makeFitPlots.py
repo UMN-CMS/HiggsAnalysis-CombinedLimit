@@ -18,7 +18,7 @@ parser.add_argument( '--mass2', dest = 'mass2', default = "600", help = 'Set mas
 parser.add_argument( '--model1', dest = 'model1', default = "RPV", help = 'Set model for first reference signal' )
 parser.add_argument( '--model2', dest = 'model2', default = "SYY", help = 'Set model for second reference signal' )
 
-parser.add_argument( '--path', dest = 'path', default="./", help = 'Input path' )
+parser.add_argument( '--path', dest = 'path', default=".", help = 'Input path' )
 
 args = parser.parse_args()
 
@@ -26,7 +26,8 @@ args = parser.parse_args()
 mvaBinList                  = [ "D1", "D2", "D3", "D4" ]
 textArray                   = [ "NN bin D1", "NN bin D2", "NN bin D3", "NN bin D4" ]
 borderSize                  = 0.20
-yearList                    = [ ("2016",""), ("2017",""), ("2018pre",""), ("2018post",""), ("Combo16","Y16_"), ("Combo17","Y17_"), ("Combo18pre","Y18pre_"), ("Combo18post","Y18post_") ]
+yearList                    = [ ("Combo16","Y16_")]
+#yearList                    = [ ("2016",""), ("2017",""), ("2018pre",""), ("2018post",""), ("Combo16","Y16_"), ("Combo17","Y17_"), ("Combo18pre","Y18pre_"), ("Combo18post","Y18post_") ]
 lumi                        = 0.0
 
 #Variables for pads that are derived from the border size
