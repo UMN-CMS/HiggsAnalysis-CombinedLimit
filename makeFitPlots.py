@@ -197,11 +197,11 @@ def main() :
                 fitHistArray[itBin].Draw( "HIST SAME" )
                 bkgdHist.Draw( "HIST SAME" )
             if( args.bkgonlyfit ) :
-                sigHistFullR.Draw( "HIST SAME" )
+                sigRefHist1.Draw( "HIST SAME" )
             else :
                 sigHist.Draw( "HIST SAME" )
             if( args.twosigfit ) :
-                sigHist850.Draw( "HIST SAME" )
+                sigRefHist2.Draw( "HIST SAME" )
             if( args.compshapes ):
                 ttHist.Draw("HIST SAME")
                 qcdHist.Draw("HIST SAME")
