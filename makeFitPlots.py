@@ -39,7 +39,7 @@ def main() :
     for year, prefix in yearList :
         #Name of root file that takes Owen's output code and makes the histogram
         fitType = "b" if args.bkgonlyfit else "s"
-        inputRootFileName           = args.path+"/KELVIN_RPV"+args.mass+year+fitType+".root"
+        inputRootFileName           = args.path+"/KELVIN_RPV"+args.mass1+year+fitType+".root"
         inputRootFile               = ROOT.TFile.Open( inputRootFileName )
     
         if year == "2016" or year == "Combo16" :
@@ -229,7 +229,7 @@ def main() :
             
             c1.Update()
     
-        c1.SaveAs("RPV"+args.mass+year+fitType+"_fitPlots.pdf")
+        c1.SaveAs("RPV"+args.mass1+year+fitType+"_fitPlots.pdf")
 
 def makeDummyPullHistograms():
     
