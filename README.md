@@ -362,7 +362,7 @@ The first step is to run `draw_hist_and_pull_plot.C` where an example call to th
 
 
 ```
-root -q -l -b 'draw_fit_hist_and_pull.c("../../FullRun2_Unblinded_Jun15/Fit_Data_Combo/output-files/", "RPV_450_Combo/fitDiagnosticsComboRPV450.root", "RPV 450", "Y16_",     "RPV450Combo16b", 0, 1, 1, "RPV_850_Combo/fitDiagnosticsComboRPV850.root", "RPV 850")'
+root -q -l -b 'draw_fit_hist_and_pull.c("condor/FullRun2_Unblinded_Jun15/Fit_Data_Combo/output-files/", "RPV_450_Combo/fitDiagnosticsComboRPV450.root", "RPV 450", "Y16_",     "RPV450Combo16b", 0, 1, 1, "RPV_850_Combo/fitDiagnosticsComboRPV850.root", "RPV 850")'
 ```
 
 This would extract the background-only fit as well as the two signal shapes for masses 450 and 850 GeV. All these histograms get put into a ROOT file called `KELVIN_RPV450Combo16b.root`
