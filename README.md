@@ -362,7 +362,7 @@ The first step is to run `draw_hist_and_pull_plot.C` where an example call to th
 
 
 ```
-root -q -l -b 'draw_fit_hist_and_pull.c("../../FullRun2_Unblinded_Jun15/Fit_Data_Combo/output-files/", "RPV_450_Combo/fitDiagnosticsComboRPV450.root", "RPV 450", "Y16_",     "RPV450Combo16b", 0, 1, 1, "RPV_850_Combo/fitDiagnosticsComboRPV850.root", "RPV 850")'
+root -q -l -b 'draw_fit_hist_and_pull.c("condor/FullRun2_Unblinded_Jun15/Fit_Data_Combo/output-files/", "RPV_450_Combo/fitDiagnosticsComboRPV450.root", "RPV 450", "Y16_",     "RPV450Combo16b", 0, 1, 1, "RPV_850_Combo/fitDiagnosticsComboRPV850.root", "RPV 850")'
 ```
 
 This would extract the background-only fit as well as the two signal shapes for masses 450 and 850 GeV. All these histograms get put into a ROOT file called `KELVIN_RPV450Combo16b.root`
@@ -374,4 +374,4 @@ python makeFitPlots.py --twosigfit --bkgonlyfit --mass1 450 --model1 RPV --mass2
 
 ```
 
-where we specify the `--bkgonlyfit` to match with how `draw_hist_and_pull_plot.C` was run and then the `--twosigfit` requests that both signal shapes be plotted as well. Along with the `--twosigfit` option, one needs to specify the masses and model corresponding to the two signals. In this case they are both RPV and the masses 450 and 850 are provided.
+where we specify the `--bkgonlyfit` to match with how `draw_hist_and_pull_plot.C` was run and then the `--twosigfit` requests that both signal shapes be plotted as well. Along with the `--twosigfit` option, one needs to specify the masses and model corresponding to the two signals. In this case they are both RPV and the masses 450 and 850 are provided. Conversely, if we do not specify `--bkgonlyfit` then the fitted signal component replaces the mass1/model1 signal shape.
