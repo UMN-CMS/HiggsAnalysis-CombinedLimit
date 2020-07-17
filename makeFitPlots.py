@@ -18,7 +18,7 @@ parser.add_argument( '--mass2', dest = 'mass2', default = "600", help = 'Set mas
 parser.add_argument( '--model1', dest = 'model1', default = "RPV", help = 'Set model for first reference signal' )
 parser.add_argument( '--model2', dest = 'model2', default = "SYY", help = 'Set model for second reference signal' )
 
-parser.add_argument( '--path', dest = 'path', required=True, help = 'Input path' )
+parser.add_argument( '--path', dest = 'path', default="./", help = 'Input path' )
 
 args = parser.parse_args()
 
@@ -56,7 +56,8 @@ def main() :
     
         #Arrays needed for easy plotting (save a copy of all legends and fit histograms derived
         #    from the graphs)
-        legendArray                 = []
+        legendArray1                = []
+        legendArray2                = []
         fitHistArray                = []
         lineArray                   = []
        
@@ -155,24 +156,34 @@ def main() :
             #Draw and save the legends in an array so that the previous legend isn't wiped when switching to a new NN bin.
             #    Location of legend also depends on NN bin
             l1                          = ROOT.TLegend()
+            l2                          = ROOT.TLegend()
             l1_yStart                   = 0.70
+            l2_yStart                   = 0.55
             if( args.bkgdfit ):
                 l1_yStart               = l1_yStart - 0.05
             if( args.twosigfit ) :
                 l1_yStart               = l1_yStart - 0.05
-            if( args.compshapes ):
-                l1_yStart               = l1_yStart - 0.15
     
             if itBin == 0 :
-                l1                          = ROOT.TLegend( 0.55+(borderSize)/2, l1_yStart, 0.87+(borderSize)/2, 0.85 )
+                l1                          = ROOT.TLegend( 0.45+(borderSize)/2, l1_yStart, 0.87+(borderSize)/2, 0.85 )
+                l2                          = ROOT.TLegend( 0.45+(borderSize)/2, l2_yStart, 0.87+(borderSize)/2, l1_yStart-0.01 )
+
                 l1.SetTextSize(0.05*pad2and3Size/pad1and4Size)
+                l2.SetTextSize(0.05*pad2and3Size/pad1and4Size)
             elif itBin == len(mvaBinList) - 1:
-                l1                          = ROOT.TLegend( 0.55-(borderSize)/2, l1_yStart, 0.87-(borderSize)/2, 0.85 )
+                l1                          = ROOT.TLegend( 0.45-(borderSize)/2, l1_yStart, 0.87-(borderSize)/2, 0.85 )
+                l2                          = ROOT.TLegend( 0.45-(borderSize)/2, l2_yStart, 0.87-(borderSize)/2, l1_yStart-0.01 )
+
                 l1.SetTextSize(0.05*pad2and3Size/pad1and4Size)
+                l2.SetTextSize(0.05*pad2and3Size/pad1and4Size)
+
             else :
-                l1                          = ROOT.TLegend( 0.55, l1_yStart, 0.87, 0.85 )
+                l1                          = ROOT.TLegend( 0.45, l1_yStart, 0.87, 0.85 )
+                l2                          = ROOT.TLegend( 0.45, l2_yStart, 0.87, l1_yStart-0.01 )
+
                 l1.SetTextSize(0.05)
-            
+                l2.SetTextSize(0.05)
+           
             l1.AddEntry( fitHist, "Fit" )
             l1.AddEntry( dataGraph, "N observed", "pl" )
             if( args.bkgonlyfit ) :
@@ -184,15 +195,21 @@ def main() :
             if( args.bkgdfit ) :
                 l1.AddEntry( bkgdHist, "Fit Background" )
             if( args.compshapes ):
-                l1.AddEntry(ttHist, "TT")
-                l1.AddEntry(qcdHist, "QCD")
-                l1.AddEntry(ttxHist, "TTX")
-                l1.AddEntry(otherHist, "OTHER")
+                l2.SetNColumns(2)
+                l2.AddEntry(ttHist, "TT")
+                l2.AddEntry(qcdHist, "QCD")
+                l2.AddEntry(ttxHist, "TTX")
+                l2.AddEntry(otherHist, "OTHER")
 
             l1.SetBorderSize(0)
-            legendArray.append( copy.deepcopy( l1 ) ) #Need to save legend as to not be erased
-            legendArray[itBin].Draw()
+            l2.SetBorderSize(0)
+            legendArray1.append( copy.deepcopy( l1 ) ) #Need to save legend as to not be erased
+            legendArray1[itBin].Draw()
     
+            if( args.compshapes ):
+                legendArray2.append( copy.deepcopy( l2 ) ) #Need to save legend as to not be erased
+                legendArray2[itBin].Draw()
+
             if( args.bkgdfit ) :
                 fitHistArray[itBin].Draw( "HIST SAME" )
                 bkgdHist.Draw( "HIST SAME" )
